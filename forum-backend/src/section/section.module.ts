@@ -12,14 +12,3 @@ import { SectionService } from './section.service';
     providers: [SectionService]})
 
 export class SectionModule {}
-
-// type: 'postgres',
-//         host: process.env.HOST,
-//         port: +process.env.PORT,
-//         username: 'postgres',
-//         password: process.env.PASSWORD,
-//         database: process.env.DATABASE,
-//         entities: [
-//           __dirname + '/../**/*.entity.ts',
-//         ],
-//         synchronize: true,

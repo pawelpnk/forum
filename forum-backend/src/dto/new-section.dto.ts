@@ -1,3 +1,3 @@
 export class NewSection {
-    topicSection: string;
+    sectionName: string;
 }
