@@ -42,7 +42,7 @@ export class SectionController {
         @Res() res: Response,
         @Param('id') id: string
     ) {
-        const deletedSection = await this.sectionService.deleteSection(id);
+        await this.sectionService.deleteSection(id);
         return res.status(HttpStatus.OK).json({
             message: "Pomyślnie usunięto sekcje"
         })

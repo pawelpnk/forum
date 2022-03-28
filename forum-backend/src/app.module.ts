@@ -12,6 +12,9 @@ import { TopicModule } from './topic/topic.module';
 import { GroupModule } from './group/group.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { AuthService } from './auth/auth.service';
+import { AuthController } from './auth/auth.controller';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,8 +24,10 @@ import { ConfigModule } from '@nestjs/config';
     SectionModule, 
     PostModule, 
     TopicModule, 
-    GroupModule],
-  controllers: [AppController],
-  providers: [AppService],
+    GroupModule, 
+    AuthModule
+  ],
+  controllers: [AppController, AuthController],
+  providers: [AppService, AuthService],
 })
 export class AppModule {}
