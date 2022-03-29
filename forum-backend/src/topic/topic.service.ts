@@ -1,6 +1,7 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Topic } from 'src/entity/topic.entity';
+import { PostService } from 'src/post/post.service';
 import { SectionService } from 'src/section/section.service';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
@@ -13,7 +14,8 @@ export class TopicService {
         @InjectRepository(Topic) private topicRepository: Repository<Topic>,
         private userService: UserService,
         @Inject(forwardRef(() => SectionService)) 
-        private sectionService: SectionService
+        private sectionService: SectionService,
+        @Inject(forwardRef(()=> PostService)) private postService: PostService
     ) {}
 
     async createTopic(bodyTopic: NewTopic): Promise<TopicResponse> {

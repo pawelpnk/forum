@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Post } from "./post.entity";
 import { Section } from "./section.entity";
 import User from "./user.entity";
 
@@ -29,4 +30,7 @@ export class Topic {
 
     @Column({nullable: false})
     sectionId: string
+
+    @OneToMany(() => Post, (post) => post.topic)
+    posts: Post[]
 }

@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Topic } from "./topic.entity";
 import { IsEmail } from 'class-validator';
+import { Post } from "./post.entity";
 
 @Entity()
 export default class User {
@@ -34,4 +35,7 @@ export default class User {
 
     @OneToMany(() => Topic, (topic) => topic.user)
     topics: Topic[];
+
+    @OneToMany(() => Post, (post) => post.user)
+    posts: Post
 }

@@ -103,7 +103,7 @@ export class UserService {
     async updateUser(user: UserUpdateForUser): Promise<UserResponse> {
         let changePassword = false;
         let changeImage = false;
-        const checkChangePassword: boolean = user.newPassword.length > 0 && user.newPassword.length > 0 ? changePassword = true : false;
+        const checkChangePassword: boolean = user.newPassword.length > 0 && user.oldPassword.length > 0 ? changePassword = true : false;
         const checkChangeImage: boolean = user.image.length > 0 ? changeImage = true : false;
 
         if(changePassword){
@@ -133,7 +133,7 @@ export class UserService {
                 login: user.login
             }
         });
-        console.log(fetchUserUpdate);
+
         return this.filter(fetchUserUpdate);        
     }
 
@@ -145,7 +145,9 @@ export class UserService {
     /// helper functions
 
     async findUserHelper(login: string): Promise<User> {
-        return await this.userRepository.findOneOrFail({login})
-         
+        return await this.userRepository.findOneOrFail({login});        
+    }
+    async findUserHelperId(id: string): Promise<User> {
+        return await this.userRepository.findOneOrFail({id});
     }
 }

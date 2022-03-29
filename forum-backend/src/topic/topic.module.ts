@@ -1,6 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Topic } from 'src/entity/topic.entity';
+import { PostModule } from 'src/post/post.module';
 import { SectionModule } from 'src/section/section.module';
 import { SectionService } from 'src/section/section.service';
 import { UserModule } from 'src/user/user.module';
@@ -10,8 +11,9 @@ import { TopicService } from './topic.service';
 @Module({
     imports: [
         TypeOrmModule.forFeature([Topic]),
-        UserModule,
-        forwardRef(()=> SectionModule)
+        forwardRef(()=> UserModule),
+        forwardRef(()=> SectionModule),
+        forwardRef(()=> PostModule)
     ],
     controllers:[TopicController],
     providers: [TopicService],
