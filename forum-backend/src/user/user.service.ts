@@ -1,7 +1,6 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
-import ErrorMessage from 'src/dto/error-message.dto';
 import NewUserInside from 'src/dto/new-user-inside.dto';
 import NewUser from 'src/dto/new-user.dto';
 import UserLogin from 'src/dto/user-login.dto';
@@ -26,7 +25,7 @@ export class UserService {
 
     }
 
-    async createUser(newUser: NewUser): Promise<ErrorMessage | UserResponse> {
+    async createUser(newUser: NewUser): Promise<UserResponse> {
 
         const isUserExist = await this.userRepository.findOne({
             where: [
@@ -41,7 +40,7 @@ export class UserService {
 
         const hashPassword: string = await this.authService.hashPassword(newUser.password);
 
-        const createNewUser: NewUserInside = new NewUserInside();
+        const createNewUser: User = new User();
         createNewUser.login = newUser.login;
         createNewUser.password = hashPassword;
         createNewUser.email = newUser.email.toLowerCase();
@@ -53,7 +52,7 @@ export class UserService {
         return this.filter(addedUSer);
     }
 
-    async login(user: UserLogin): Promise<UserResponse | ErrorMessage> {
+    async login(user: UserLogin): Promise<UserResponse> {
         const findUser = await this.userRepository.findOneOrFail({
             where: {
                 login: user.login
@@ -101,7 +100,7 @@ export class UserService {
         return this.filter(updatedUser);
     }
 
-    async updateUser(user: UserUpdateForUser): Promise<UserResponse | ErrorMessage> {
+    async updateUser(user: UserUpdateForUser): Promise<UserResponse> {
         let changePassword = false;
         let changeImage = false;
         const checkChangePassword: boolean = user.newPassword.length > 0 && user.newPassword.length > 0 ? changePassword = true : false;
@@ -141,5 +140,12 @@ export class UserService {
     async deleteUser(login: string): Promise<any> {
         await this.userRepository.findOneOrFail(login);
         return await this.userRepository.delete(login);
+    }
+
+    /// helper functions
+
+    async findUserHelper(login: string): Promise<User> {
+        return await this.userRepository.findOneOrFail({login})
+         
     }
 }

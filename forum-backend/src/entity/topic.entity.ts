@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Section } from "./section.entity";
+import User from "./user.entity";
 
 @Entity()
 export class Topic {
@@ -8,9 +10,23 @@ export class Topic {
     @Column()
     topic: string
 
-    @CreateDateColumn()
-    createdAT: Date
+    @Column()
+    createdAt: string
 
-    @UpdateDateColumn()
-    updatedAt: Date
+    @Column()
+    updatedAt: string
+
+    @ManyToOne(() => User, (user) => user.topics)
+    @JoinColumn({name: "userId"})
+    user: User
+
+    @Column({nullable: false})
+    userId: string
+
+    @ManyToOne(() => Section, (section) => section.topics)
+    @JoinColumn({name: "sectionId"})
+    section: Section
+
+    @Column({nullable: false})
+    sectionId: string
 }

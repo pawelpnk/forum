@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Topic } from "./topic.entity";
+import { IsEmail } from 'class-validator';
 
 @Entity()
 export default class User {
@@ -12,6 +14,7 @@ export default class User {
     password: string;
 
     @Column()
+    @IsEmail()
     email: string;
 
     @Column()
@@ -28,4 +31,7 @@ export default class User {
 
     @Column()
     image: string;
+
+    @OneToMany(() => Topic, (topic) => topic.user)
+    topics: Topic[];
 }

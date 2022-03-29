@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Topic } from "./topic.entity";
 
 @Entity()
 export class Section {
@@ -7,4 +8,7 @@ export class Section {
 
     @Column()
     sectionName: string;
+
+    @OneToMany(() => Topic, (topic) => topic.section)
+    topics: Topic[]
 }

@@ -1,6 +1,5 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Patch, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
-import ErrorMessage from 'src/dto/error-message.dto';
 import NewUser from 'src/dto/new-user.dto';
 import UserLogin from 'src/dto/user-login.dto';
 import UserUpdateForUser from 'src/dto/user-update-for-user.dto';
@@ -18,7 +17,7 @@ export class UserController {
         @Body() newUser: NewUser
     ) {
         try {
-            const addedNewUser: ErrorMessage | UserResponse = await this.userService.createUser(newUser);
+            const addedNewUser: UserResponse = await this.userService.createUser(newUser);
             return res.status(HttpStatus.OK).json({
                         message: 'Użytkownik dodany',
                         addedNewUser
@@ -36,7 +35,7 @@ export class UserController {
         @Body() userLogin: UserLogin
     ) {
         try {
-            const loginAccount = await this.userService.login(userLogin);
+            const loginAccount: UserResponse = await this.userService.login(userLogin);
             return res.status(HttpStatus.OK).json({
                 message: "Zalogowano pomyślnie",
                 loginAccount
@@ -54,7 +53,7 @@ export class UserController {
         @Body() login: string
     ) {
         try {
-            const searchUser = await this.userService.findUser(login);
+            const searchUser: UserResponse = await this.userService.findUser(login);
             return res.status(HttpStatus.OK).json({
                 searchUser
             })
@@ -70,7 +69,7 @@ export class UserController {
     async findAllUsers(
         @Res() res: Response
     ) {
-        const allUsers = await this.userService.findAllUsers();
+        const allUsers: UserResponse[] = await this.userService.findAllUsers();
         return res.status(HttpStatus.OK).json(allUsers);
     }
 
@@ -80,7 +79,7 @@ export class UserController {
         @Body() user: UserUpdateForAdmin,
     ) {
         try {
-            const updateUser = await this.userService.updateUserForAdmin(user);
+            const updateUser: UserResponse = await this.userService.updateUserForAdmin(user);
             return res.status(HttpStatus.OK).json({
                 message: "Pomyślnie zaaktualizowano użytkownika",
                 updateUser
@@ -99,7 +98,7 @@ export class UserController {
         @Body() user: UserUpdateForUser,
     ) {
         try {
-            const updatedUser = await this.userService.updateUser(user);
+            const updatedUser: UserResponse = await this.userService.updateUser(user);
             return res.status(HttpStatus.OK).json({
                 message: 'Pomyślnie zaaktualizowano użytkownika',
                 updatedUser
@@ -123,7 +122,7 @@ export class UserController {
                 message: 'Konto zostało usunięte'
             })
         } catch {
-            return res.status(404).json({
+            return res.status(HttpStatus.NOT_FOUND).json({
                 message: 'Wystąpił błąd'
             })
         }        
