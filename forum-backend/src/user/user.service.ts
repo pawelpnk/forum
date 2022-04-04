@@ -1,26 +1,30 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/auth.service';
-import NewUserInside from 'src/dto/new-user-inside.dto';
 import NewUser from 'src/dto/new-user.dto';
 import UserLogin from 'src/dto/user-login.dto';
 import UserUpdateForUser from 'src/dto/user-update-for-user.dto';
 import UserUpdateForAdmin from 'src/dto/user-update.dto';
+import { OptionalUser } from 'src/entity/optionalUser.entity';
 import User from 'src/entity/user.entity';
-import UserFilter from 'src/interface/user-filter.interface';
 import UserResponse from 'src/interface/user-response.interface';
 import { UserRole } from 'src/interface/user-role.interface';
+import { PostService } from 'src/post/post.service';
+import { TopicService } from 'src/topic/topic.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
-        @Inject(forwardRef(()=> AuthService))private authService: AuthService
+        @InjectRepository(OptionalUser) private optionalUserRepository: Repository<OptionalUser>,
+        @Inject(forwardRef(()=> AuthService)) private authService: AuthService,
+        @Inject(forwardRef(()=> PostService)) private postService: PostService,
+        @Inject(forwardRef(()=> TopicService)) private topicService: TopicService
         ) {}
 
-    filter = (user: UserFilter): UserResponse => {
-        const { password, ...other } = user;
+    filter = (user: User): UserResponse => {
+        const { password, token, ...other } = user;
         return other;
 
     }
@@ -35,8 +39,14 @@ export class UserService {
         });
 
         if(isUserExist) {
-            throw new HttpException('User already exist', HttpStatus.CONFLICT)
+            throw new HttpException('Użytkownik już istnieje', HttpStatus.CONFLICT)
         }
+
+        const createOptionalUser: OptionalUser = new OptionalUser();
+        createOptionalUser.message = '';
+        createOptionalUser.dateFinish = '';
+
+        const additionalSettings = await this.optionalUserRepository.save(createOptionalUser);
 
         const hashPassword: string = await this.authService.hashPassword(newUser.password);
 
@@ -47,31 +57,49 @@ export class UserService {
         createNewUser.role = UserRole.USER;
         createNewUser.active = true;
         createNewUser.image = '';
+        createNewUser.createdAt = new Date().toLocaleString();
+        createNewUser.optionalUser = additionalSettings;
 
         const addedUSer = await this.userRepository.save(createNewUser);
+
         return this.filter(addedUSer);
     }
 
-    async login(user: UserLogin): Promise<UserResponse> {
-        const findUser = await this.userRepository.findOneOrFail({
+    async login(user: UserLogin): Promise<any> {
+        const findUser = await this.userRepository.findOne({
             where: {
                 login: user.login
-            }
+            },
+            relations: [
+                'optionalUser'
+            ]
         });
 
         const checkIsNotBaned: boolean = findUser.active ? true : false;
 
-        const comparePassword = await this.authService.comparePassword(user.password, findUser.password);
+        const comparePassword: boolean = await this.authService.comparePassword(user.password, findUser.password);
         
         if(!comparePassword) {
-            throw new HttpException('Bad login or password', HttpStatus.NOT_FOUND);
+            throw new HttpException('Zły login lub hasło', HttpStatus.NOT_FOUND);
         }
 
         if(!checkIsNotBaned) {
-            throw new HttpException('User baned', HttpStatus.CONFLICT);
+            throw new HttpException(`Użytkownik zbanowany do ${findUser.optionalUser.dateFinish}`, HttpStatus.CONFLICT);
+        }
+        
+        const pureToken = await this.authService.generateToken();
+        findUser.token = pureToken;
+        await this.userRepository.save(findUser);
+        const signToken = await this.authService.createToken(pureToken);
+        
+        const filterUser = this.filter(findUser);
+
+        const returnObject = {
+            signToken,
+            filterUser
         }
 
-        return this.filter(findUser);
+        return returnObject
     }
 
     async findUser(login: string): Promise<UserResponse> {
@@ -92,11 +120,20 @@ export class UserService {
             active: user.active,
             image: user.image
         });
+
         const updatedUser = await this.userRepository.findOne({
+            relations: ["OptionalUser"],
             where: {
                 login: user.login
             }
         })
+
+        if(user.active === false && user.dateFinish) {
+            updatedUser.optionalUser.dateFinish = user.dateFinish;
+            updatedUser.optionalUser.message = user.reasonBan;
+            await this.userRepository.save(updatedUser);
+        }        
+
         return this.filter(updatedUser);
     }
 
@@ -119,7 +156,7 @@ export class UserService {
                     password: hashPassword
                 });
             } else {
-                throw new HttpException("Bad password", HttpStatus.UNAUTHORIZED)
+                throw new HttpException("Niepoprawne hasło", HttpStatus.UNAUTHORIZED)
             }
         }
         if(changeImage){
@@ -138,7 +175,8 @@ export class UserService {
     }
 
     async deleteUser(login: string): Promise<any> {
-        await this.userRepository.findOneOrFail(login);
+        await this.userRepository.findOneOrFail(login);        
+        
         return await this.userRepository.delete(login);
     }
 
@@ -150,4 +188,33 @@ export class UserService {
     async findUserHelperId(id: string): Promise<User> {
         return await this.userRepository.findOneOrFail({id});
     }
+
+    async findUserWithToken(tokenId: string): Promise<User> {
+        return await this.userRepository.findOne({token: tokenId})
+    }
+
+    async findAllBannedUsers(): Promise<User[]> {
+        return await this.userRepository.find({
+            relations: ["OptionalUser"],
+            where: {
+                active: false
+            }
+        })
+    }
+
+    async updatedBannedUser(user: User): Promise<void> {
+        const findUser = await this.userRepository.findOne({
+            relations: ["OptionalUser"],
+            where: {
+                id: user.id
+            }
+        });
+
+        findUser.active = true;
+        findUser.optionalUser.dateFinish = '';
+        findUser.optionalUser.message = '';
+
+        await this.userRepository.save(findUser);
+    }
 }
+

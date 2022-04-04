@@ -17,11 +17,11 @@ export class Topic {
     @Column()
     updatedAt: string
 
-    @ManyToOne(() => User, (user) => user.topics)
-    @JoinColumn({name: "userId"})
+    @ManyToOne(() => User, (user) => user.topics, { cascade: true, onDelete: "SET NULL"})
+    @JoinColumn({name: "userId"},)
     user: User
 
-    @Column({nullable: false})
+    @Column({nullable: true})
     userId: string
 
     @ManyToOne(() => Section, (section) => section.topics)

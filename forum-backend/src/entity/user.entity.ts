@@ -1,7 +1,8 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Topic } from "./topic.entity";
 import { IsEmail } from 'class-validator';
 import { Post } from "./post.entity";
+import { OptionalUser } from "./optionalUser.entity";
 
 @Entity()
 export default class User {
@@ -18,6 +19,12 @@ export default class User {
     @IsEmail()
     email: string;
 
+    @Column({
+        nullable: true,
+        default: null
+    })
+    token: string | null
+
     @Column()
     role: string;
 
@@ -25,10 +32,9 @@ export default class User {
     active: boolean;
 
     @Column({
-        type: 'timestamp with time zone',
-       default: () => 'CURRENT_TIMESTAMP'
+        nullable: true
     })
-    createdAt: Date;
+    createdAt: string;
 
     @Column()
     image: string;
@@ -37,5 +43,9 @@ export default class User {
     topics: Topic[];
 
     @OneToMany(() => Post, (post) => post.user)
-    posts: Post
+    posts: Post[];
+
+    @OneToOne(() => OptionalUser)
+    @JoinColumn()
+    optionalUser: OptionalUser
 }

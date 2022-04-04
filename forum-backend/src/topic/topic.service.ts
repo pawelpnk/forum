@@ -12,9 +12,8 @@ import TopicResponse from './topic.interface/topic-response.interface';
 export class TopicService {
     constructor(
         @InjectRepository(Topic) private topicRepository: Repository<Topic>,
-        private userService: UserService,
-        @Inject(forwardRef(() => SectionService)) 
-        private sectionService: SectionService,
+        @Inject(forwardRef(()=> UserService)) private userService: UserService,
+        @Inject(forwardRef(() => SectionService)) private sectionService: SectionService,
         @Inject(forwardRef(()=> PostService)) private postService: PostService
     ) {}
 

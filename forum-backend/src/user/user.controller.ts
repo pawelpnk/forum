@@ -35,14 +35,18 @@ export class UserController {
         @Body() userLogin: UserLogin
     ) {
         try {
-            const loginAccount: UserResponse = await this.userService.login(userLogin);
-            return res.status(HttpStatus.OK).json({
+            const loginAccount: any = await this.userService.login(userLogin);
+            return res.cookie('jwt', loginAccount.signToken.accessToken, {
+                secure: false,
+                domain: 'localhost',
+                httpOnly: true
+            }).status(HttpStatus.OK).json({
                 message: "Zalogowano pomyślnie",
-                loginAccount
-            });
+                user: loginAccount.filterUser
+            })
         } catch (err) {
             res.json({
-                message: err
+                message: err.message
             })
         }
     }
@@ -61,8 +65,7 @@ export class UserController {
             return res.json({
                 message: 'Brak użytkownika'
             })
-        }
-       
+        }       
     }
 
     @Get('/all')
@@ -88,8 +91,7 @@ export class UserController {
             return res.json({
                 message: "Nie udało się zaaktualizować użytkownika"
             })
-        }
-       
+        }       
     }
 
     @Patch('/user-update')
