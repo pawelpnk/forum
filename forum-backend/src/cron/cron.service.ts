@@ -12,7 +12,7 @@ export class CronService {
     async checkFinishBan() {
         const findUsers = await this.userService.findAllBannedUsers();
         findUsers.filter( async user => {
-            if(user.optionalUser.dateFinish < new Date().toLocaleDateString()) {
+            if(user.optionalUser.dateFinish <= new Date().toLocaleDateString()) {
                 await this.userService.updatedBannedUser(user)
             }
         })
