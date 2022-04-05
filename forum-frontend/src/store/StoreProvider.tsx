@@ -1,14 +1,18 @@
 import { createContext, useState } from "react";
 
-export const StoreContext = createContext<any>(null);
+export const ThemeContext = createContext<any>(null);
+export const UserContext = createContext<any>(null);
 
 const StoreProvider: React.FC = ({children}): JSX.Element => {
     const [theme, setTheme] = useState<string>('dark');
+    const [user, setUser] = useState<any>('')
 
     return (
-        <StoreContext.Provider value={{theme, setTheme}}>
-            {children}
-        </StoreContext.Provider>
+        <ThemeContext.Provider value={{theme, setTheme}}>
+            <UserContext.Provider value={{user, setUser}}>
+                {children}
+            </UserContext.Provider>
+        </ThemeContext.Provider>
 
     )
 }

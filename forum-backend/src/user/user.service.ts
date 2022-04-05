@@ -122,7 +122,7 @@ export class UserService {
         });
 
         const updatedUser = await this.userRepository.findOne({
-            relations: ["OptionalUser"],
+            relations: ["optionalUser"],
             where: {
                 login: user.login
             }
@@ -195,7 +195,7 @@ export class UserService {
 
     async findAllBannedUsers(): Promise<User[]> {
         return await this.userRepository.find({
-            relations: ["OptionalUser"],
+            relations: ["optionalUser"],
             where: {
                 active: false
             }
@@ -204,7 +204,7 @@ export class UserService {
 
     async updatedBannedUser(user: User): Promise<void> {
         const findUser = await this.userRepository.findOne({
-            relations: ["OptionalUser"],
+            relations: ["optionalUser"],
             where: {
                 id: user.id
             }

@@ -2,7 +2,9 @@ import React from 'react';
 import StoreProvider from './store/StoreProvider';
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Header from './header/Header';
+import Header from './components/header/Header';
+import './App.css';
+import Content from './components/content/Content';
 
 function App() {
   return (
@@ -10,7 +12,9 @@ function App() {
       <StoreProvider>
         <Router>
           <Header />
-          
+          {/* <div className="wrapper"> */}
+            <Content />
+          {/* </div>           */}
         </Router>
       </StoreProvider>
     </div>
