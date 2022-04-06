@@ -14,7 +14,7 @@ const Content: React.FC = (): JSX.Element => {
                     <Routes>
                         <Route path='/' element={<Home />}/>
                         <Route path='/:sectionID' element={<Topic />}/>
-                        <Route path='/:topicID' element={<TopicPosts/>}/>
+                        <Route path='/sekcja/:topicID' element={<TopicPosts/>}/>
                     </Routes>
                 </Col>
             </Row>

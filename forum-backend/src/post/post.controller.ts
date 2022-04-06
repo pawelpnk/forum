@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import NewPost from './post.dto/new-post.dto';
 import UpdatePost from './post.dto/update-post.dto';
@@ -26,10 +26,10 @@ export class PostController {
         }       
     }
 
-    @Get('/all')
+    @Get('/all/:id')
     async fetchAllPosts(
         @Res() res: Response,
-        @Body() idTopic: string
+        @Param('id') idTopic: string
     ) {
         try {
             const fetchAllPosts = await this.postService.fetchAllPosts(idTopic);

@@ -30,7 +30,7 @@ const Topic: React.FC = (): JSX.Element => {
 
     const handleRedirectToTopicWithPosts = (topic: TopicType) => {
         localStorage.setItem("currentTopic", JSON.stringify(topic));
-        navigate(`/${topic.id}`);
+        navigate(`/sekcja/${topic.id}`);
     }
 
     return (
