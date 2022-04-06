@@ -24,6 +24,13 @@ export class SectionController {
         return await this.sectionService.getSections(); 
     }
 
+    @Get(':id')
+    async getOneSection(
+        @Param('id') id: string
+    ) {
+        return await this.sectionService.findSection(id);
+    }
+
     @Patch('/update/:id')
     async updateSection(
         @Res() res: Response,

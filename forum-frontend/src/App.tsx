@@ -12,9 +12,7 @@ function App() {
       <StoreProvider>
         <Router>
           <Header />
-          {/* <div className="wrapper"> */}
             <Content />
-          {/* </div>           */}
         </Router>
       </StoreProvider>
     </div>

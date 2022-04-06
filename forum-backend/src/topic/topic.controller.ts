@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import NewTopic from './topic.dto/new-topic.dto';
 import { TopicService } from './topic.service';
@@ -40,10 +40,10 @@ export class TopicController {
         }        
     }
 
-    @Get('/all')
+    @Get('/all/:sectionID')
     async fetchAllTopics(
         @Res() res: Response,
-        @Body() idSection: string
+        @Param('sectionID') idSection: string
     ) {
         try {
             const fetchAllTopics = await this.topicService.fetchAllTopics(idSection);
