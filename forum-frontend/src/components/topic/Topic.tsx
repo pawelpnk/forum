@@ -33,9 +33,11 @@ const Topic: React.FC = (): JSX.Element => {
         navigate(`/sekcja/${topic.id}`);
     }
 
+    const currentSection = JSON.parse(localStorage.getItem("currentSection") || "null").sectionName;
+
     return (
         <Container className='my-5 text-light'>
-            <p>{JSON.parse(localStorage.getItem("currentSection") || "null").sectionName}</p>
+            <p>{currentSection}</p>
             {topics.map((topic: any) => {
                 return (
                     <Row key={topic.id} className='border py-1'>
@@ -43,19 +45,21 @@ const Topic: React.FC = (): JSX.Element => {
                             <Container>
                                 <Row>
                                     <Col>
-                                        <Nav.Link className='text-light' onClick={() => handleRedirectToTopicWithPosts(topic)}>{topic.topic}</Nav.Link>
+                                        <Nav.Link className='text-light px-0' onClick={() => handleRedirectToTopicWithPosts(topic)}>{topic.topic}</Nav.Link>
                                     </Col>
                                     <Col>
                                         <p className='d-flex justify-content-end text-muted '><small>{topic.updatedAt}</small></p>
                                     </Col>
                                 </Row>
                                 <Row>
-                                    <p className='py-0 text-white-50'>
-                                        <small>{topic.userId 
-                                        ? `Stworzony przez ${topic.userId} ${topic.createdAt}` 
-                                        : `Stworzony przez nie istniejące konto ${topic.createdAt}`}
-                                        </small>
-                                    </p>
+                                    <Col>
+                                        <p className='py-0 text-white-50'>
+                                            <small>{topic.userId 
+                                            ? `Stworzony przez ${topic.userId} ${topic.createdAt}` 
+                                            : `Stworzony przez nie istniejące konto ${topic.createdAt}`}
+                                            </small>
+                                        </p>
+                                    </Col>
                                 </Row>
                             </Container>
                         </Col>

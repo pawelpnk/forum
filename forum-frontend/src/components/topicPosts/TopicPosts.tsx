@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, Nav, Row } from 'react-bootstrap';
 import { HandThumbsDown, HandThumbsUp } from 'react-bootstrap-icons';
 import { useParams } from 'react-router';
 import req from '../../helpers/request';
@@ -20,11 +20,22 @@ const TopicPosts: React.FC = (): JSX.Element => {
         console.log(posts)
     },[])
 
+    const currentTopic = JSON.parse(localStorage.getItem("currentTopic") || "null").topic;
+    const currentTopicAuthor = JSON.parse(localStorage.getItem("currentTopic") || "null").userId;
+    const currentSection = JSON.parse(localStorage.getItem("currentSection") || "null").sectionName;
+    const currentSectionID = JSON.parse(localStorage.getItem("currentSection") || "null").id;
+
+    
+
     return (
         <Container className='text-light'>
-            <p className='my-5'>{JSON.parse(localStorage.getItem("currentTopic") || "null").topic}</p>
-            <p>Stworzony przez: {JSON.parse(localStorage.getItem("currentTopic") || "null").userId}</p>
+            <Nav.Link className='my-5 px-0 text-info' href={`/${currentSectionID}`}>Wróć do tematów z sekcji: {currentSection}</Nav.Link>
+            <p className='my-5'>{currentTopic}</p>
+            <p>Stworzony przez: {currentTopicAuthor}</p>
             {posts.map((post: any) => {
+
+                const comparisonTimeCreateAndUpdate: boolean = post.createAt === post.updateAt;
+
                 return (
                     <Row key={post.id} className='border py-1'>
                         <Col className='py-1'>
@@ -54,6 +65,9 @@ const TopicPosts: React.FC = (): JSX.Element => {
                                             : `Stworzony przez nie istniejące konto`}
                                             </small>
                                         </p>
+                                    </Col>
+                                    <Col>
+                                        {comparisonTimeCreateAndUpdate ? null : <small className='text-white-50  d-flex justify-content-end'>Edytowano: {post.updateAt}</small>}                                        
                                     </Col>
                                 </Row>
                             </Container>
