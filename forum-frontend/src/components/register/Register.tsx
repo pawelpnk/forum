@@ -62,7 +62,7 @@ const Register: React.FC = (): JSX.Element => {
                     email
                 });
                 setShowModal(true);
-                setText(result.data.message.message);
+                setText(result.data.message);
                 resetInputs();
             } catch (err) {
                 console.log(err);

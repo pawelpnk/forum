@@ -27,7 +27,7 @@ const Home: React.FC = (): JSX.Element => {
 
     const handleRedirectToTopics = (sec: SectionType) => {
         localStorage.setItem('currentSection', JSON.stringify(sec));
-        navigate(`/${sec.id}`)
+        navigate(`/s/${sec.id}`)
     }
 
     return (        

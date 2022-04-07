@@ -1,11 +1,19 @@
 import React, { useContext } from 'react';
 import { Navbar, Container, Nav, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { Person, PersonPlus, BoxArrowRight, Gear, Bell} from 'react-bootstrap-icons';
+import { useNavigate } from 'react-router';
 import { UserContext } from '../../store/StoreProvider';
 
 const Header: React.FC = (): JSX.Element => {
 
-    const { user } = useContext(UserContext);
+    const { user, setUser } = useContext(UserContext);
+
+    const navigate = useNavigate();
+
+    const logout = () => {
+        setUser(null);
+        sessionStorage.removeItem("currentUser");
+    }
 
     const setPropertylabel = user 
         ? 
@@ -29,7 +37,7 @@ const Header: React.FC = (): JSX.Element => {
                     Wyloguj
                 </Tooltip>
             }>
-                <Nav.Link href="/"><BoxArrowRight/></Nav.Link>                        
+                <Button variant='dark' onClick={logout}><BoxArrowRight/></Button>                        
             </OverlayTrigger>
         </Nav>
         :

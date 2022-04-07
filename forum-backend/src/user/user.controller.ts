@@ -24,7 +24,7 @@ export class UserController {
                     });
         } catch (err) {
             return res.json({
-                message: err
+                message: err.message
             });
         }
     }

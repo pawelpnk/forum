@@ -24,9 +24,8 @@ export class UserService {
         ) {}
 
     filter = (user: User): UserResponse => {
-        const { password, token, ...other } = user;
+        const { password, token, email, ...other } = user;
         return other;
-
     }
 
     async createUser(newUser: NewUser): Promise<UserResponse> {
@@ -78,6 +77,8 @@ export class UserService {
                 'optionalUser'
             ]
         });
+
+        if(!findUser) throw new HttpException('Zły login lub hasło', HttpStatus.NOT_FOUND);
 
         const checkIsNotBaned: boolean = findUser.active ? true : false;
 

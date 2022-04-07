@@ -29,7 +29,7 @@ const TopicPosts: React.FC = (): JSX.Element => {
 
     return (
         <Container className='text-light'>
-            <Nav.Link className='my-5 px-0 text-info' href={`/${currentSectionID}`}>Wróć do tematów z sekcji: {currentSection}</Nav.Link>
+            <Nav.Link className='my-5 px-0 text-info' href={`/s/${currentSectionID}`}>Wróć do tematów z sekcji: {currentSection}</Nav.Link>
             <p className='my-5'>{currentTopic}</p>
             <p>Stworzony przez: {currentTopicAuthor}</p>
             {posts.map((post: any) => {
