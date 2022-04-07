@@ -1,6 +1,7 @@
-import React, { ChangeEvent, useState } from 'react';
-import { Button, Container, Form } from 'react-bootstrap';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import { Button, Form } from 'react-bootstrap';
 import req from '../../helpers/request';
+import ModalInfo from '../modal/ModalInfo';
 
 const Register: React.FC = (): JSX.Element => {
     const [login, setLogin] = useState<string>('');
@@ -9,6 +10,13 @@ const Register: React.FC = (): JSX.Element => {
     const [email, setEmail] = useState<string>('');
     const [acceptCondition, setAcceptCondition] = useState<boolean>(false);
     const [message, setMessage] = useState<string>('');
+
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [text, setText] = useState<string>('');
+
+    useEffect(()=> {
+        resetInputs();
+    },[]);
 
     const handleOnLogin = (event: ChangeEvent<HTMLInputElement>): void => setLogin(event.target.value);
     const handleOnPassword = (event: ChangeEvent<HTMLInputElement>): void => setPassword(event.target.value);
@@ -48,37 +56,43 @@ const Register: React.FC = (): JSX.Element => {
 
         if(validateInputs()){
             try {
-                await req.post(`user/register`, {
+                const result = await req.post(`user/register`, {
                     login,
                     password,
                     email
                 });
+                setShowModal(true);
+                setText(result.data.message.message);
                 resetInputs();
             } catch (err) {
                 console.log(err);
-            }
-            
+            }            
         }
     }
 
     const checkValidationMessage: JSX.Element | null = message.length > 0 ? <p className='text-danger'>{message}</p> : null;
 
+    const handleOnClose = () => {
+        setShowModal(false);
+    }
+
     return (
+        <div className='d-flex justify-content-center'>
             <Form className='my-5 p-4' onSubmit={handleOnSubmit}>
                 {checkValidationMessage}
-                <Form.Group className='my-2'>
+                <Form.Group className='my-2 col-md-6'>
                     <Form.Control placeholder='login' type='text' onChange={handleOnLogin} value={login}/>
                 </Form.Group>
-                <Form.Group className='my-2'>
+                <Form.Group className='my-2 col-md-6'>
                     <Form.Control placeholder='hasło' type='password' onChange={handleOnPassword} value={password}/>
                 </Form.Group>
-                <Form.Group className='my-2'>
+                <Form.Group className='my-2 col-md-6'>
                     <Form.Control placeholder='potwierdź hasło' type='password' onChange={handleOnRepeatPassword} value={repeatPassword}/>
                 </Form.Group>
-                <Form.Group className='my-2'>
+                <Form.Group className='my-2 col-md-6'>
                     <Form.Control placeholder='email' type='email' onChange={handleOnEmail} value={email}/>
                 </Form.Group>
-                <Form.Text muted>Po założeniu konta w ustawieniach pojawia się opcja zmiany zdjęcia profilowgo</Form.Text>
+                <Form.Text muted>Po założeniu konta w ustawieniach pojawia się opcja zmiany zdjęcia profilowego</Form.Text>
                 <Form.Group className="my-2 text-light" >
                     <Form.Check type="checkbox" label="Akceptuj regulamin" onChange={handleOnCheck} />
                 </Form.Group>
@@ -86,6 +100,8 @@ const Register: React.FC = (): JSX.Element => {
                     Zarejstruj
                 </Button>
             </Form>
+            <ModalInfo show={showModal} onHide={handleOnClose} text={text}/>
+        </div>
     )
 }
 

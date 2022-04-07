@@ -39,7 +39,11 @@ export class UserService {
         });
 
         if(isUserExist) {
-            throw new HttpException('Użytkownik już istnieje', HttpStatus.CONFLICT)
+            throw new HttpException('Użytkownik już istnieje, zmień login lub email', HttpStatus.CONFLICT)
+        }
+
+        if(!newUser.login || !newUser.password || !newUser.email) {
+            throw new HttpException("Brak podstawowych danych", HttpStatus.BAD_REQUEST)
         }
 
         const createOptionalUser: OptionalUser = new OptionalUser();
