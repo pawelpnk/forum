@@ -1,9 +1,7 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NewSection } from 'src/dto/new-section.dto';
 import { Section } from 'src/entity/section.entity';
-import newSection from 'src/interface/new-section.interface';
-import { TopicService } from 'src/topic/topic.service';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -13,6 +11,11 @@ export class SectionService {
         ) {}
 
     async addSection(sectionName: NewSection): Promise<Section> {
+        console.log(sectionName.sectionName)
+        if(!sectionName.sectionName) {
+            throw new HttpException('Sekcja nie może mieć pustą nazwę', HttpStatus.BAD_REQUEST);
+        }
+
         const newSection = new Section();
         newSection.sectionName = sectionName.sectionName;
 

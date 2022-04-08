@@ -23,9 +23,7 @@ const TopicPosts: React.FC = (): JSX.Element => {
     const currentTopic = JSON.parse(localStorage.getItem("currentTopic") || "null").topic;
     const currentTopicAuthor = JSON.parse(localStorage.getItem("currentTopic") || "null").userId;
     const currentSection = JSON.parse(localStorage.getItem("currentSection") || "null").sectionName;
-    const currentSectionID = JSON.parse(localStorage.getItem("currentSection") || "null").id;
-
-    
+    const currentSectionID = JSON.parse(localStorage.getItem("currentSection") || "null").id;    
 
     return (
         <Container className='text-light'>

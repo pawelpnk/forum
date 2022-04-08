@@ -41,6 +41,7 @@ const Login: React.FC = (): JSX.Element => {
                 resetInputs();
                 setUser(result.data.user);
                 sessionStorage.setItem('currentUser', JSON.stringify(result.data.user));
+                navigate('/');
             }
         } catch(err) {
             console.log(err)

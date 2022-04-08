@@ -12,11 +12,17 @@ export class SectionController {
         @Body() newSection: NewSection,
         @Res() res: Response
     ) {
-        const addedSection = await this.sectionService.addSection(newSection);
-        return res.status(HttpStatus.OK).json({
-            message: 'Pomyślnie dodano nową sekcje',
-            addedSection
-        })
+        try {
+            const addedSection = await this.sectionService.addSection(newSection);
+            return res.status(HttpStatus.OK).json({
+                message: 'Pomyślnie dodano nową sekcje',
+                addedSection
+            })
+        } catch (err) {
+            return res.json({
+                message: err.message
+            })
+        }       
     }
 
     @Get('/')
