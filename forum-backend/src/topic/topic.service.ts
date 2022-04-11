@@ -29,6 +29,8 @@ export class TopicService {
         newTopic.section = findSection;
         newTopic.sectionId = findSection.id;
         newTopic.userId = findUser.id;
+        newTopic.countPostsTopic = 1;
+        newTopic.lastPostUser = findUser.login;
 
         await this.topicRepository.save(newTopic);
 
@@ -57,11 +59,18 @@ export class TopicService {
         return await this.topicRepository.findOneOrFail(id);
     }
 
-    async fetchAllTopics(id: string): Promise<Topic[]> {
-        return await this.topicRepository.find({sectionId: id}) 
+    async fetchAllTopics(id: string): Promise<any> {
+        const findTopics = await this.topicRepository.find({
+           where: { sectionId: id }
+        });
+        return findTopics;
     }
 
     async deleteTopic(id: string): Promise<any> {
         return await this.topicRepository.delete(id);
+    }
+
+    async updateTopic(data): Promise<any> {
+        return await this.topicRepository.save(data);
     }
 }

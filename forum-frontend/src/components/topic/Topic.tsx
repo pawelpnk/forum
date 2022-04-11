@@ -35,8 +35,9 @@ const Topic: React.FC = (): JSX.Element => {
 
     const fetchTopics = async (): Promise<void> => {
         const data = await req.get(`/topic/all/${sectionID}`);
-        setTopics(data.data)
         console.log(data.data);
+        setTopics(data.data)
+        
     }
 
     useEffect(()=> {
@@ -136,7 +137,9 @@ const Topic: React.FC = (): JSX.Element => {
                                             <Nav.Link className='text-light px-0' onClick={() => handleRedirectToTopicWithPosts(topic)}>{topic.topic}</Nav.Link>
                                         </Col>
                                         <Col>
-                                            <p className='d-flex justify-content-end text-muted '><small>{topic.updatedAt}</small></p>
+                                            <p className='d-flex justify-content-end text-muted '><small>Ostatni post: {topic.updatedAt}</small></p>
+                                            <p className='d-flex justify-content-end text-muted '><small>Dodany przez: {topic.lastPostUser}</small></p>
+                                            <p className='d-flex justify-content-end text-muted '><small>Ilość postów: {topic.countPostsTopic}</small></p>
                                         </Col>
                                     </Row>
                                     <Row>
@@ -147,9 +150,10 @@ const Topic: React.FC = (): JSX.Element => {
                                                 : `Stworzony przez nie istniejące konto ${topic.createdAt}`}
                                                 </small>
                                             </p>
+                                            
                                         </Col>
                                         <Col className='d-flex justify-content-end align-items-center'>
-                                            {userLogged && user.role === 'admin' && <Button variant='outline-danger' size='sm' onClick={() => handleShowModalDeleteTopic(topic.id)}>Usuń</Button>}
+                                            {userLogged && user.role === 'admin' && <Button variant='outline-danger' size='sm' onClick={() => handleShowModalDeleteTopic(topic.id)}>Usuń</Button>}                                            
                                         </Col>
                                     </Row>
                                 </Container>

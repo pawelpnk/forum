@@ -33,6 +33,12 @@ export class PostService {
 
         await this.postRepository.save(newPost);
 
+        findTopic.updatedAt = newPost.updateAt;
+        findTopic.countPostsTopic++;
+        findTopic.lastPostUser = findUser.login;
+
+        await this.topicService.updateTopic(findTopic);
+
         const PostResponse = {
             id: newPost.id,
             text: newPost.text,
@@ -68,6 +74,23 @@ export class PostService {
 
     async fetchAllPosts(idTopic: string): Promise<Post[]> {
         return await this.postRepository.find({topicId: idTopic});
+    }
+
+    async findLastPostAndCounts(id: string): Promise<any> {
+        const amountPosts = await this.postRepository.count({
+            topicId: id
+        })
+         const lastPost = await this.postRepository.findOne(id, {
+            where: {
+                topicId: id
+            },
+            // order: {createAt: 'DESC'}
+        })
+        const postToTopicResponse = {
+            amountPosts,
+            lastPost
+        }
+        return postToTopicResponse;
     }
 
     async fetchOnePost(idPost: string): Promise<Post> {

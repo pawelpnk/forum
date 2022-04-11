@@ -33,4 +33,10 @@ export class Topic {
 
     @OneToMany(() => Post, (post) => post.topic)
     posts: Post[]
+
+    @Column({nullable: true})
+    lastPostUser: string
+
+    @Column({nullable: true})
+    countPostsTopic: number
 }
