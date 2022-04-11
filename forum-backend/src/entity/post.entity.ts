@@ -28,7 +28,7 @@ export class Post {
     @Column({nullable: true})
     userId: string | null
 
-    @ManyToOne(() => Topic, (topic) => topic.posts)
+    @ManyToOne(() => Topic, (topic) => topic.posts, { cascade: true, onDelete:'CASCADE' })
     @JoinColumn({name: 'topicId'})
     topic: Topic
 

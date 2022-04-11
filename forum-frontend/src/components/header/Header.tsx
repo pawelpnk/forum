@@ -30,7 +30,7 @@ const Header: React.FC = (): JSX.Element => {
                     Ustawienia
                 </Tooltip>
             }>
-                <Nav.Link href="ustawienia"><Gear/></Nav.Link>                        
+                <Nav.Link href="/ustawienia"><Gear/></Nav.Link>                        
             </OverlayTrigger>
             <OverlayTrigger placement='bottom' overlay={
                 <Tooltip id='tooltip-bottom'>
@@ -47,14 +47,14 @@ const Header: React.FC = (): JSX.Element => {
                     Zaloguj
                 </Tooltip>
             }>
-                <Nav.Link href="zaloguj"><Person/></Nav.Link>                        
+                <Nav.Link href="/zaloguj"><Person/></Nav.Link>                        
             </OverlayTrigger>
             <OverlayTrigger placement='bottom' overlay={
                 <Tooltip id='tooltip-bottom'>
                     Rejestracja
                 </Tooltip>
             }>
-                <Nav.Link href="rejestracja"><PersonPlus/></Nav.Link>                        
+                <Nav.Link href="/rejestracja"><PersonPlus/></Nav.Link>                        
             </OverlayTrigger>
         </Nav>
 

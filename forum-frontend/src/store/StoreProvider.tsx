@@ -5,7 +5,9 @@ export const UserContext = createContext<any>(null);
 
 const StoreProvider: React.FC = ({children}): JSX.Element => {
     const [theme, setTheme] = useState<string>('dark');
-    const [user, setUser] = useState<any>('');
+    const [user, setUser] = useState<any>({
+        role: ''
+    });
 
     useEffect(()=> {
         setUser(JSON.parse(sessionStorage.getItem("currentUser") || "null"))

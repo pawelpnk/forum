@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router';
 import { UserContext } from '../../store/StoreProvider';
 import ModalSection from '../modalSection/ModalSection';
 import ModalInfo from '../modal/ModalInfo';
+import ModalConfirm from '../modalConfirm/modalConfirm';
 
 export interface SectionType {
     id: string;
@@ -20,6 +21,12 @@ const Home: React.FC = (): JSX.Element => {
     const [showModalInfo, setShowModalInfo] = useState<boolean>(false);
     const [text, setText] = useState<string>('');
 
+    const [showModalSectionUpdate, setShowModalSectionUpdate] = useState<boolean>(false);
+    const [sectionId, setSectionId] = useState<string>('');
+
+    const [showModalConfirm, setShowModalConfirm] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>('');
+
     const { user } = useContext(UserContext);
 
     const navigate = useNavigate();
@@ -27,7 +34,6 @@ const Home: React.FC = (): JSX.Element => {
     const sectionData = async (): Promise<void> => {
         const data = await req.get('section');
         setSection(data.data);
-        console.log(section)
     }
 
     useEffect(() => {
@@ -45,13 +51,16 @@ const Home: React.FC = (): JSX.Element => {
 
     const cleanModalSection = () => {
         setShowModalSection(false);
+        setShowModalSectionUpdate(false);
         setNewSectionName('');
     }
 
     const handleNewSection = (e: ChangeEvent<HTMLInputElement>) => setNewSectionName(e.target.value);
-    const handleCloseModal = () => {
+
+    const handleCloseModalSection = () => {
         cleanModalSection();
         setText('');
+        setSectionId('');
     }
     
     const handleAddSectionPost = async (): Promise<void> => {
@@ -61,11 +70,47 @@ const Home: React.FC = (): JSX.Element => {
             sectionName: newSectionName
         });
         setText(result.data.message);
-        console.log(result.data)
     }
 
     const handleCloseModalInfo = () => {
+        setText('');
+        setNewSectionName('');
+        setSectionId('');
         setShowModalInfo(false);
+    }
+
+    const userAdminLogged: string | null = user ? user.role : null;
+
+    const handleEditSection = (id: string) => {
+        setSectionId(id);
+        setShowModalSectionUpdate(true);
+    }
+
+    const handleDeleteSection = (id: string) => {
+        setSectionId(id);
+        setTitle('Czy na pewno chcesz usunąć tę sekcję? Spowoduje to usunięcie wszystkich jej tematów wraz z postami');
+        setShowModalConfirm(true);
+    }
+
+    const handleUpdateSectionPatch = async (): Promise<void> => {
+        cleanModalSection();
+        const result = await req.patch(`section/update/${sectionId}`, {
+            sectionName: newSectionName
+        });
+        setShowModalInfo(true);
+        setText(result.data.message);
+    }
+
+    const handleCloseModalConfirm = () => {
+        setShowModalConfirm(false);
+        setSectionId('');
+    }
+
+    const handleConfirmDeleteSection = async (): Promise<void> => {
+        setShowModalConfirm(false);
+        const result = await req.delete(`section/delete/${sectionId}`);
+        setShowModalInfo(true);
+        setText(result.data.message);
     }
 
     return (        
@@ -74,7 +119,7 @@ const Home: React.FC = (): JSX.Element => {
                 a następnie temat lub założysz swój własny! Zapraszamy również do odwiedzenia Komunikatora, gdzie
                 można porozmawiać z wybranymi osobami, a także zajrzeć do zakładki "Nuda" :)
             </p>
-            {user.role === 'admin' ? <Button className='mb-2' variant='outline-light' onClick={handleAddSectionButton}>Dodaj nową sekcje</Button> : null}
+            {userAdminLogged === 'admin' ? <Button className='mb-2' variant='outline-light' onClick={handleAddSectionButton}>Dodaj nową sekcje</Button> : null}
             {   
                 section.map((sec: any) => {
                     return (
@@ -85,12 +130,18 @@ const Home: React.FC = (): JSX.Element => {
                             <Col sm={5}>
                                 <Nav.Link onClick={() => handleRedirectToTopics(sec)}>{sec.sectionName}</Nav.Link>
                             </Col>
+                            <Col className='d-flex justify-content-end'>
+                                {userAdminLogged === 'admin' ? <Button variant='outline-warning' className='mx-2' onClick={() => handleEditSection(sec.id)}>Edytuj</Button> : null}
+                                {userAdminLogged === 'admin' ? <Button variant='outline-danger' onClick={() => handleDeleteSection(sec.id)}>Usuń</Button> : null}
+                            </Col>
                         </Row>
                     )
                 })
             }
-            <ModalSection show={showModalSection} onHide={handleCloseModal} handleNewSection={handleNewSection} newSectionName={newSectionName} handleAddSectionPost={handleAddSectionPost}/>
-            <ModalInfo show={showModalInfo} onHide={handleCloseModalInfo} text={text}/>         
+            <ModalSection show={showModalSection} onHide={handleCloseModalSection} handleNewSection={handleNewSection} newSectionName={newSectionName} handleAddSectionPost={handleAddSectionPost}/>
+            <ModalInfo show={showModalInfo} onHide={handleCloseModalInfo} text={text}/>
+            <ModalSection show={showModalSectionUpdate} onHide={handleCloseModalSection} handleNewSection={handleNewSection} newSectionName={newSectionName} handleAddSectionPost={handleUpdateSectionPatch}/>
+            <ModalConfirm show={showModalConfirm} onHide={handleCloseModalConfirm} title={title} handleConfirm={handleConfirmDeleteSection}/>         
         </Container>        
     )
 }

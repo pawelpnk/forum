@@ -23,7 +23,7 @@ const ModalSection: React.FC<any> = ({show, onHide, handleNewSection, newSection
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant='outline-primary' onClick={handleAddSectionPost}>Dodaj nową sekcje</Button>
+                    <Button variant='outline-primary' onClick={handleAddSectionPost}>Zatwierdź</Button>
                     <Button variant='outline-primary' onClick={onHide}>Anuluj</Button>
                 </Modal.Footer>
             </Modal>

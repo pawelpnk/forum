@@ -24,7 +24,7 @@ export class Topic {
     @Column({nullable: true})
     userId: string
 
-    @ManyToOne(() => Section, (section) => section.topics)
+    @ManyToOne(() => Section, (section) => section.topics, { cascade: true, onDelete:'CASCADE' })
     @JoinColumn({name: "sectionId"})
     section: Section
 

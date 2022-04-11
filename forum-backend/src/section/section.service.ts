@@ -32,7 +32,10 @@ export class SectionService {
     }
 
     async updateSectionName(id: string, sectionName: NewSection): Promise<Section> {
-        await this.sectionEntity.update(id, sectionName);
+        if(!sectionName.sectionName) {
+            throw new HttpException('Sekcja nie może mieć pustą nazwę', HttpStatus.BAD_REQUEST);
+        }
+        await this.sectionEntity.update({id: id}, {sectionName: sectionName.sectionName});
         return this.sectionEntity.findOne(id);
     }
 

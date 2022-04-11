@@ -43,11 +43,18 @@ export class SectionController {
         @Body() updateSection: NewSection,
         @Param('id') id: string
     ) {
-        const updtSection = await this.sectionService.updateSectionName(id, updateSection);
-        return res.status(HttpStatus.OK).json({
+        try {
+            const updtSection = await this.sectionService.updateSectionName(id, updateSection);
+            return res.status(HttpStatus.OK).json({
             message: 'Pomyślnie zaaktualizowano sekcje',
             updtSection
         })
+        } catch (err) {
+            return res.json({
+                message: err.message
+            })
+        }
+        
     }
 
     @Delete('/delete/:id')
@@ -55,9 +62,16 @@ export class SectionController {
         @Res() res: Response,
         @Param('id') id: string
     ) {
-        await this.sectionService.deleteSection(id);
-        return res.status(HttpStatus.OK).json({
+        try {
+            await this.sectionService.deleteSection(id);
+            return res.status(HttpStatus.OK).json({
             message: "Pomyślnie usunięto sekcje"
         })
+        } catch (err) {
+            return res.json({
+                message: err.message
+            })
+        }
+        
     }
 }
