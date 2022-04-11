@@ -59,7 +59,7 @@ const TopicPosts: React.FC = (): JSX.Element => {
                                     <Col>
                                         <p className='py-0 my-0 text-white-50'>
                                             <small>{post.userId 
-                                            ? `Stworzony przez ${post.userId} $postc.createdAt}` 
+                                            ? `Stworzony przez ${post.userId} ` 
                                             : `Stworzony przez nie istniejące konto`}
                                             </small>
                                         </p>

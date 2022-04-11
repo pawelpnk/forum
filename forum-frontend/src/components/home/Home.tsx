@@ -79,7 +79,7 @@ const Home: React.FC = (): JSX.Element => {
         setShowModalInfo(false);
     }
 
-    const userAdminLogged: string | null = user ? user.role : null;
+    const userLogged: string | null = user ? user.role : null;
 
     const handleEditSection = (id: string) => {
         setSectionId(id);
@@ -119,7 +119,7 @@ const Home: React.FC = (): JSX.Element => {
                 a następnie temat lub założysz swój własny! Zapraszamy również do odwiedzenia Komunikatora, gdzie
                 można porozmawiać z wybranymi osobami, a także zajrzeć do zakładki "Nuda" :)
             </p>
-            {userAdminLogged === 'admin' ? <Button className='mb-2' variant='outline-light' onClick={handleAddSectionButton}>Dodaj nową sekcje</Button> : null}
+            {userLogged === 'admin' ? <Button className='mb-2' variant='outline-light' onClick={handleAddSectionButton}>Dodaj nową sekcje</Button> : null}
             {   
                 section.map((sec: any) => {
                     return (
@@ -131,8 +131,8 @@ const Home: React.FC = (): JSX.Element => {
                                 <Nav.Link onClick={() => handleRedirectToTopics(sec)}>{sec.sectionName}</Nav.Link>
                             </Col>
                             <Col className='d-flex justify-content-end'>
-                                {userAdminLogged === 'admin' ? <Button variant='outline-warning' className='mx-2' onClick={() => handleEditSection(sec.id)}>Edytuj</Button> : null}
-                                {userAdminLogged === 'admin' ? <Button variant='outline-danger' onClick={() => handleDeleteSection(sec.id)}>Usuń</Button> : null}
+                                {userLogged === 'admin' ? <Button variant='outline-warning' className='mx-2' onClick={() => handleEditSection(sec.id)}>Edytuj</Button> : null}
+                                {userLogged === 'admin' ? <Button variant='outline-danger' onClick={() => handleDeleteSection(sec.id)}>Usuń</Button> : null}
                             </Col>
                         </Row>
                     )

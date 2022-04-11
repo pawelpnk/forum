@@ -45,6 +45,27 @@ export class PostService {
         return PostResponse;        
     }
 
+    async createPostWithTopic(body): Promise<any> {
+        const newPost: Post = new Post();
+
+        newPost.text = body.firstPost;
+        newPost.createAt = body.createdAt
+        newPost.updateAt = body.updatedAt;
+        newPost.rating = 0;
+        newPost.user = body.user;
+        newPost.userId = body.user.id;
+        newPost.topic = body.topic;
+        newPost.topicId = body.topic.id;
+
+        await this.postRepository.save(newPost);
+        
+        const PostResponse = {
+            id: newPost.id,
+        }
+
+        return PostResponse;
+    }
+
     async fetchAllPosts(idTopic: string): Promise<Post[]> {
         return await this.postRepository.find({topicId: idTopic});
     }

@@ -55,10 +55,10 @@ export class TopicController {
         }
     }
 
-    @Delete('/delete')
+    @Delete('/delete/:id')
     async deleteTopic(
         @Res() res: Response,
-        @Body() idTopic: string
+        @Param('id') idTopic: string
     ) {
         try {
             await this.topicService.deleteTopic(idTopic);
@@ -67,7 +67,7 @@ export class TopicController {
             })
         } catch (err) {
             res.status(HttpStatus.INTERNAL_SERVER_ERROR).json({
-                message: err
+                message: err.message
             })
         }
     }
