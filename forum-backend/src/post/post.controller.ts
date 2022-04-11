@@ -59,15 +59,15 @@ export class PostController {
         }
     }
 
-    @Delete('/delete')
+    @Delete('/delete/:id')
     async deletePost(
         @Res() res: Response,
-        @Body() idPost: string
+        @Param('id') idPost: string
     ) {
         try {
             await this.postService.deletePost(idPost);
             return res.status(HttpStatus.OK).json({
-                message: "Post zostało usunięty"
+                message: "Post został usunięty"
             });
         } catch {
             return res.json({

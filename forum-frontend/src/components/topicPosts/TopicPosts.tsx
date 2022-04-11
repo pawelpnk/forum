@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Col, Container, Nav, Row } from 'react-bootstrap';
+import React, { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import { Button, Col, Container, Form, Nav, Row } from 'react-bootstrap';
 import { HandThumbsDown, HandThumbsUp } from 'react-bootstrap-icons';
 import { useParams } from 'react-router';
 import req from '../../helpers/request';
+import { UserContext } from '../../store/StoreProvider';
 
 const TopicPosts: React.FC = (): JSX.Element => {
     const [posts, setPosts] = useState<any>([]);
+    const [newPost, setNewPost] = useState<string>('');
+    const [refreshPage, setRefreshPage] = useState<boolean>(false);
 
     const { topicID } = useParams();
+    const { user } = useContext(UserContext);
+    const userLogged: boolean = Boolean(user);
 
     const fetchPosts = async (): Promise<void> => {
         const data = await req.get(`post/all/${topicID}`)
@@ -17,13 +22,42 @@ const TopicPosts: React.FC = (): JSX.Element => {
 
     useEffect(()=>{
         fetchPosts();
-        console.log(posts)
-    },[])
+    },[refreshPage]);
 
     const currentTopic = JSON.parse(localStorage.getItem("currentTopic") || "null").topic;
     const currentTopicAuthor = JSON.parse(localStorage.getItem("currentTopic") || "null").userId;
     const currentSection = JSON.parse(localStorage.getItem("currentSection") || "null").sectionName;
-    const currentSectionID = JSON.parse(localStorage.getItem("currentSection") || "null").id;    
+    const currentSectionID = JSON.parse(localStorage.getItem("currentSection") || "null").id;
+
+    const handleNewPost = (e: ChangeEvent<HTMLInputElement>) => {
+        setNewPost(e.target.value)
+    }
+
+    const validateText = () => {
+        if(newPost.length < 10) {
+            return false
+        }
+        return true;
+    }
+
+    const handleSubmitNewPost = async (e: FormEvent): Promise<void> => {
+        e.preventDefault();
+
+        if(validateText()){            
+            setNewPost('');
+            const result = await req.post('post/new', {
+                text: newPost,
+                idUser: user.id,
+                idTopic: topicID
+            })
+            setRefreshPage(prev => !prev);
+        }        
+    }
+
+    const handleDeletePost = async (id: string): Promise<void> => {
+        await req.delete(`post/delete/${id}`);
+        setRefreshPage(prev => !prev)
+    }
 
     return (
         <Container className='text-light'>
@@ -54,6 +88,10 @@ const TopicPosts: React.FC = (): JSX.Element => {
                                     <Col>
                                         <p>{post.text}</p>
                                     </Col>
+                                    <Col className='d-flex justify-content-end align-items-center'>
+                                        {userLogged && (user.role === 'admin' || user.login === post.userId) && <Button className='mx-2' variant='outline-warning' size='sm'>Edytuj</Button>}
+                                        {userLogged && user.role === 'admin' && <Button variant='outline-danger' size='sm' onClick={() => handleDeletePost(post.id)}>Usuń</Button>}
+                                    </Col>
                                 </Row>
                                 <Row>
                                     <Col>
@@ -73,7 +111,14 @@ const TopicPosts: React.FC = (): JSX.Element => {
                     </Row>
                     )
                 })
-            } 
+            }
+            <Form className='my-4' onSubmit={handleSubmitNewPost}>
+                <Form.Group className='my-4'>
+                    <Form.Label>Dodaj nowy post</Form.Label>
+                    <Form.Control as='textarea' rows={4} value={newPost} onChange={handleNewPost} placeholder="Minimum 10 znaków"/>
+                </Form.Group>
+                <Button variant='outline-secondary' type='submit'>Dodaj</Button>
+            </Form> 
         </Container>
     )
 }

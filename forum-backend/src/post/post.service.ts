@@ -114,6 +114,10 @@ export class PostService {
     }
 
     async deletePost(id: string): Promise<any> {
+        const findPost = await this.postRepository.findOne(id);
+        const findTopic = await this.topicService.fetchOneTopic(findPost.topicId);
+        findTopic.countPostsTopic--;
+        await this.topicService.updateTopic(findTopic);
         return await this.postRepository.delete(id);
     }
 }
