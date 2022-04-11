@@ -23,15 +23,21 @@ export class Post {
 
     @ManyToOne(() => User, (user) => user.posts, { cascade: true, onDelete: "SET NULL"})
     @JoinColumn({name: "login"})
-    user: User
+    user: User;
 
     @Column({nullable: true})
-    userId: string | null
+    userId: string | null;
 
     @ManyToOne(() => Topic, (topic) => topic.posts, { cascade: true, onDelete:'CASCADE' })
     @JoinColumn({name: 'topicId'})
-    topic: Topic
+    topic: Topic;
 
     @Column()
-    topicId: string
+    topicId: string;
+
+    @Column("text", {
+        array: true,
+        default: []
+    })
+    userRated: string[];
 }

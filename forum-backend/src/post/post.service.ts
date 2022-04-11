@@ -5,6 +5,7 @@ import { TopicService } from 'src/topic/topic.service';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import NewPost from './post.dto/new-post.dto';
+import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';
 import PostResponse from './post.interface/post-response.interface';
 
@@ -96,21 +97,38 @@ export class PostService {
         return await this.postRepository.findOne({id: idPost})
     }
 
-    async updatePost(updatePost: UpdatePost): Promise<Post> {
+    async updatePost(id: string, updatePost: UpdatePost): Promise<Post> {
 
-        await this.postRepository.update({id: updatePost.id}, {
+        await this.postRepository.update({id}, {
             text: updatePost.text,
-            rating: updatePost.rating,
             updateAt: new Date().toLocaleString()
         })
 
-        const updatedPost = await this.fetchOnePost(updatePost.id);
+        const updatedPost = await this.fetchOnePost(id);
 
         if(!updatedPost) {
             throw new HttpException('Nie ma takiego postu', HttpStatus.BAD_REQUEST)
         }
 
         return updatedPost;
+    }
+
+    async changeRate(id: string, rateUpdatePost: RateUpdatePost): Promise<Post> {
+        const findPost = await this.postRepository.findOneOrFail(id);
+        const checkUserRated: boolean = findPost.userRated.some(user => user === rateUpdatePost.userLogin);
+
+        if(checkUserRated) {
+            throw new HttpException('Już zagłosowano', HttpStatus.FORBIDDEN);
+        }
+        if(rateUpdatePost.rate === 1){
+            findPost.rating++;
+        } else {
+            findPost.rating--;
+        }
+        findPost.userRated.push(rateUpdatePost.userLogin);
+        await this.postRepository.save(findPost);
+
+        return findPost;
     }
 
     async deletePost(id: string): Promise<any> {

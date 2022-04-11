@@ -4,11 +4,15 @@ import { HandThumbsDown, HandThumbsUp } from 'react-bootstrap-icons';
 import { useParams } from 'react-router';
 import req from '../../helpers/request';
 import { UserContext } from '../../store/StoreProvider';
+import ModalPostEdit from '../modalPostEdit/ModalPostEdit';
 
 const TopicPosts: React.FC = (): JSX.Element => {
     const [posts, setPosts] = useState<any>([]);
     const [newPost, setNewPost] = useState<string>('');
     const [refreshPage, setRefreshPage] = useState<boolean>(false);
+    const [showModalEditPost, setShowModalEditPost] = useState<boolean>(false);
+    const [newTextPost, setNewTextPost] = useState<string>('');
+    const [postId, setPostId] = useState<string>('');
 
     const { topicID } = useParams();
     const { user } = useContext(UserContext);
@@ -45,7 +49,7 @@ const TopicPosts: React.FC = (): JSX.Element => {
 
         if(validateText()){            
             setNewPost('');
-            const result = await req.post('post/new', {
+            await req.post('post/new', {
                 text: newPost,
                 idUser: user.id,
                 idTopic: topicID
@@ -59,12 +63,41 @@ const TopicPosts: React.FC = (): JSX.Element => {
         setRefreshPage(prev => !prev)
     }
 
+    const handleEditPost = (id: string) => {
+        setPostId(id);
+        setShowModalEditPost(true);
+    }
+
+    const closeModalEditPost = () => {
+        setShowModalEditPost(false);
+    }
+
+    const handleInputEditPost = (e: ChangeEvent<HTMLInputElement>) => {
+        setNewTextPost(e.target.value);
+    }
+
+    const handleUpdatePost = async (): Promise<void> => {
+       await req.patch(`post/update/${postId}`, {
+           text: newTextPost
+       });
+       setRefreshPage(prev => !prev);
+       setShowModalEditPost(false); 
+    }
+
+    const handleUpdateRatePost = async(nb: number, id: string): Promise<void> => {
+        await req.patch(`post/update/rate/${id}`, {
+            rate: nb,
+            userLogin: user.login
+        })
+        setRefreshPage(prev => !prev);
+    }
+
     return (
         <Container className='text-light'>
             <Nav.Link className='my-5 px-0 text-info' href={`/s/${currentSectionID}`}>Wróć do tematów z sekcji: {currentSection}</Nav.Link>
             <p className='my-5'>{currentTopic}</p>
             <p>Stworzony przez: {currentTopicAuthor}</p>
-            {posts.map((post: any) => {
+            {posts.sort((a: any, b: any) => a.createAt.localeCompare(b.createAt)).map((post: any) => {
 
                 const comparisonTimeCreateAndUpdate: boolean = post.createAt === post.updateAt;
 
@@ -78,9 +111,9 @@ const TopicPosts: React.FC = (): JSX.Element => {
                                     </Col>
                                     <Col>
                                         <small className='text-light py-1 justify-content-end d-flex align-items-center'>
-                                            <HandThumbsUp className='mx-2 text-success'/>
+                                            <HandThumbsUp onClick={() => handleUpdateRatePost(1, post.id)} className='mx-2 text-success'/>
                                             {post.rating}
-                                            <HandThumbsDown className='mx-2 text-danger'/>
+                                            <HandThumbsDown onClick={() => handleUpdateRatePost(-1, post.id)} className='mx-2 text-danger'/>
                                         </small>
                                     </Col>
                                 </Row>
@@ -89,7 +122,7 @@ const TopicPosts: React.FC = (): JSX.Element => {
                                         <p>{post.text}</p>
                                     </Col>
                                     <Col className='d-flex justify-content-end align-items-center'>
-                                        {userLogged && (user.role === 'admin' || user.login === post.userId) && <Button className='mx-2' variant='outline-warning' size='sm'>Edytuj</Button>}
+                                        {userLogged && (user.role === 'admin' || user.login === post.userId) && <Button className='mx-2' variant='outline-warning' size='sm' onClick={() => handleEditPost(post.id)}>Edytuj</Button>}
                                         {userLogged && user.role === 'admin' && <Button variant='outline-danger' size='sm' onClick={() => handleDeletePost(post.id)}>Usuń</Button>}
                                     </Col>
                                 </Row>
@@ -118,7 +151,8 @@ const TopicPosts: React.FC = (): JSX.Element => {
                     <Form.Control as='textarea' rows={4} value={newPost} onChange={handleNewPost} placeholder="Minimum 10 znaków"/>
                 </Form.Group>
                 <Button variant='outline-secondary' type='submit'>Dodaj</Button>
-            </Form> 
+            </Form>
+            <ModalPostEdit show={showModalEditPost} onHide={closeModalEditPost} textPost={newTextPost} handleInputEditPost={handleInputEditPost} handleUpdatePost={handleUpdatePost}/> 
         </Container>
     )
 }

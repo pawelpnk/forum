@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import NewPost from './post.dto/new-post.dto';
+import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';
 import { PostService } from './post.service';
 
@@ -41,13 +42,14 @@ export class PostController {
         }
     }
 
-    @Patch('/update')
+    @Patch('/update/:id')
     async updatePost(
         @Res() res: Response,
-        @Body() bodyUpdatePost: UpdatePost
+        @Body() bodyUpdatePost: UpdatePost,
+        @Param('id') id: string
     ) {
         try {
-            const updatePost = await this.postService.updatePost(bodyUpdatePost);
+            const updatePost = await this.postService.updatePost(id, bodyUpdatePost);
             return res.status(HttpStatus.OK).json({
                 message: "Zaaktualizowano pomyślnie",
                 updatePost
@@ -55,6 +57,25 @@ export class PostController {
         } catch (err) {
             return res.json({
                 message: err
+            })
+        }
+    }
+
+    @Patch('update/rate/:id')
+    async changeRatePost (
+        @Res() res: Response,
+        @Body() rateUpdatePost: RateUpdatePost,
+        @Param('id') id: string
+    ) {
+        try {
+            const changeRate = await this.postService.changeRate(id, rateUpdatePost);
+            return res.status(HttpStatus.OK).json({
+                message: 'Pomyślnie zmieniono ocene',
+                changeRate
+            })
+        } catch {
+            return res.json({
+                message: "Błąd"
             })
         }
     }

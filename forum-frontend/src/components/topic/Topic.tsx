@@ -127,7 +127,7 @@ const Topic: React.FC = (): JSX.Element => {
                         {userLogged && <Button onClick={handleAddNewTopic} variant='outline-light'>Dodaj nowy temat</Button>}
                     </Col>
                 </Row>
-                {topics.map((topic: any) => {
+                {topics.sort((a: any, b: any) => b.updatedAt.localeCompare(a.updatedAt)).map((topic: any) => {
                     return (
                         <Row key={topic.id} className='border py-1 '>
                             <Col className='py-1'>
