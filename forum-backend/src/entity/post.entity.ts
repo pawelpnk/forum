@@ -22,7 +22,7 @@ export class Post {
     updateAt: string;
 
     @ManyToOne(() => User, (user) => user.posts, { cascade: true, onDelete: "SET NULL"})
-    @JoinColumn({name: "userId"})
+    @JoinColumn({name: "login"})
     user: User
 
     @Column({nullable: true})

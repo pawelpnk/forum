@@ -18,7 +18,7 @@ export class Topic {
     updatedAt: string
 
     @ManyToOne(() => User, (user) => user.topics, { cascade: true, onDelete: "SET NULL"})
-    @JoinColumn({name: "userId"},)
+    @JoinColumn({name: "login"},)
     user: User
 
     @Column({nullable: true})

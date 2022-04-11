@@ -27,7 +27,7 @@ export class PostService {
         newPost.updateAt = new Date().toLocaleString();
         newPost.rating = 0;
         newPost.user = findUser;
-        newPost.userId = findUser.id;
+        newPost.userId = findUser.login;
         newPost.topic = findTopic;
         newPost.topicId = findTopic.id;
 
@@ -84,7 +84,6 @@ export class PostService {
             where: {
                 topicId: id
             },
-            // order: {createAt: 'DESC'}
         })
         const postToTopicResponse = {
             amountPosts,

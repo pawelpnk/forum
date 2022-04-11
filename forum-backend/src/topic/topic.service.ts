@@ -28,7 +28,7 @@ export class TopicService {
         newTopic.user = findUser;
         newTopic.section = findSection;
         newTopic.sectionId = findSection.id;
-        newTopic.userId = findUser.id;
+        newTopic.userId = findUser.login;
         newTopic.countPostsTopic = 1;
         newTopic.lastPostUser = findUser.login;
 
