@@ -17,10 +17,12 @@ const TopicPosts: React.FC = (): JSX.Element => {
 	const [postId, setPostId] = useState<string>('');
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [totalPage, setTotalPage] = useState<number>(1);
+	const [currentTopicLS, setCurrentTopicLS] = useState<string>('');
 
 	const postPerPage = 10;
 	
 	const currentTopic = JSON.parse(localStorage.getItem("currentTopic") || "null").topic;
+	const currentTopicID = JSON.parse(localStorage.getItem("currentTopic") || "null").id;
 	const currentTopicAuthor = JSON.parse(localStorage.getItem("currentTopic") || "null").userId;
 	const currentSection = JSON.parse(localStorage.getItem("currentSection") || "null").sectionName;
 	const currentSectionID = JSON.parse(localStorage.getItem("currentSection") || "null").id;
@@ -28,6 +30,18 @@ const TopicPosts: React.FC = (): JSX.Element => {
 	const { topicID } = useParams();
 	const { user } = useContext(UserContext);
 	const userLogged: boolean = Boolean(user);
+
+	const fetchPosts = async (): Promise<void> => {
+			const data = await req.get(`post/all/${currentTopicID}`)
+			setPosts(data.data.sort((a: any, b: any) => a.createAt.localeCompare(b.createAt)));
+			console.log(data.data.sort((a: any, b: any) => a.createAt.localeCompare(b.createAt)))
+			setTotalPage(Math.ceil(data.data.length/postPerPage));
+	}
+
+	useEffect(()=>{
+			fetchPosts();
+			setCurrentTopicLS(currentTopicID);
+	},[refreshPage, currentTopicLS]);
 
 	const setPostInPage = () => {
 		const lastIndexPost = currentPage * postPerPage;
@@ -40,18 +54,6 @@ const TopicPosts: React.FC = (): JSX.Element => {
 	useEffect(()=>{
 		setPostInPage();
 	},[currentPage, posts])
-
-	const fetchPosts = async (): Promise<void> => {
-			const data = await req.get(`post/all/${topicID}`)
-			setPosts(data.data.sort((a: any, b: any) => a.createAt.localeCompare(b.createAt)));
-			console.log(data.data.sort((a: any, b: any) => a.createAt.localeCompare(b.createAt)))
-			setTotalPage(Math.ceil(data.data.length/postPerPage));
-	}
-
-
-	useEffect(()=>{
-			fetchPosts();
-	},[refreshPage]);
 
 	const handleNewPost = (e: ChangeEvent<HTMLInputElement>) => {
 			setNewPost(e.target.value)
