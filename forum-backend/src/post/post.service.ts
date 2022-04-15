@@ -13,13 +13,18 @@ import PostResponse from './post.interface/post-response.interface';
 export class PostService {
     constructor(
         @InjectRepository(Post) private postRepository: Repository<Post>,
-        @Inject(forwardRef(() => UserService))private userService: UserService,
-        @Inject(forwardRef(()=>TopicService))private topicService: TopicService
+        @Inject(forwardRef(() => UserService)) private userService: UserService,
+        @Inject(forwardRef(() => TopicService)) private topicService: TopicService
     ) {}
 
     async createPost(body: NewPost): Promise<PostResponse> {
         const findUser = await this.userService.findUserHelperId(body.idUser);
-        const findTopic = await this.topicService.fetchOneTopic(body.idTopic)
+        const findTopic = await this.topicService.fetchOneTopic(body.idTopic);
+
+        const checkSignedUsers = body.text.match(/@+/gi);
+        if(checkSignedUsers) {
+            console.log(body.text.match(/(?<=@)\w+/gi));
+        }
 
         const newPost: Post = new Post();
 
