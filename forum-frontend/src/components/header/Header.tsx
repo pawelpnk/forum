@@ -64,8 +64,8 @@ const Header: React.FC = (): JSX.Element => {
             <Container>
                 <Nav className="me-auto">
                     <Nav.Link href="/">Forum</Nav.Link>
-                    <Nav.Link href="komunikator">Komunikator</Nav.Link>
-                    <Nav.Link href="games">Nuda?</Nav.Link>
+                    <Nav.Link href="/komunikator">Komunikator</Nav.Link>
+                    <Nav.Link href="/games">Nuda?</Nav.Link>
                 </Nav>
                 {setPropertylabel}
             </Container>

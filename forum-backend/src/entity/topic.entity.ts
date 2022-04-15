@@ -1,3 +1,4 @@
+import { Length } from "class-validator";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Post } from "./post.entity";
 import { Section } from "./section.entity";
@@ -9,6 +10,7 @@ export class Topic {
     id: string
 
     @Column()
+    @Length(10, 100)
     topic: string
 
     @Column()

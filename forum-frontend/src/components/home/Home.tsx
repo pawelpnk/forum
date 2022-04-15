@@ -124,13 +124,13 @@ const Home: React.FC = (): JSX.Element => {
                 section.map((sec: any) => {
                     return (
                         <Row key={sec.id} className='border py-3'>
-                            <Col sm={1} className='px-4 d-flex justify-content-center align-items-center'>
+                            <Col xs='auto' sm={1} className='px-4 d-flex justify-content-center align-items-center'>
                                 <ChatRightText />
                             </Col>
-                            <Col sm={5}>
+                            <Col xs sm={5}>
                                 <Nav.Link onClick={() => handleRedirectToTopics(sec)}>{sec.sectionName}</Nav.Link>
                             </Col>
-                            <Col className='d-flex justify-content-end'>
+                            <Col xs className='d-flex justify-content-end'>
                                 {userLogged === 'admin' ? <Button variant='outline-warning' className='mx-2' onClick={() => handleEditSection(sec.id)}>Edytuj</Button> : null}
                                 {userLogged === 'admin' ? <Button variant='outline-danger' onClick={() => handleDeleteSection(sec.id)}>Usuń</Button> : null}
                             </Col>

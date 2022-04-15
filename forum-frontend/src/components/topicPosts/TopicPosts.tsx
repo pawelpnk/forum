@@ -1,160 +1,141 @@
 import React, { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
-import { Button, Col, Container, Form, Nav, Row } from 'react-bootstrap';
-import { HandThumbsDown, HandThumbsUp } from 'react-bootstrap-icons';
+import { Button, Container, Form, Nav } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import req from '../../helpers/request';
 import { UserContext } from '../../store/StoreProvider';
 import ModalPostEdit from '../modalPostEdit/ModalPostEdit';
+import PaginationPost from '../pagination/PaginationPost';
+import Post from '../post/Post';
 
 const TopicPosts: React.FC = (): JSX.Element => {
-    const [posts, setPosts] = useState<any>([]);
-    const [newPost, setNewPost] = useState<string>('');
-    const [refreshPage, setRefreshPage] = useState<boolean>(false);
-    const [showModalEditPost, setShowModalEditPost] = useState<boolean>(false);
-    const [newTextPost, setNewTextPost] = useState<string>('');
-    const [postId, setPostId] = useState<string>('');
+	const [posts, setPosts] = useState<any>([]);
+	const [postsInOnePage, setPostsInOnePage] = useState<any>([]);
+	const [newPost, setNewPost] = useState<string>('');
+	const [refreshPage, setRefreshPage] = useState<boolean>(false);
+	const [showModalEditPost, setShowModalEditPost] = useState<boolean>(false);
+	const [newTextPost, setNewTextPost] = useState<string>('');
+	const [postId, setPostId] = useState<string>('');
+	const [currentPage, setCurrentPage] = useState<number>(1);
+	const [totalPage, setTotalPage] = useState<number>(1);
 
-    const { topicID } = useParams();
-    const { user } = useContext(UserContext);
-    const userLogged: boolean = Boolean(user);
+	const postPerPage = 10;
+	
+	const currentTopic = JSON.parse(localStorage.getItem("currentTopic") || "null").topic;
+	const currentTopicAuthor = JSON.parse(localStorage.getItem("currentTopic") || "null").userId;
+	const currentSection = JSON.parse(localStorage.getItem("currentSection") || "null").sectionName;
+	const currentSectionID = JSON.parse(localStorage.getItem("currentSection") || "null").id;
 
-    const fetchPosts = async (): Promise<void> => {
-        const data = await req.get(`post/all/${topicID}`)
-        setPosts(data.data);
-        console.log(data.data)
-    }
+	const { topicID } = useParams();
+	const { user } = useContext(UserContext);
+	const userLogged: boolean = Boolean(user);
 
-    useEffect(()=>{
-        fetchPosts();
-    },[refreshPage]);
+	const setPostInPage = () => {
+		const lastIndexPost = currentPage * postPerPage;
+		const firstIndexPost = lastIndexPost - postPerPage;;
+		const currentPosts = posts.slice(firstIndexPost, lastIndexPost);
+		setPostsInOnePage(currentPosts);
+		console.log(currentPosts)
+	}	
 
-    const currentTopic = JSON.parse(localStorage.getItem("currentTopic") || "null").topic;
-    const currentTopicAuthor = JSON.parse(localStorage.getItem("currentTopic") || "null").userId;
-    const currentSection = JSON.parse(localStorage.getItem("currentSection") || "null").sectionName;
-    const currentSectionID = JSON.parse(localStorage.getItem("currentSection") || "null").id;
+	useEffect(()=>{
+		setPostInPage();
+	},[currentPage, posts])
 
-    const handleNewPost = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewPost(e.target.value)
-    }
+	const fetchPosts = async (): Promise<void> => {
+			const data = await req.get(`post/all/${topicID}`)
+			setPosts(data.data.sort((a: any, b: any) => a.createAt.localeCompare(b.createAt)));
+			console.log(data.data.sort((a: any, b: any) => a.createAt.localeCompare(b.createAt)))
+			setTotalPage(Math.ceil(data.data.length/postPerPage));
+	}
 
-    const validateText = () => {
-        if(newPost.length < 10) {
-            return false
-        }
-        return true;
-    }
 
-    const handleSubmitNewPost = async (e: FormEvent): Promise<void> => {
-        e.preventDefault();
+	useEffect(()=>{
+			fetchPosts();
+	},[refreshPage]);
 
-        if(validateText()){            
-            setNewPost('');
-            await req.post('post/new', {
-                text: newPost,
-                idUser: user.id,
-                idTopic: topicID
-            })
-            setRefreshPage(prev => !prev);
-        }        
-    }
+	const handleNewPost = (e: ChangeEvent<HTMLInputElement>) => {
+			setNewPost(e.target.value)
+	}
 
-    const handleDeletePost = async (id: string): Promise<void> => {
-        await req.delete(`post/delete/${id}`);
-        setRefreshPage(prev => !prev)
-    }
+	const validateText = () => {
+			if(newPost.length < 10) {
+					return false
+			}
+			return true;
+	}
 
-    const handleEditPost = (id: string) => {
-        setPostId(id);
-        setShowModalEditPost(true);
-    }
+	const handleSubmitNewPost = async (e: FormEvent): Promise<void> => {
+			e.preventDefault();
 
-    const closeModalEditPost = () => {
-        setShowModalEditPost(false);
-    }
+			if(validateText()){            
+					setNewPost('');
+					await req.post('post/new', {
+							text: newPost,
+							idUser: user.id,
+							idTopic: topicID
+					})
+					setRefreshPage(prev => !prev);
+			}        
+	}
 
-    const handleInputEditPost = (e: ChangeEvent<HTMLInputElement>) => {
-        setNewTextPost(e.target.value);
-    }
+	const handleDeletePost = async (id: string): Promise<void> => {
+			await req.delete(`post/delete/${id}`);
+			setRefreshPage(prev => !prev)
+	}
 
-    const handleUpdatePost = async (): Promise<void> => {
-       await req.patch(`post/update/${postId}`, {
-           text: newTextPost
-       });
-       setRefreshPage(prev => !prev);
-       setShowModalEditPost(false); 
-    }
+	const handleEditPost = (id: string) => {
+			setPostId(id);
+			setShowModalEditPost(true);
+	}
 
-    const handleUpdateRatePost = async(nb: number, id: string): Promise<void> => {
-        await req.patch(`post/update/rate/${id}`, {
-            rate: nb,
-            userLogin: user.login
-        })
-        setRefreshPage(prev => !prev);
-    }
+	const closeModalEditPost = () => {
+			setShowModalEditPost(false);
+	}
 
-    return (
-        <Container className='text-light'>
-            <Nav.Link className='my-5 px-0 text-info' href={`/s/${currentSectionID}`}>Wróć do tematów z sekcji: {currentSection}</Nav.Link>
-            <p className='my-5'>{currentTopic}</p>
-            <p>Stworzony przez: {currentTopicAuthor}</p>
-            {posts.sort((a: any, b: any) => a.createAt.localeCompare(b.createAt)).map((post: any) => {
+	const handleInputEditPost = (e: ChangeEvent<HTMLInputElement>) => {
+			setNewTextPost(e.target.value);
+	}
 
-                const comparisonTimeCreateAndUpdate: boolean = post.createAt === post.updateAt;
+	const handleUpdatePost = async (): Promise<void> => {
+			await req.patch(`post/update/${postId}`, {
+					text: newTextPost
+			});
+			setRefreshPage(prev => !prev);
+			setShowModalEditPost(false); 
+	}
 
-                return (
-                    <Row key={post.id} className='border py-1'>
-                        <Col className='py-1'>
-                            <Container>
-                                <Row>
-                                    <Col>
-                                        <p className='text-muted'><small>Napisano {post.createAt}</small></p>
-                                    </Col>
-                                    <Col>
-                                        <small className='text-light py-1 justify-content-end d-flex align-items-center'>
-                                            <HandThumbsUp onClick={() => handleUpdateRatePost(1, post.id)} className='mx-2 text-success'/>
-                                            {post.rating}
-                                            <HandThumbsDown onClick={() => handleUpdateRatePost(-1, post.id)} className='mx-2 text-danger'/>
-                                        </small>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col>
-                                        <p>{post.text}</p>
-                                    </Col>
-                                    <Col className='d-flex justify-content-end align-items-center'>
-                                        {userLogged && (user.role === 'admin' || user.login === post.userId) && <Button className='mx-2' variant='outline-warning' size='sm' onClick={() => handleEditPost(post.id)}>Edytuj</Button>}
-                                        {userLogged && user.role === 'admin' && <Button variant='outline-danger' size='sm' onClick={() => handleDeletePost(post.id)}>Usuń</Button>}
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col>
-                                        <p className='py-0 my-0 text-white-50'>
-                                            <small>{post.userId 
-                                            ? `Stworzony przez ${post.userId} ` 
-                                            : `Stworzony przez nie istniejące konto`}
-                                            </small>
-                                        </p>
-                                    </Col>
-                                    <Col>
-                                        {comparisonTimeCreateAndUpdate ? null : <small className='text-white-50  d-flex justify-content-end'>Edytowano: {post.updateAt}</small>}                                        
-                                    </Col>
-                                </Row>
-                            </Container>
-                        </Col>
-                    </Row>
-                    )
-                })
-            }
-            <Form className='my-4' onSubmit={handleSubmitNewPost}>
-                <Form.Group className='my-4'>
-                    <Form.Label>Dodaj nowy post</Form.Label>
-                    <Form.Control as='textarea' rows={4} value={newPost} onChange={handleNewPost} placeholder="Minimum 10 znaków"/>
-                </Form.Group>
-                <Button variant='outline-secondary' type='submit'>Dodaj</Button>
-            </Form>
-            <ModalPostEdit show={showModalEditPost} onHide={closeModalEditPost} textPost={newTextPost} handleInputEditPost={handleInputEditPost} handleUpdatePost={handleUpdatePost}/> 
-        </Container>
-    )
+	const handleUpdateRatePost = async(nb: number, id: string): Promise<void> => {
+		if(userLogged) {
+			await req.patch(`post/update/rate/${id}`, {
+					rate: nb,
+					userLogin: user.login
+			})
+			setRefreshPage(prev => !prev);
+		}
+	}
+
+	const pagi = (number: number) => setCurrentPage(number);
+
+	return (
+			<Container className='text-light mb-3'>
+					<Nav.Link className='my-5 px-0 text-info' href={`/s/${currentSectionID}`}>Wróć do tematów z sekcji: {currentSection}</Nav.Link>
+					<p className='my-5'>{currentTopic}</p>
+					<p>Stworzony przez: {currentTopicAuthor}</p>
+					<Post posts={postsInOnePage} userLogged={userLogged} handleUpdateRatePost={handleUpdateRatePost} user={user} handleEditPost={handleEditPost} handleDeletePost={handleDeletePost} />
+					<PaginationPost totalPage={totalPage} currentPage={currentPage} pagi={pagi} />
+					{
+						userLogged &&
+						<Form className='my-4' onSubmit={handleSubmitNewPost}>
+								<Form.Group className='my-4'>
+										<Form.Label>Dodaj nowy post</Form.Label>
+										<Form.Control as='textarea' rows={4} value={newPost} onChange={handleNewPost} placeholder="Minimum 10 znaków"/>
+								</Form.Group>
+								<Button variant='outline-secondary' type='submit'>Dodaj</Button>
+						</Form>
+					}
+					<ModalPostEdit show={showModalEditPost} onHide={closeModalEditPost} textPost={newTextPost} handleInputEditPost={handleInputEditPost} handleUpdatePost={handleUpdatePost}/>
+			</Container>
+	)
 }
 
 export default TopicPosts;

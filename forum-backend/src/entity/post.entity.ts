@@ -9,7 +9,7 @@ export class Post {
     id: string;
 
     @Column()
-    @Length(10, 300)
+    @Length(10, 1000)
     text: string;
 
     @Column('int')

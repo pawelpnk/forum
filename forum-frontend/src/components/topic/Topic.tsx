@@ -133,17 +133,17 @@ const Topic: React.FC = (): JSX.Element => {
                             <Col className='py-1'>
                                 <Container>
                                     <Row>
-                                        <Col>
+                                        <Col md='auto' >
                                             <Nav.Link className='text-light px-0' onClick={() => handleRedirectToTopicWithPosts(topic)}>{topic.topic}</Nav.Link>
                                         </Col>
-                                        <Col>
+                                        <Col >
                                             <p className='d-flex justify-content-end text-muted '><small>Ostatni post: {topic.updatedAt}</small></p>
                                             <p className='d-flex justify-content-end text-muted '><small>Dodany przez: {topic.lastPostUser}</small></p>
                                             <p className='d-flex justify-content-end text-muted '><small>Ilość postów: {topic.countPostsTopic}</small></p>
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col>
+                                        <Col md='auto'>
                                             <p className='py-0 text-white-50'>
                                                 <small>{topic.userId 
                                                 ? `Stworzony przez ${topic.userId} ${topic.createdAt}` 
