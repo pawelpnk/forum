@@ -55,7 +55,7 @@ const Home: React.FC = (): JSX.Element => {
         setNewSectionName('');
     }
 
-    const handleNewSection = (e: ChangeEvent<HTMLInputElement>) => setNewSectionName(e.target.value);
+    const handleNewSection = (e: ChangeEvent<HTMLInputElement>): void => setNewSectionName(e.target.value);
 
     const handleCloseModalSection = () => {
         cleanModalSection();
@@ -79,7 +79,7 @@ const Home: React.FC = (): JSX.Element => {
         setShowModalInfo(false);
     }
 
-    const userLogged: string | null = user ? user.role : null;
+    const userLogged: boolean = Boolean(user);
 
     const handleEditSection = (id: string) => {
         setSectionId(id);
@@ -119,7 +119,7 @@ const Home: React.FC = (): JSX.Element => {
                 a następnie temat lub założysz swój własny! Zapraszamy również do odwiedzenia Komunikatora, gdzie
                 można porozmawiać z wybranymi osobami, a także zajrzeć do zakładki "Nuda" :)
             </p>
-            {userLogged === 'admin' ? <Button className='mb-2' variant='outline-light' onClick={handleAddSectionButton}>Dodaj nową sekcje</Button> : null}
+            {userLogged && user.role === 'admin' ? <Button className='mb-2' variant='outline-light' onClick={handleAddSectionButton}>Dodaj nową sekcje</Button> : null}
             {   
                 section.map((sec: any) => {
                     return (
@@ -131,8 +131,8 @@ const Home: React.FC = (): JSX.Element => {
                                 <Nav.Link onClick={() => handleRedirectToTopics(sec)}>{sec.sectionName}</Nav.Link>
                             </Col>
                             <Col xs className='d-flex justify-content-end'>
-                                {userLogged === 'admin' ? <Button variant='outline-warning' className='mx-2' onClick={() => handleEditSection(sec.id)}>Edytuj</Button> : null}
-                                {userLogged === 'admin' ? <Button variant='outline-danger' onClick={() => handleDeleteSection(sec.id)}>Usuń</Button> : null}
+                                {userLogged && user.role === 'admin'? <Button variant='outline-warning' className='mx-2' onClick={() => handleEditSection(sec.id)}>Edytuj</Button> : null}
+                                {userLogged && user.role === 'admin'? <Button variant='outline-danger' onClick={() => handleDeleteSection(sec.id)}>Usuń</Button> : null}
                             </Col>
                         </Row>
                     )

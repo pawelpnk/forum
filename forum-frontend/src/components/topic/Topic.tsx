@@ -35,7 +35,6 @@ const Topic: React.FC = (): JSX.Element => {
 
     const fetchTopics = async (): Promise<void> => {
         const data = await req.get(`/topic/all/${sectionID}`);
-        console.log(data.data);
         setTopics(data.data)
         
     }
@@ -85,7 +84,6 @@ const Topic: React.FC = (): JSX.Element => {
                 firstPost
             });
             setText(result.data.message);
-            console.log(result.data)
         }
     }
 

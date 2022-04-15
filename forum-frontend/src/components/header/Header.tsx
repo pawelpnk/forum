@@ -8,14 +8,12 @@ const Header: React.FC = (): JSX.Element => {
 
     const { user, setUser } = useContext(UserContext);
 
-    const navigate = useNavigate();
-
-    const logout = () => {
+    const logout = (): void => {
         setUser(null);
         sessionStorage.removeItem("currentUser");
     }
 
-    const setPropertylabel = user 
+    const setPropertylabel: JSX.Element = user 
         ? 
         <Nav className="justify-content-end">
             <OverlayTrigger placement='bottom' overlay={

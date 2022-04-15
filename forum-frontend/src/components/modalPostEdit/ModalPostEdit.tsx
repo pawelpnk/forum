@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 
-const ModalPostEdit: React.FC<any> = ({show, onHide, textPost, handleInputEditPost, handleUpdatePost}): JSX.Element => {
+interface ModalPostEditType {
+    show: boolean,
+    onHide: () => void,
+    textPost: string,
+    handleInputEditPost: (e: ChangeEvent<HTMLInputElement>) => void,
+    handleUpdatePost: () => Promise<void>
+}
+
+const ModalPostEdit: React.FC<ModalPostEditType> = ({show, onHide, textPost, handleInputEditPost, handleUpdatePost}): JSX.Element => {
     return (
         <>
             <Modal show={show} onHide={onHide}

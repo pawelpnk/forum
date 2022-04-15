@@ -10,7 +10,7 @@ const Login: React.FC = (): JSX.Element => {
 
     const [message, setMessage] = useState<string>('');
 
-    const { user, setUser } = useContext(UserContext);
+    const { setUser } = useContext(UserContext);
 
     const navigate = useNavigate();
 
@@ -43,9 +43,7 @@ const Login: React.FC = (): JSX.Element => {
                 sessionStorage.setItem('currentUser', JSON.stringify(result.data.user));
                 navigate('/');
             }
-        } catch(err) {
-            console.log(err)
-        }
+        } catch {}
     }
 
     return (
@@ -62,7 +60,6 @@ const Login: React.FC = (): JSX.Element => {
                     Zaloguj
                 </Button>
             </Form>
-            {/* <ModalInfo show={showModal} onHide={handleOnClose} text={text}/> */}
         </div>
     )
 }

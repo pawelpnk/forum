@@ -1,7 +1,14 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
-const modalConfirm: React.FC<any> = ({show, onHide, title, handleConfirm}):JSX.Element => {
+interface ModalConfirmType {
+    show: boolean,
+    onHide: () => void,
+    title: string,
+    handleConfirm: () => Promise<void>
+}
+
+const modalConfirm: React.FC<ModalConfirmType> = ({show, onHide, title, handleConfirm}):JSX.Element => {
     return (
         <>
             <Modal show={show} onHide={onHide}

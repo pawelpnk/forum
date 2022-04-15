@@ -1,7 +1,18 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 
-const ModalTopic: React.FC<any> = ({show, onHide, sectionName, topicName, handleNameTopic, handleAddTopic, handleFirstPost, firstPost}): JSX.Element => {
+interface ModalTopicType {
+    show: boolean,
+    onHide: () => void,
+    sectionName: string,
+    topicName: string,
+    handleNameTopic: (e: ChangeEvent<HTMLInputElement>) => void,
+    handleAddTopic: () => Promise<void>,
+    handleFirstPost: (e: ChangeEvent<HTMLInputElement>) => void,
+    firstPost: string
+}
+
+const ModalTopic: React.FC<ModalTopicType> = ({show, onHide, sectionName, topicName, handleNameTopic, handleAddTopic, handleFirstPost, firstPost}): JSX.Element => {
     return (
         <>
             <Modal show={show} onHide={onHide}

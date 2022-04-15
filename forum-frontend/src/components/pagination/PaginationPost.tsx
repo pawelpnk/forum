@@ -2,7 +2,13 @@ import React from 'react';
 import { Pagination } from 'react-bootstrap';
 import './paginationPost.css'
 
-const PaginationPost: React.FC<any> = ({totalPage, currentPage, pagi}): JSX.Element => {
+interface PaginationPostType {
+    totalPage: number,
+    currentPage: number,
+    pagi: (number: number) => void
+}
+
+const PaginationPost: React.FC<PaginationPostType> = ({totalPage, currentPage, pagi}): JSX.Element => {
     const items: any = [];
     
     const kindOfPagination = totalPage <= 5;
@@ -14,8 +20,7 @@ const PaginationPost: React.FC<any> = ({totalPage, currentPage, pagi}): JSX.Elem
                 </Pagination.Item>,
             );
         }
-    }
-    
+    }    
 
     return (
         <>

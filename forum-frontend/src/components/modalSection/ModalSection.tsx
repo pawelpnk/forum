@@ -1,7 +1,15 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 
-const ModalSection: React.FC<any> = ({show, onHide, handleNewSection, newSectionName, handleAddSectionPost}): JSX.Element => {
+interface ModalSectionType {
+    show: boolean,
+    onHide: () => void,
+    handleNewSection: (e: ChangeEvent<HTMLInputElement>) => void,
+    newSectionName: string,
+    handleAddSectionPost: () => Promise<void>
+}
+
+const ModalSection: React.FC<ModalSectionType> = ({show, onHide, handleNewSection, newSectionName, handleAddSectionPost}): JSX.Element => {
     return (
         <>
             <Modal show={show} onHide={onHide}

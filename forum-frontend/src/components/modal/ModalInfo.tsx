@@ -1,7 +1,13 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
-const ModalInfo: React.FC<any> = ({show, onHide, text}): JSX.Element => {
+interface ModalInfoType {
+    show: boolean,
+    onHide: () => void,
+    text: string
+}
+
+const ModalInfo: React.FC<ModalInfoType> = ({show, onHide, text}): JSX.Element => {
     return (
         <>
             <Modal show={show} onHide={onHide}
