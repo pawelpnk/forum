@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, HttpStatus, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import NewUser from 'src/dto/new-user.dto';
 import UserLogin from 'src/dto/user-login.dto';
 import UserUpdateForUser from 'src/dto/user-update-for-user.dto';
@@ -76,6 +77,7 @@ export class UserController {
         return res.status(HttpStatus.OK).json(allUsers);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Patch('/admin-update')
     async updateUserforAdmin (
         @Res() res: Response,
@@ -94,6 +96,7 @@ export class UserController {
         }       
     }
 
+    @UseGuards(JwtAuthGuard)
     @Patch('/user-update')
     async updateUserForUser (
         @Res() res: Response,
@@ -113,6 +116,7 @@ export class UserController {
         
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete('/delete')
     async deleteUser(
         @Res() res: Response,

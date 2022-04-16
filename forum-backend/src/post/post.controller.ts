@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import NewPost from './post.dto/new-post.dto';
 import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';
@@ -9,6 +10,7 @@ import { PostService } from './post.service';
 export class PostController {
     constructor(private postService: PostService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Post('/new')
     async addNewPost(
         @Res() res: Response,
@@ -42,6 +44,7 @@ export class PostController {
         }
     }
 
+    @UseGuards(JwtAuthGuard)
     @Patch('/update/:id')
     async updatePost(
         @Res() res: Response,
@@ -61,6 +64,7 @@ export class PostController {
         }
     }
 
+    @UseGuards(JwtAuthGuard)
     @Patch('update/rate/:id')
     async changeRatePost (
         @Res() res: Response,
@@ -80,6 +84,7 @@ export class PostController {
         }
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete('/delete/:id')
     async deletePost(
         @Res() res: Response,

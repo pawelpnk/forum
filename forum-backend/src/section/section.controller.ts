@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { NewSection } from 'src/dto/new-section.dto';
 import { SectionService } from './section.service';
 
@@ -7,6 +8,7 @@ import { SectionService } from './section.service';
 export class SectionController {
     constructor(private sectionService: SectionService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Post('/add')
     async addNewSection(
         @Body() newSection: NewSection,
@@ -37,6 +39,7 @@ export class SectionController {
         return await this.sectionService.findSection(id);
     }
 
+    @UseGuards(JwtAuthGuard)
     @Patch('/update/:id')
     async updateSection(
         @Res() res: Response,
@@ -57,6 +60,7 @@ export class SectionController {
         
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete('/delete/:id')
     async deleteSection(
         @Res() res: Response,

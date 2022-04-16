@@ -10,7 +10,8 @@ import { JwtStrategy } from './jwt.strategy';
     ],
     providers: [
         AuthService, 
-        JwtStrategy
+        JwtStrategy,
+        AuthController
     ],
     controllers: [AuthController],
     exports: [

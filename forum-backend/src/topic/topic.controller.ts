@@ -1,5 +1,6 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import NewTopic from './topic.dto/new-topic.dto';
 import { TopicService } from './topic.service';
 
@@ -7,6 +8,7 @@ import { TopicService } from './topic.service';
 export class TopicController {
     constructor(private topicService: TopicService) {}
 
+    @UseGuards(JwtAuthGuard)
     @Post('/new')
     async addNewTopic(
         @Res() res: Response,
@@ -55,6 +57,7 @@ export class TopicController {
         }
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete('/delete/:id')
     async deleteTopic(
         @Res() res: Response,
