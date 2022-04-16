@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Navbar, Container, Nav, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { Person, PersonPlus, BoxArrowRight, Gear, Bell} from 'react-bootstrap-icons';
 import { UserContext } from '../../store/StoreProvider';
@@ -6,6 +6,7 @@ import Notifications from '../notifications/Notifications';
 
 const Header: React.FC = (): JSX.Element => {
     const [show, setShow] = useState<boolean>(false);
+    const [notis, setNotis] = useState<any[]>([]);
 
     const { user, setUser } = useContext(UserContext);
     const userLogged: boolean = Boolean(user);
@@ -15,12 +16,26 @@ const Header: React.FC = (): JSX.Element => {
         sessionStorage.removeItem("currentUser");
     }
 
-    const handleShow = () => setShow(prev => !prev);
+    const handleShow = () => setShow(prev => !prev);     
+
+    const ff = (): void => {
+        if(userLogged) {
+            setNotis(user.notifications);
+        }        
+    }
+
+    const checkNewNoti: boolean = notis.some((noti: any) => noti.toDisplay === true);
+
+    useEffect(()=>{
+        ff();
+    },[show, user])
+
+    const bellColor: JSX.Element = checkNewNoti ? <Bell style={{color: 'red'}} /> : <Bell />;
 
     const setPropertylabel: JSX.Element = user 
         ? 
         <Nav className="justify-content-end">
-            <Notifications show={show} handleShow={handleShow} user={user} userLogged={userLogged}/>
+            <Notifications show={show} handleShow={handleShow} user={user} userLogged={userLogged} bellColor={bellColor} notis={notis}/>
             <OverlayTrigger placement='bottom' overlay={
                 <Tooltip id='tooltip-bottom'>
                     Ustawienia

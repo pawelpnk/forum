@@ -1,26 +1,10 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Col, OverlayTrigger, Popover, Row } from 'react-bootstrap';
 import { Bell } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
 import req from '../../helpers/request';
 
-const Notifications: React.FC<any> = ({show, handleShow, user, userLogged}): JSX.Element => {
-    const [notis, setNotis] = React.useState<any[]>([])    
-
-    const ff = (): void => {
-        if(userLogged) {
-            setNotis(user.notifications);
-        }        
-    }
-
-    React.useEffect(()=>{
-        ff();
-    },[show])
-
-    const checkNewNoti: boolean = notis.some((noti: any) => noti.toDisplay === true);
-
-    const bellColor: JSX.Element = checkNewNoti ? <Bell style={{color: 'red'}} /> : <Bell />;
-
+const Notifications: React.FC<any> = ({show, handleShow, user, userLogged, notis, bellColor}): JSX.Element => {
     const navigate = useNavigate();
 
     const changeColorToDefault = async (): Promise<any> => {
@@ -57,7 +41,7 @@ const Notifications: React.FC<any> = ({show, handleShow, user, userLogged}): JSX
                     <Popover id={`popover-positioned-bottom`}>
                     <Popover.Header as="h3">{`Powiadomienia`}</Popover.Header>
                     {userLogged && notis.length > 0 && 
-                    notis.sort((a: any, b: any) => a.createAt.localeCompare(b.createAt)).slice(0,10).map((noti: any)=> {
+                    notis.sort((a: any, b: any) => b.createAt.localeCompare(a.createAt)).slice(0,10).map((noti: any)=> {
                       return (  
                         <Popover.Body key={noti.id}>
                             <Row>
