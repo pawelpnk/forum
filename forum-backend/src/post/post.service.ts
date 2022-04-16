@@ -8,22 +8,43 @@ import NewPost from './post.dto/new-post.dto';
 import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';
 import PostResponse from './post.interface/post-response.interface';
+import { Notification } from 'src/entity/notification.entity';
 
 @Injectable()
 export class PostService {
     constructor(
         @InjectRepository(Post) private postRepository: Repository<Post>,
+        @InjectRepository(Notification) private notificationRepository: Repository<Notification>,
         @Inject(forwardRef(() => UserService)) private userService: UserService,
-        @Inject(forwardRef(() => TopicService)) private topicService: TopicService
+        @Inject(forwardRef(() => TopicService)) private topicService: TopicService,
     ) {}
 
-    async createPost(body: NewPost): Promise<PostResponse> {
+    async createPost(body: NewPost, user): Promise<PostResponse> {
         const findUser = await this.userService.findUserHelperId(body.idUser);
         const findTopic = await this.topicService.fetchOneTopic(body.idTopic);
 
-        const checkSignedUsers = body.text.match(/@+/gi);
-        if(checkSignedUsers) {
-            console.log(body.text.match(/(?<=@)\w+/gi));
+        const checkSignedUsers = body.text.match(/(?<=@)\w+/gi);
+        if(checkSignedUsers && checkSignedUsers.length <= 10) {
+            console.log(checkSignedUsers, checkSignedUsers.length);
+
+            for(let i = 0; i < checkSignedUsers.length; i++) {
+                const findUserForNoti = await this.userService.findUserHelper(checkSignedUsers[i]);
+
+                const newNote: Notification = new Notification();
+                newNote.message = `Zostałeś oznaczony przez`
+                newNote.fromWho = findUser.login;
+                newNote.toWho = checkSignedUsers[i];
+                newNote.toDisplay = true;
+                newNote.topicId = findTopic.id;
+                newNote.createAt = new Date().toLocaleString();
+                newNote.user = findUserForNoti;
+
+                await this.notificationRepository.save(newNote);
+            }
+        }
+
+        if(checkSignedUsers && checkSignedUsers.length > 10) {
+            throw new HttpException("zbyt dużo oznaczonych osób", HttpStatus.TOO_MANY_REQUESTS);
         }
 
         const newPost: Post = new Post();
@@ -32,8 +53,8 @@ export class PostService {
         newPost.createAt = new Date().toLocaleString();
         newPost.updateAt = new Date().toLocaleString();
         newPost.rating = 0;
-        newPost.user = findUser;
-        newPost.userId = findUser.login;
+        newPost.user = user;
+        newPost.userId = user.login;
         newPost.topic = findTopic;
         newPost.topicId = findTopic.id;
 
@@ -80,22 +101,6 @@ export class PostService {
 
     async fetchAllPosts(idTopic: string): Promise<Post[]> {
         return await this.postRepository.find({topicId: idTopic});
-    }
-
-    async findLastPostAndCounts(id: string): Promise<any> {
-        const amountPosts = await this.postRepository.count({
-            topicId: id
-        })
-         const lastPost = await this.postRepository.findOne(id, {
-            where: {
-                topicId: id
-            },
-        })
-        const postToTopicResponse = {
-            amountPosts,
-            lastPost
-        }
-        return postToTopicResponse;
     }
 
     async fetchOnePost(idPost: string): Promise<Post> {

@@ -12,12 +12,14 @@ import { UserRole } from 'src/interface/user-role.interface';
 import { PostService } from 'src/post/post.service';
 import { TopicService } from 'src/topic/topic.service';
 import { Repository } from 'typeorm';
+import { Notification } from 'src/entity/notification.entity';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(OptionalUser) private optionalUserRepository: Repository<OptionalUser>,
+        @InjectRepository(Notification) private notificationRepository: Repository<Notification>,
         @Inject(forwardRef(()=> AuthService)) private authService: AuthService,
         @Inject(forwardRef(()=> PostService)) private postService: PostService,
         @Inject(forwardRef(()=> TopicService)) private topicService: TopicService
@@ -74,13 +76,14 @@ export class UserService {
                 login: user.login
             },
             relations: [
-                'optionalUser'
+                'optionalUser',
+                'notifications'
             ]
         });
 
         if(!findUser) throw new HttpException('Zły login lub hasło', HttpStatus.NOT_FOUND);
 
-        const checkIsNotBaned: boolean = findUser.active ? true : false;
+        const checkIsNotBaned: boolean = Boolean(findUser.active);
 
         const comparePassword: boolean = await this.authService.comparePassword(user.password, findUser.password);
         

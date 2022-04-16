@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { UserObj } from 'src/decorators/user.decorator';
 import NewPost from './post.dto/new-post.dto';
 import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';
@@ -14,10 +15,11 @@ export class PostController {
     @Post('/new')
     async addNewPost(
         @Res() res: Response,
-        @Body() postDTO: NewPost
+        @Body() postDTO: NewPost,
+        @UserObj() user
     ) {
         try {
-            const addedPost = await this.postService.createPost(postDTO);
+            const addedPost = await this.postService.createPost(postDTO, user);
             return res.status(HttpStatus.OK).json({
                 message: "Dodano nowy post",
                 addedPost

@@ -3,7 +3,6 @@ import { JwtPayload } from './jwt.strategy';
 const bcrypt = require('bcrypt');
 import { v4 as uuid } from 'uuid';
 import { sign } from 'jsonwebtoken';
-import User from 'src/entity/user.entity';
 import { UserService } from 'src/user/user.service';
 
 @Injectable()
@@ -21,17 +20,6 @@ export class AuthService {
         return await bcrypt.compare(newPassword, oldPassword);
     }
 
-    async createToken(tokenId: string):  Promise<{accessToken: string, expiresIn: number}> {
-        const payload: JwtPayload = { id: tokenId };
-        const expiresIn = parseInt(process.env.EXPIRES_IN);
-        const accessToken = sign(payload, process.env.SECRET_KEY, { expiresIn});
-
-        return {
-            accessToken,
-            expiresIn
-        }
-    }
-
     async generateToken(): Promise<string> {
         let token;
         let userWithThisToken = null;
@@ -41,5 +29,16 @@ export class AuthService {
         } while (!!userWithThisToken);
 
         return token;
+    }    
+
+    async createToken(tokenId: string):  Promise<{accessToken: string, expiresIn: number}> {
+        const payload: JwtPayload = { id: tokenId };
+        const expiresIn = parseInt(process.env.EXPIRES_IN);
+        const accessToken = sign(payload, process.env.SECRET_KEY, { expiresIn});
+
+        return {
+            accessToken,
+            expiresIn
+        }
     }
 }

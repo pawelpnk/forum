@@ -3,6 +3,7 @@ import { Topic } from "./topic.entity";
 import { IsEmail } from 'class-validator';
 import { Post } from "./post.entity";
 import { OptionalUser } from "./optionalUser.entity";
+import { Notification } from 'src/entity/notification.entity';
 
 @Entity()
 export default class User {
@@ -48,4 +49,7 @@ export default class User {
     @OneToOne(() => OptionalUser)
     @JoinColumn()
     optionalUser: OptionalUser
+
+    @OneToMany(() => Notification, (noti)=> noti.user)
+    notifications: Notification[]
 }

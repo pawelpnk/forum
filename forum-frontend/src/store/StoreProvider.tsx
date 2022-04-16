@@ -6,7 +6,8 @@ export const UserContext = createContext<any>(null);
 const StoreProvider: React.FC = ({children}): JSX.Element => {
     const [theme, setTheme] = useState<string>('dark');
     const [user, setUser] = useState<any>({
-        role: ''
+        role: '',
+        notifications: []
     });
 
     useEffect(()=> {

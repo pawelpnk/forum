@@ -37,11 +37,12 @@ export class UserController {
     ) {
         try {
             const loginAccount: any = await this.userService.login(userLogin);
-            return res.cookie('jwt', loginAccount.signToken.accessToken, {
+            res.cookie('jwt', loginAccount.signToken.accessToken, {
                 secure: false,
                 domain: 'localhost',
                 httpOnly: true
-            }).status(HttpStatus.OK).json({
+            })
+            return res.status(HttpStatus.OK).json({
                 message: "Zalogowano pomyślnie",
                 user: loginAccount.filterUser
             })
