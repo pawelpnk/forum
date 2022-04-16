@@ -5,7 +5,9 @@ import NewUser from 'src/dto/new-user.dto';
 import UserLogin from 'src/dto/user-login.dto';
 import UserUpdateForUser from 'src/dto/user-update-for-user.dto';
 import UserUpdateForAdmin from 'src/dto/user-update.dto';
+import RoleGuard from 'src/guard/roles.guards';
 import UserResponse from 'src/interface/user-response.interface';
+import { UserRole } from 'src/interface/user-role.interface';
 import { UserService } from './user.service';
 
 @Controller('user')
@@ -78,6 +80,7 @@ export class UserController {
         return res.status(HttpStatus.OK).json(allUsers);
     }
 
+    @UseGuards(RoleGuard(UserRole.ADMIN))
     @UseGuards(JwtAuthGuard)
     @Patch('/admin-update')
     async updateUserforAdmin (
@@ -117,6 +120,7 @@ export class UserController {
         
     }
 
+    @UseGuards(RoleGuard(UserRole.ADMIN))
     @UseGuards(JwtAuthGuard)
     @Delete('/delete')
     async deleteUser(

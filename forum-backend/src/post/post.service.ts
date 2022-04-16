@@ -9,6 +9,7 @@ import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';
 import PostResponse from './post.interface/post-response.interface';
 import { Notification } from 'src/entity/notification.entity';
+import { UserRole } from 'src/interface/user-role.interface';
 
 @Injectable()
 export class PostService {
@@ -25,7 +26,6 @@ export class PostService {
 
         const checkSignedUsers = body.text.match(/(?<=@)\w+/gi);
         if(checkSignedUsers && checkSignedUsers.length <= 10) {
-            console.log(checkSignedUsers, checkSignedUsers.length);
 
             for(let i = 0; i < checkSignedUsers.length; i++) {
                 const findUserForNoti = await this.userService.findUserHelper(checkSignedUsers[i]);
@@ -107,12 +107,22 @@ export class PostService {
         return await this.postRepository.findOne({id: idPost})
     }
 
-    async updatePost(id: string, updatePost: UpdatePost): Promise<Post> {
+    async updatePost(id: string, updatePost: UpdatePost, user): Promise<Post> {
 
-        await this.postRepository.update({id}, {
+        if(user.role === UserRole.ADMIN) {
+            await this.postRepository.update({id}, {
+                text: updatePost.text,
+                updateAt: new Date().toLocaleString()
+            })
+        } else {
+            await this.postRepository.update({
+                id,
+                userId: user.id
+            }, {
             text: updatePost.text,
             updateAt: new Date().toLocaleString()
         })
+        }        
 
         const updatedPost = await this.fetchOnePost(id);
 

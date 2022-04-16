@@ -1,6 +1,8 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import RoleGuard from 'src/guard/roles.guards';
+import { UserRole } from 'src/interface/user-role.interface';
 import NewTopic from './topic.dto/new-topic.dto';
 import { TopicService } from './topic.service';
 
@@ -57,6 +59,7 @@ export class TopicController {
         }
     }
 
+    @UseGuards(RoleGuard(UserRole.ADMIN))
     @UseGuards(JwtAuthGuard)
     @Delete('/delete/:id')
     async deleteTopic(

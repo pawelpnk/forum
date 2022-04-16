@@ -2,6 +2,8 @@ import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, Use
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { UserObj } from 'src/decorators/user.decorator';
+import RoleGuard from 'src/guard/roles.guards';
+import { UserRole } from 'src/interface/user-role.interface';
 import NewPost from './post.dto/new-post.dto';
 import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';
@@ -51,17 +53,18 @@ export class PostController {
     async updatePost(
         @Res() res: Response,
         @Body() bodyUpdatePost: UpdatePost,
-        @Param('id') id: string
+        @Param('id') id: string,
+        @UserObj() user
     ) {
         try {
-            const updatePost = await this.postService.updatePost(id, bodyUpdatePost);
+            const updatePost = await this.postService.updatePost(id, bodyUpdatePost, user);
             return res.status(HttpStatus.OK).json({
                 message: "Zaaktualizowano pomyślnie",
                 updatePost
             })
         } catch (err) {
             return res.json({
-                message: err
+                message: err.message
             })
         }
     }
@@ -86,6 +89,7 @@ export class PostController {
         }
     }
 
+    @UseGuards(RoleGuard(UserRole.ADMIN))
     @UseGuards(JwtAuthGuard)
     @Delete('/delete/:id')
     async deletePost(

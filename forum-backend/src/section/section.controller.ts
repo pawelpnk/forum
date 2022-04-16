@@ -2,12 +2,15 @@ import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, Use
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { NewSection } from 'src/dto/new-section.dto';
+import RoleGuard from 'src/guard/roles.guards';
+import { UserRole } from 'src/interface/user-role.interface';
 import { SectionService } from './section.service';
 
 @Controller('section')
 export class SectionController {
     constructor(private sectionService: SectionService) {}
 
+    @UseGuards(RoleGuard(UserRole.ADMIN))
     @UseGuards(JwtAuthGuard)
     @Post('/add')
     async addNewSection(
@@ -39,6 +42,7 @@ export class SectionController {
         return await this.sectionService.findSection(id);
     }
 
+    @UseGuards(RoleGuard(UserRole.ADMIN))
     @UseGuards(JwtAuthGuard)
     @Patch('/update/:id')
     async updateSection(
@@ -60,6 +64,7 @@ export class SectionController {
         
     }
 
+    @UseGuards(RoleGuard(UserRole.ADMIN))
     @UseGuards(JwtAuthGuard)
     @Delete('/delete/:id')
     async deleteSection(
