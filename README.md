@@ -40,3 +40,5 @@ Przykładowa konfiguracja bazy danych z stworzeniem pliku `ormconfig.json`, a na
 - CSS
 - HTML
 - Passport-JWT
+
+#### Aplikacja jest w fazie ciągłego rozwoju
