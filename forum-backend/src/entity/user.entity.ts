@@ -1,9 +1,12 @@
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Topic } from "./topic.entity";
 import { IsEmail } from 'class-validator';
 import { Post } from "./post.entity";
 import { OptionalUser } from "./optionalUser.entity";
 import { Notification } from 'src/entity/notification.entity';
+import { Message } from "./message.entity";
+import { Group } from "./group.entity";
+import { Games } from "./games.entity";
 
 @Entity()
 export default class User {
@@ -52,4 +55,13 @@ export default class User {
 
     @OneToMany(() => Notification, (noti)=> noti.user)
     notifications: Notification[]
+
+    @OneToMany(() => Message, (message) => message.author)
+    messages: Message
+
+    @ManyToMany(() => Group, (group) => group.users)
+    groups: Group[];
+
+    @OneToMany(() => Games, (games) => games.user)
+    games: Games[];
 }

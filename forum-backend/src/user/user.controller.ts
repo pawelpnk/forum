@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Patch, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import NewUser from 'src/dto/new-user.dto';
@@ -55,10 +55,10 @@ export class UserController {
         }
     }
 
-    @Get('/')
+    @Get('/one/:login')
     async findUser(
         @Res() res: Response,
-        @Body() login: string
+        @Param('login') login: string
     ) {
         try {
             const searchUser: UserResponse = await this.userService.findUser(login);

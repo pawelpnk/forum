@@ -2,6 +2,8 @@ import React, { useContext } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Route, Routes } from 'react-router';
 import { UserContext } from '../../store/StoreProvider';
+import Communicator from '../communicator/Communicator';
+import CommunicatorAlert from '../communicator/CommunicatorAlert';
 import Games from '../games/Games';
 import Home from '../home/Home';
 import Login from '../login/Login';
@@ -27,6 +29,11 @@ const Content: React.FC = (): JSX.Element => {
                         {!user && <Route path='/zaloguj' element={<Login/>} />}
                         <Route path='/games' element={<Games />} />
                         <Route path='/snake' element={<Snake />} />
+                        {
+                            user ? 
+                            <Route path='/komunikator' element={<Communicator />} /> : 
+                            <Route path='/komunikator' element={<CommunicatorAlert />} />
+                        }
                         <Route path='/*' element={<NotFoundPage/>} />
                     </Routes>
                 </Col>
