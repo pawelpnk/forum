@@ -1,0 +1,27 @@
+.container-snake {
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.snake-div {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border: 2px solid black;
+    box-sizing: border-box;
+}
+
+.apple {
+    background-color: red;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+}
+
+.snake {
+    background-color: yellowgreen;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+}
