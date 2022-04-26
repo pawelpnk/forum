@@ -23,7 +23,7 @@ export class GroupService {
         }
 
         const newGroup: Group = new Group();
-        newGroup.name = name.user;
+        newGroup.name = name.user + ', ' + user.login;
         newGroup.updateAt = new Date().toLocaleString();
         newGroup.users = [user, findUser];
 
@@ -36,10 +36,10 @@ export class GroupService {
 
         const findGroups = await this.connection
             .getRepository(Group)
-            .createQueryBuilder('groups')
-            .leftJoin('groups.users', 'users')
-            .where('users.id = :id', {
-                id: user.id
+            .createQueryBuilder('group')
+            .leftJoin('group.users', 'user')
+            .where('user.id = :userId', {
+                userId: user.id
             })
             .getMany();
 

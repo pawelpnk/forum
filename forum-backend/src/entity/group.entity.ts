@@ -16,7 +16,6 @@ export class Group {
     @OneToMany(() => Message, (message) => message.group)
     messages: Message[];
 
-    @ManyToMany(() => User, (user) => user.groups)
-    @JoinTable()
+    @ManyToMany(() => User, (user) => user.groups, { cascade: true, onDelete:'CASCADE' })
     users: User[];
 }
