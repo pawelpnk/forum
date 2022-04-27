@@ -10,8 +10,8 @@ export class Message {
     @Column()
     text: string;
 
-    @ManyToOne(() => User)
-    author: User;
+    @Column()
+    author: string;
 
     @ManyToOne(() => Group, (group) => group.messages)
     group: Group;

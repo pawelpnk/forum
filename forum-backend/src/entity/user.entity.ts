@@ -55,10 +55,7 @@ export default class User {
 
     @OneToMany(() => Notification, (noti)=> noti.user)
     notifications: Notification[]
-
-    @OneToMany(() => Message, (message) => message.author)
-    messages: Message
-
+    
     @ManyToMany(() => Group, (group) => group.users)
     @JoinTable()
     groups: Group[];

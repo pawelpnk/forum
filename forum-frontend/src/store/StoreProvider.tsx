@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import socketIOClient from "socket.io-client";
 
-// const SOCKET_URL = "http://127.0.0.1:5001";
 const SOCKET_URL = "http://localhost:5001";
 
 export const ThemeContext = createContext<any>(null);

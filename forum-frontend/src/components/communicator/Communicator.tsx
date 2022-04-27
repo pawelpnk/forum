@@ -103,16 +103,12 @@ const Communicator: React.FC = (): JSX.Element => {
                     </Col>
                     <Col xs={9} className='border d-flex flex-column'>
                         <p className='text-light d-flex justify-content-center mt-2 border-bottom'>Wiadomości</p>
-                        <div className='overflow-auto'>
+                        <div className='overflow-auto d-flex flex-column'>
                             {
-                                messages.map((message: any, index: number) => {
+                                messages.map((message: any, index: number) => {                                    
                                     return (
-                                        // <Toast className={user.login === message.author.login ? 'mr-0' :  'ml-0'}>
-                                        <Toast key={index}>
-                                            {/* <Toast.Header> */}
-                                                <small>{message.author}</small>
-                                            {/* </Toast.Header> */}
-                                            <Toast.Body>
+                                        <Toast key={index} className={message.author === user?.login ? 'align-self-end bg-success mb-1' : 'mb-1'}>
+                                            <Toast.Body >
                                                 {message.text}
                                             </Toast.Body>
                                         </Toast>
