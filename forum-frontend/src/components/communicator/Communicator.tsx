@@ -75,8 +75,8 @@ const Communicator: React.FC = (): JSX.Element => {
                         <p className='d-flex justify-content-center mt-5 text-secondary'>Uwaga! Wszystkie wiadomości starsze niż 5 dni są usuwane!</p>
                     </Col>
                 </Row>
-                <Row className='my-3' style={{minHeight: '70vh'}}>
-                    <Col xs={3} className='border overflow-auto' >
+                <Row className='my-3' style={{height: '70vh'}}>
+                    <Col xs={3} className='border overflow-auto' style={{height: '70vh'}}>
                         <Form onSubmit={handleFindUserAndCreateNewGroup} className='d-flex flex-column align-items-center'>
                             <Form.Control
                                 type='text'
@@ -103,7 +103,7 @@ const Communicator: React.FC = (): JSX.Element => {
                     </Col>
                     <Col xs={9} className='border d-flex flex-column'>
                         <p className='text-light d-flex justify-content-center mt-2 border-bottom'>Wiadomości</p>
-                        <div className='overflow-auto d-flex flex-column'>
+                        <div className='overflow-auto d-flex flex-column' style={{height: '70vh'}}>
                             {
                                 messages.map((message: any, index: number) => {                                    
                                     return (
