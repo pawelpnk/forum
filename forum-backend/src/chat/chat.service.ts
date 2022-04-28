@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Message } from 'src/entity/message.entity';
 import User from 'src/entity/user.entity';
 import { UserService } from 'src/user/user.service';
-import { Repository } from 'typeorm';
+import { MoreThan, Repository } from 'typeorm';
 import { ChatCreateMessage } from './chat.interface/chat-create-message.interface';
 
 @Injectable()
@@ -22,6 +22,7 @@ export class ChatService {
         const newMessage: Message = new Message();
         newMessage.text = message.text;
         newMessage.author = findUser.login;
+        newMessage.createAt = new Date().toLocaleString();
         newMessage.group = message.group;
 
         const saveMessage = await this.messageRepository.save(newMessage);
@@ -30,7 +31,7 @@ export class ChatService {
     }
 
     async getAllMessageOneConversation(id: string): Promise<Message[]> {
-        const findMessages = this.messageRepository.find({
+        const findMessages = await this.messageRepository.find({
             relations: ['group'],
             where: {
                 group: {
@@ -40,5 +41,15 @@ export class ChatService {
         })
 
         return findMessages;
+    }
+
+    async findMessagesOldestThenFiveDays(): Promise<void> {
+        const timeFiveDaysAgo = new Date(new Date().getTime() - (5 * 24 * 60 * 60 * 1000));
+        const findMessages = await this.messageRepository.find({
+            where: {
+                createAt: MoreThan(timeFiveDaysAgo) 
+            }
+        })
+        await this.messageRepository.remove(findMessages);
     }
 }

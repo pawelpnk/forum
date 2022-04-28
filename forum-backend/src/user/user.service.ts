@@ -9,20 +9,14 @@ import { OptionalUser } from 'src/entity/optionalUser.entity';
 import User from 'src/entity/user.entity';
 import UserResponse from 'src/interface/user-response.interface';
 import { UserRole } from 'src/interface/user-role.interface';
-import { PostService } from 'src/post/post.service';
-import { TopicService } from 'src/topic/topic.service';
 import { Repository } from 'typeorm';
-import { Notification } from 'src/entity/notification.entity';
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(User) private userRepository: Repository<User>,
         @InjectRepository(OptionalUser) private optionalUserRepository: Repository<OptionalUser>,
-        @InjectRepository(Notification) private notificationRepository: Repository<Notification>,
         @Inject(forwardRef(()=> AuthService)) private authService: AuthService,
-        @Inject(forwardRef(()=> PostService)) private postService: PostService,
-        @Inject(forwardRef(()=> TopicService)) private topicService: TopicService
         ) {}
 
     filter = (user: User): UserResponse => {

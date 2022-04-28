@@ -13,6 +13,9 @@ export class Message {
     @Column()
     author: string;
 
+    @Column({nullable: true})
+    createAt: string;
+
     @ManyToOne(() => Group, (group) => group.messages)
     group: Group;
 }

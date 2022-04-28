@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useContext, useEffect, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import { Button, Col, Container, Form, Row, Toast } from 'react-bootstrap';
 import { CaretDown, Cursor } from 'react-bootstrap-icons';
 import req from '../../helpers/request';
@@ -14,6 +14,8 @@ const Communicator: React.FC = (): JSX.Element => {
 
     const { user } = useContext(UserContext);
     const socket = useContext(SocketContext);
+
+    const lastMessageRef = useRef<null | HTMLDivElement>(null);
 
     const handleChangeFindUser = (e: ChangeEvent<HTMLInputElement>) => setFindUser(e.target.value);
     const handleChangeTextMessage = (e: ChangeEvent<HTMLInputElement>) => setTextMessage(e.target.value);
@@ -56,16 +58,28 @@ const Communicator: React.FC = (): JSX.Element => {
         console.log(result.data)
     }
 
+    const scrollToBottom = () => {
+        lastMessageRef.current?.scrollIntoView({behavior: 'smooth'})
+    }
+
     useEffect(() => {
         fetchGroupsUser();
     },[newGroup])
 
     useEffect(() => {
-        handleReceiveMessages(currentGroup.id);   
+        handleReceiveMessages(currentGroup.id);  
+    },[]);
+
+    useEffect(() => {
         socket.on('new-message', (data: any) => {
             setMessages((prev: any) => [...prev, data]);
-       })     
+        });
+        return () => socket.off('new-message')
     },[])
+
+    useEffect(() => {
+        scrollToBottom();
+    },[messages])
 
     return (
         <>
@@ -92,18 +106,18 @@ const Communicator: React.FC = (): JSX.Element => {
                             {
                             groups.map((group: any) => {
                                 return (
-                                    <div onClick={() =>{ handleReceiveMessages(group.id); setCurrentGroup(group)}} key={group.id} className='d-flex justify-content-center align-items-center' style={{cursor: 'pointer'}}>
+                                    <div onClick={() =>{handleReceiveMessages(group.id); setCurrentGroup(group)}} key={group.id} className='d-flex justify-content-center align-items-center' style={{cursor: 'pointer'}}>
                                         <CaretDown className='text-light mx-2' />
-                                        <span className='text-white'>{group.name}</span>
+                                        <span className={currentGroup.id === group.id ? 'text-warning' : 'text-white'}>{group.name}</span>
                                     </div>
                                 )
-                            })
+                            })                            
                             }
                         </div>
                     </Col>
-                    <Col xs={9} className='border d-flex flex-column'>
+                    <Col xs={9} className='border d-flex flex-column' style={{height: '70vh'}}>
                         <p className='text-light d-flex justify-content-center mt-2 border-bottom'>Wiadomości</p>
-                        <div className='overflow-auto d-flex flex-column' style={{height: '70vh'}}>
+                        <div className='overflow-auto d-flex flex-column' >
                             {
                                 messages.map((message: any, index: number) => {                                    
                                     return (
@@ -115,6 +129,7 @@ const Communicator: React.FC = (): JSX.Element => {
                                     )
                                 })
                             }
+                            <div ref={lastMessageRef} />
                         </div>
                         <Form onSubmit={handleSendNewMessage} className='d-flex justify-self-end mb-1' style={{marginTop: 'auto'}}>
                             <Form.Control
