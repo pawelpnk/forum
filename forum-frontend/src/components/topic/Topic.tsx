@@ -10,6 +10,7 @@ import ModalTopic from '../modalTopic/ModalTopic';
 interface TopicType {
     id: string;
     sectionId: string;
+    sectionName: string;
     topic: string;
     createdAt: string;
     updateAt: string;
@@ -35,8 +36,7 @@ const Topic: React.FC = (): JSX.Element => {
 
     const fetchTopics = async (): Promise<void> => {
         const data = await req.get(`/topic/all/${sectionID}`);
-        setTopics(data.data)
-        
+        setTopics(data.data);        
     }
 
     useEffect(()=> {
@@ -44,11 +44,8 @@ const Topic: React.FC = (): JSX.Element => {
     }, [showModalInfo]);
 
     const handleRedirectToTopicWithPosts = (topic: TopicType) => {
-        localStorage.setItem("currentTopic", JSON.stringify(topic));
         navigate(`/sekcja/${topic.id}`);
     }
-
-    const currentSection: string = JSON.parse(localStorage.getItem("currentSection") || "null").sectionName;
 
     const handleAddNewTopic = () => {
         setShowModalTopic(true);
@@ -119,7 +116,7 @@ const Topic: React.FC = (): JSX.Element => {
             <Container className='my-5 text-light'>
                 <Row className='mb-2'>
                     <Col>
-                        <span>{currentSection}</span>
+                        <span>{topics[0]?.sectionName}</span>
                     </Col>
                     <Col className='d-flex justify-content-end'>
                         {userLogged && <Button onClick={handleAddNewTopic} variant='outline-light'>Dodaj nowy temat</Button>}
@@ -161,7 +158,7 @@ const Topic: React.FC = (): JSX.Element => {
                     })
                 }         
             </Container>
-            <ModalTopic show={showModalTopic} onHide={closeModalTopic} sectionName={currentSection} topicName={topicName} handleNameTopic={handleNewTopicArea} handleAddTopic={handleAddTopicPost} handleFirstPost={handleAddFirstPost} firstPost={firstPost}/>
+            <ModalTopic show={showModalTopic} onHide={closeModalTopic} sectionName={topics[0]?.sectionName} topicName={topicName} handleNameTopic={handleNewTopicArea} handleAddTopic={handleAddTopicPost} handleFirstPost={handleAddFirstPost} firstPost={firstPost}/>
             <ModalInfo show={showModalInfo} onHide={closeModalInfo} text={text}/>
             <ModalConfirm show={showModalConfirm} onHide={closeModalConfirm} title={title} handleConfirm={handleDeleteTopic}/>
         </>

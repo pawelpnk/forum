@@ -4,7 +4,8 @@ import { Group } from 'src/entity/group.entity';
 import User from 'src/entity/user.entity';
 import { UserService } from 'src/user/user.service';
 import { Connection, Repository } from 'typeorm';
-import { NewGroup } from './group.interface/new-group.interface';
+import { UpdateGroup } from './group.dto/update-group.dto';
+import { NewGroup } from './group.dto/new-group.dto';
 
 @Injectable()
 export class GroupService {
@@ -41,8 +42,15 @@ export class GroupService {
             .where('user.id = :userId', {
                 userId: user.id
             })
+            .orderBy('group.updateAt', 'DESC')
             .getMany();
 
         return findGroups;
+    }
+
+    async updateTime(body: UpdateGroup): Promise<void> {
+        await this.groupRepository.update(body.id, {
+            updateAt: new Date().toLocaleString()
+        })
     }
 }

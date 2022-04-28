@@ -10,6 +10,8 @@ import UpdatePost from './post.dto/update-post.dto';
 import PostResponse from './post.interface/post-response.interface';
 import { Notification } from 'src/entity/notification.entity';
 import { UserRole } from 'src/interface/user-role.interface';
+import User from 'src/entity/user.entity';
+import { SectionService } from 'src/section/section.service';
 
 @Injectable()
 export class PostService {
@@ -18,11 +20,13 @@ export class PostService {
         @InjectRepository(Notification) private notificationRepository: Repository<Notification>,
         @Inject(forwardRef(() => UserService)) private userService: UserService,
         @Inject(forwardRef(() => TopicService)) private topicService: TopicService,
+        private sectionService: SectionService
     ) {}
 
-    async createPost(body: NewPost, user): Promise<PostResponse> {
+    async createPost(body: NewPost, user: User): Promise<PostResponse> {
         const findUser = await this.userService.findUserHelperId(body.idUser);
-        const findTopic = await this.topicService.fetchOneTopic(body.idTopic);
+        const findTopic = await this.topicService.fetchOneTopic(body.topicId);
+        const findSection = await this.sectionService.findSection(body.topicId);
 
         const checkSignedUsers = body.text.match(/(?<=@)\w+/gi);
         if(checkSignedUsers && checkSignedUsers.length <= 10) {
@@ -31,7 +35,7 @@ export class PostService {
                 const findUserForNoti = await this.userService.findUserHelper(checkSignedUsers[i]);
 
                 const newNote: Notification = new Notification();
-                newNote.message = `Zostałeś oznaczony przez`
+                newNote.message = `Zostałeś oznaczony przez ${findUser.login} w ${findSection.sectionName}/${findTopic.topic}`
                 newNote.fromWho = findUser.login;
                 newNote.toWho = checkSignedUsers[i];
                 newNote.toDisplay = true;
@@ -57,6 +61,8 @@ export class PostService {
         newPost.userId = user.login;
         newPost.topic = findTopic;
         newPost.topicId = findTopic.id;
+        newPost.topicName = findTopic.topic;
+        newPost.sectionName = findSection.sectionName;
 
         await this.postRepository.save(newPost);
 
@@ -86,9 +92,11 @@ export class PostService {
         newPost.updateAt = body.updatedAt;
         newPost.rating = 0;
         newPost.user = body.user;
-        newPost.userId = body.user.id;
+        newPost.userId = body.user.login;
         newPost.topic = body.topic;
         newPost.topicId = body.topic.id;
+        newPost.topicName = body.topic.topic;
+        newPost.sectionName = body.topic.sectionName;
 
         await this.postRepository.save(newPost);
         

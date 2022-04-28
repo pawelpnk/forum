@@ -37,7 +37,7 @@ export class ChatService {
                 group: {
                     id
                 }
-            }            
+            }           
         })
 
         return findMessages;

@@ -1,9 +1,10 @@
-import { Body, Controller, Get, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { UserObj } from 'src/decorators/user.decorator';
 import User from 'src/entity/user.entity';
-import { NewGroup } from './group.interface/new-group.interface';
+import { UpdateGroup } from './group.dto/update-group.dto';
+import { NewGroup } from './group.dto/new-group.dto';
 import { GroupService } from './group.service';
 
 @Controller('group')
@@ -31,5 +32,13 @@ export class GroupController {
     ) {
         const allGroups = await this.groupService.getGroups(user);
         return res.status(HttpStatus.OK).json(allGroups);
+    }
+
+    @UseGuards(JwtAuthGuard)
+    @Patch('/')
+    async updateTimeLastMessage(
+        @Body() body: UpdateGroup
+    ) {
+        await this.groupService.updateTime(body)
     }
 }

@@ -8,16 +8,8 @@ const Notifications: React.FC<any> = ({show, handleShow, user, userLogged, notis
 
     const changeColorToDefault = async (): Promise<any> => {
         try {
-            const result = await req.get(`noti`)
-            if(result.data.positive) {
-                for(let i=0;i<notis.length;i++){
-                    user.notifications[i].toDisplay = false;
-                }
-                console.log(user)
-                sessionStorage.setItem('currentUser', JSON.stringify(user));
-            }
-        } catch {
-        }        
+            await req.patch(`noti`);
+        } catch {}        
     }
 
     const handleCloseNoti = () => {
@@ -40,9 +32,9 @@ const Notifications: React.FC<any> = ({show, handleShow, user, userLogged, notis
                     <Popover id={`popover-positioned-bottom`}>
                     <Popover.Header as="h3">{`Powiadomienia`}</Popover.Header>
                     {userLogged && notis.length > 0 && 
-                    notis.sort((a: any, b: any) => b.createAt.localeCompare(a.createAt)).slice(0,7).map((noti: any)=> {
+                    notis.map((noti: any)=> {
                       return (  
-                        <Popover.Body key={noti.id}>
+                        <Popover.Body key={noti.id} onClick={() => handleRedirectToTopic(noti.topicId)} style={{cursor: 'pointer'}}>
                             <Row>
                                 <Col>
                                     <small className='text-muted d-flex justify-content-end'>{noti.createAt}</small>
@@ -50,19 +42,13 @@ const Notifications: React.FC<any> = ({show, handleShow, user, userLogged, notis
                             </Row>
                             <Row>
                                 <Col>
-                                    <small onClick={() => handleRedirectToTopic(noti.topicId)}>{noti.message}</small>
+                                    <small>{noti.message}</small>
                                 </Col>
-                                <Col xs='auto'>
-                                    <small><strong>{noti.fromWho}</strong></small>
-                                </Col>
-                            </Row>
-                            
+                            </Row>                            
                         </Popover.Body>
                       )
-                    })
-                    
-                    }
-                    
+                    })                    
+                    }                    
                     </Popover>
                 }
                 >

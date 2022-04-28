@@ -35,6 +35,12 @@ export class Post {
     @Column()
     topicId: string;
 
+    @Column({nullable: true})
+    topicName: string;
+
+    @Column({nullable: true})
+    sectionName: string;
+
     @Column("text", {
         array: true,
         default: []

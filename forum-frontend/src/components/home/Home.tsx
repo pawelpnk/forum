@@ -41,7 +41,6 @@ const Home: React.FC = (): JSX.Element => {
     },[showModalInfo]);
 
     const handleRedirectToTopics = (sec: SectionType) => {
-        localStorage.setItem('currentSection', JSON.stringify(sec));
         navigate(`/s/${sec.id}`)
     }
 

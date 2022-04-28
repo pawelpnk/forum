@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Button, Col, Container, Form, Row, Toast } from 'react-bootstrap';
 import { CaretDown, Cursor } from 'react-bootstrap-icons';
 import req from '../../helpers/request';
@@ -48,14 +48,17 @@ const Communicator: React.FC = (): JSX.Element => {
             group: currentGroup,
             userLogin: user.login
         });
-        
+        req.patch(`group`,{
+            id: currentGroup.id
+        });
         setTextMessage('')
     }
 
     const fetchGroupsUser = async () => {
         const result = await req.get('group');
         setGroups(result.data);
-        console.log(result.data)
+        setCurrentGroup(() => result.data[0]);
+        handleReceiveMessages(result.data[0].id);        
     }
 
     const scrollToBottom = () => {
@@ -65,10 +68,6 @@ const Communicator: React.FC = (): JSX.Element => {
     useEffect(() => {
         fetchGroupsUser();
     },[newGroup])
-
-    useEffect(() => {
-        handleReceiveMessages(currentGroup.id);  
-    },[]);
 
     useEffect(() => {
         socket.on('new-message', (data: any) => {
@@ -95,7 +94,7 @@ const Communicator: React.FC = (): JSX.Element => {
                             <Form.Control
                                 type='text'
                                 placeholder='użytkownik'
-                                className='mt-1'
+                                className='mt-2'
                                 value={findUser} 
                                 onChange={handleChangeFindUser}
                             />
@@ -105,10 +104,11 @@ const Communicator: React.FC = (): JSX.Element => {
                             <p className='text-light mt-3 d-flex justify-content-center'>Konwersacje</p>
                             {
                             groups.map((group: any) => {
+                                
                                 return (
                                     <div onClick={() =>{handleReceiveMessages(group.id); setCurrentGroup(group)}} key={group.id} className='d-flex justify-content-center align-items-center' style={{cursor: 'pointer'}}>
                                         <CaretDown className='text-light mx-2' />
-                                        <span className={currentGroup.id === group.id ? 'text-warning' : 'text-white'}>{group.name}</span>
+                                        <span className={currentGroup?.id === group.id ? 'text-warning' : 'text-white'}>{group.name}</span>
                                     </div>
                                 )
                             })                            
@@ -116,13 +116,13 @@ const Communicator: React.FC = (): JSX.Element => {
                         </div>
                     </Col>
                     <Col xs={9} className='border d-flex flex-column' style={{height: '70vh'}}>
-                        <p className='text-light d-flex justify-content-center mt-2 border-bottom'>Wiadomości</p>
+                        <p className='text-light d-flex justify-content-center mt-2 border-bottom'>Wiadomości</p>                        
                         <div className='overflow-auto d-flex flex-column' >
                             {
-                                messages.map((message: any, index: number) => {                                    
+                                messages.map((message: any, index: number) => {
                                     return (
                                         <Toast key={index} className={message.author === user?.login ? 'align-self-end bg-success mb-1' : 'mb-1'}>
-                                            <Toast.Body >
+                                            <Toast.Body>
                                                 {message.text}
                                             </Toast.Body>
                                         </Toast>

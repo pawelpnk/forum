@@ -27,6 +27,7 @@ export class TopicService {
         newTopic.updatedAt = new Date().toLocaleString();
         newTopic.user = findUser;
         newTopic.section = findSection;
+        newTopic.sectionName = findSection.sectionName;
         newTopic.sectionId = findSection.id;
         newTopic.userId = findUser.login;
         newTopic.countPostsTopic = 1;

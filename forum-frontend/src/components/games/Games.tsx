@@ -1,7 +1,12 @@
 import React from 'react';
 import { Col, Container, Nav, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router';
 
 const Games: React.FC = (): JSX.Element => {
+    const navigate = useNavigate();
+
+    const handleRedirectToSnake = () => navigate('snake');
+
     return (
         <>
             <Container>
@@ -14,7 +19,7 @@ const Games: React.FC = (): JSX.Element => {
                 <Row>
                     <Col>
                         <p className='text-light d-flex justify-content-center align-items-center my-5'>
-                            Popularna gra<Nav.Link href='snake' className='mx-1' style={{color: 'yellow'}}>Snake</Nav.Link>
+                            Popularna gra<Nav.Link onClick={handleRedirectToSnake} className='mx-1' style={{color: 'yellow'}}>Snake</Nav.Link>
                         </p>
                     </Col>
                 </Row>                

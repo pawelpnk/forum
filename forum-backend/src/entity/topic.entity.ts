@@ -7,38 +7,41 @@ import User from "./user.entity";
 @Entity()
 export class Topic {
     @PrimaryGeneratedColumn('uuid')
-    id: string
+    id: string;
 
     @Column()
     @Length(10, 100)
-    topic: string
+    topic: string;
 
     @Column()
-    createdAt: string
+    createdAt: string;
 
     @Column()
-    updatedAt: string
+    updatedAt: string;
 
     @ManyToOne(() => User, (user) => user.topics, { cascade: true, onDelete: "SET NULL"})
     @JoinColumn({name: "login"},)
-    user: User
+    user: User;
 
     @Column({nullable: true})
-    userId: string
+    userId: string;
 
     @ManyToOne(() => Section, (section) => section.topics, { cascade: true, onDelete:'CASCADE' })
     @JoinColumn({name: "sectionId"})
-    section: Section
+    section: Section;
 
     @Column({nullable: false})
-    sectionId: string
+    sectionId: string;
+
+    @Column({nullable: true})
+    sectionName: string;
 
     @OneToMany(() => Post, (post) => post.topic)
-    posts: Post[]
+    posts: Post[];
 
     @Column({nullable: true})
-    lastPostUser: string
+    lastPostUser: string;
 
     @Column({nullable: true})
-    countPostsTopic: number
+    countPostsTopic: number;
 }

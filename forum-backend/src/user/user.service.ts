@@ -71,7 +71,6 @@ export class UserService {
             },
             relations: [
                 'optionalUser',
-                'notifications'
             ]
         });
 

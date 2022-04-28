@@ -17,30 +17,24 @@ const TopicPosts: React.FC = (): JSX.Element => {
 	const [postId, setPostId] = useState<string>('');
 	const [currentPage, setCurrentPage] = useState<number>(1);
 	const [totalPage, setTotalPage] = useState<number>(1);
-	const [currentTopicLS, setCurrentTopicLS] = useState<string>('');
+	const [currentTopicLS, setCurrentTopicLS] = useState<string | undefined>('');
 
 	const postPerPage = 10;
-	
-	const currentTopic: string = JSON.parse(localStorage.getItem("currentTopic") || "null").topic;
-	const currentTopicID: string = JSON.parse(localStorage.getItem("currentTopic") || "null").id;
-	const currentTopicAuthor: string = JSON.parse(localStorage.getItem("currentTopic") || "null").userId;
-	const currentSection: string = JSON.parse(localStorage.getItem("currentSection") || "null").sectionName;
-	const currentSectionID: string = JSON.parse(localStorage.getItem("currentSection") || "null").id;
 
 	const { topicID } = useParams();
 	const { user } = useContext(UserContext);
 	const userLogged: boolean = Boolean(user);
 
 	const fetchPosts = async (): Promise<void> => {
-		const data = await req.get(`post/all/${currentTopicID}`)
+		const data = await req.get(`post/all/${topicID}`)
 		setPosts(data.data.sort((a: any, b: any) => a.createAt.localeCompare(b.createAt)));
 		setTotalPage(Math.ceil(data.data.length/postPerPage));
 	}
 
 	useEffect(()=>{
 		fetchPosts();
-		setCurrentTopicLS(currentTopicID);
-	},[refreshPage, currentTopicLS]);
+		setCurrentTopicLS(topicID);
+	},[refreshPage, currentTopicLS, topicID]);
 
 	const setPostInPage = () => {
 		const lastIndexPost = currentPage * postPerPage;
@@ -53,9 +47,7 @@ const TopicPosts: React.FC = (): JSX.Element => {
 		setPostInPage();
 	},[currentPage, posts])
 
-	const handleNewPost = (e: ChangeEvent<HTMLInputElement>) => {
-		setNewPost(e.target.value)
-	}
+	const handleNewPost = (e: ChangeEvent<HTMLInputElement>) =>	setNewPost(e.target.value)
 
 	const validateText = () => {
 		if(newPost.length < 10) {
@@ -72,7 +64,7 @@ const TopicPosts: React.FC = (): JSX.Element => {
 			await req.post('post/new', {
 					text: newPost,
 					idUser: user.id,
-					idTopic: topicID
+					topicId: topicID
 			})
 			setRefreshPage(prev => !prev);
 		}        
@@ -88,13 +80,9 @@ const TopicPosts: React.FC = (): JSX.Element => {
 		setShowModalEditPost(true);
 	}
 
-	const closeModalEditPost = () => {
-		setShowModalEditPost(false);
-	}
+	const closeModalEditPost = () => setShowModalEditPost(false);
 
-	const handleInputEditPost = (e: ChangeEvent<HTMLInputElement>) => {
-		setNewTextPost(e.target.value);
-	}
+	const handleInputEditPost = (e: ChangeEvent<HTMLInputElement>) => setNewTextPost(e.target.value);
 
 	const handleUpdatePost = async (): Promise<void> => {
 		await req.patch(`post/update/${postId}`, {
@@ -118,9 +106,9 @@ const TopicPosts: React.FC = (): JSX.Element => {
 
 	return (
 		<Container className='text-light mb-3'>
-				<Nav.Link className='my-5 px-0 text-info' href={`/s/${currentSectionID}`}>Wróć do tematów z sekcji: {currentSection}</Nav.Link>
-				<p className='my-5'>{currentTopic}</p>
-				<p>Stworzony przez: {currentTopicAuthor}</p>
+				<Nav.Link className='my-5 px-0 text-info'>Jesteś w postach związanych z sekcją: {posts[0]?.sectionName}</Nav.Link>
+				<p className='my-5'>{posts[0]?.sectionName}</p>
+				<p>Stworzony przez: {posts[0]?.userId}</p>
 				<Post posts={postsInOnePage} userLogged={userLogged} handleUpdateRatePost={handleUpdateRatePost} user={user} handleEditPost={handleEditPost} handleDeletePost={handleDeletePost} />
 				<PaginationPost totalPage={totalPage} currentPage={currentPage} pagi={pagi} />
 				{
