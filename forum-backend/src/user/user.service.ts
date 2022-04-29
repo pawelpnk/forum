@@ -1,5 +1,6 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Response } from 'express';
 import { AuthService } from 'src/auth/auth.service';
 import NewUser from 'src/dto/new-user.dto';
 import UserLogin from 'src/dto/user-login.dto';
@@ -101,6 +102,23 @@ export class UserService {
         }
 
         return returnObject
+    }
+
+    async logout(user: User, res: Response): Promise<any> {
+        try {
+            user.token = null;
+            await this.userRepository.save(user);
+            res.clearCookie('jwt', {
+                secure: false,
+                domain: 'localhost',
+                httpOnly: true
+            });
+            return res.json({ok: true})
+        } catch (err) {
+            return res.json({
+                err: err.message
+            })
+        }
     }
 
     async findUser(login: string): Promise<UserResponse> {

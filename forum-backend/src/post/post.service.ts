@@ -26,7 +26,7 @@ export class PostService {
     async createPost(body: NewPost, user: User): Promise<PostResponse> {
         const findUser = await this.userService.findUserHelperId(body.idUser);
         const findTopic = await this.topicService.fetchOneTopic(body.topicId);
-        const findSection = await this.sectionService.findSection(body.topicId);
+        // const findSection = await this.sectionService.findSection(body.topicId);
 
         const checkSignedUsers = body.text.match(/(?<=@)\w+/gi);
         if(checkSignedUsers && checkSignedUsers.length <= 10) {
@@ -35,7 +35,7 @@ export class PostService {
                 const findUserForNoti = await this.userService.findUserHelper(checkSignedUsers[i]);
 
                 const newNote: Notification = new Notification();
-                newNote.message = `Zostałeś oznaczony przez ${findUser.login} w ${findSection.sectionName}/${findTopic.topic}`
+                newNote.message = `Zostałeś oznaczony przez ${findUser.login} w ${body.sectionName}/${findTopic.topic}`
                 newNote.fromWho = findUser.login;
                 newNote.toWho = checkSignedUsers[i];
                 newNote.toDisplay = true;
@@ -62,7 +62,8 @@ export class PostService {
         newPost.topic = findTopic;
         newPost.topicId = findTopic.id;
         newPost.topicName = findTopic.topic;
-        newPost.sectionName = findSection.sectionName;
+        // newPost.sectionName = findSection.sectionName;
+        newPost.sectionName = body.sectionName;
 
         await this.postRepository.save(newPost);
 

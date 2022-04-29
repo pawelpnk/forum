@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Navbar, Container, Nav, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { Person, PersonPlus, BoxArrowRight, Gear, Bell} from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
+import req from '../../helpers/request';
 import { UserContext } from '../../store/StoreProvider';
 import Notifications from '../notifications/Notifications';
 
@@ -14,9 +15,10 @@ const Header: React.FC = (): JSX.Element => {
     
     const navigate = useNavigate();
 
-    const logout = (): void => {
+    const logout = async (): Promise<void> => {
         setUser(null);
         sessionStorage.removeItem("currentUser");
+        await req.get('user/logout');
     }
 
     const handleShow = () => setShow(prev => !prev);     

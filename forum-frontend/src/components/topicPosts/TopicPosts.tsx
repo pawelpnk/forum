@@ -64,7 +64,8 @@ const TopicPosts: React.FC = (): JSX.Element => {
 			await req.post('post/new', {
 					text: newPost,
 					idUser: user.id,
-					topicId: topicID
+					topicId: topicID,
+					sectionName: posts[0]?.sectionName
 			})
 			setRefreshPage(prev => !prev);
 		}        

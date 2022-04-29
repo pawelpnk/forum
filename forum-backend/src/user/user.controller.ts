@@ -1,10 +1,12 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { UserObj } from 'src/decorators/user.decorator';
 import NewUser from 'src/dto/new-user.dto';
 import UserLogin from 'src/dto/user-login.dto';
 import UserUpdateForUser from 'src/dto/user-update-for-user.dto';
 import UserUpdateForAdmin from 'src/dto/user-update.dto';
+import User from 'src/entity/user.entity';
 import RoleGuard from 'src/guard/roles.guards';
 import UserResponse from 'src/interface/user-response.interface';
 import { UserRole } from 'src/interface/user-role.interface';
@@ -55,7 +57,16 @@ export class UserController {
         }
     }
 
-    @Get('/one/:login')
+    @UseGuards(JwtAuthGuard)
+    @Get('logout')
+    async logout(
+        @UserObj() user: User,
+        @Res() res: Response
+    ) {
+        return await this.userService.logout(user, res);
+    }
+
+    @Get('/all/:login')
     async findUser(
         @Res() res: Response,
         @Param('login') login: string
