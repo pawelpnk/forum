@@ -1,8 +1,8 @@
-import React, { ChangeEvent, FormEvent, useContext, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 'react';
 import { Button, Col, Container, Form, Row, Toast } from 'react-bootstrap';
 import { CaretDown, Cursor } from 'react-bootstrap-icons';
 import req from '../../helpers/request';
-import { SocketContext, UserContext } from '../../store/StoreProvider';
+import { SocketContext, ThemeContext, UserContext } from '../../store/StoreProvider';
 
 const Communicator: React.FC = (): JSX.Element => {
     const [groups, setGroups] = useState<any>([]);
@@ -14,6 +14,7 @@ const Communicator: React.FC = (): JSX.Element => {
 
     const { user } = useContext(UserContext);
     const socket = useContext(SocketContext);
+    const { theme } = useContext(ThemeContext);
 
     const lastMessageRef = useRef<null | HTMLDivElement>(null);
 
@@ -89,39 +90,38 @@ const Communicator: React.FC = (): JSX.Element => {
                     </Col>
                 </Row>
                 <Row className='my-3' style={{height: '70vh'}}>
-                    <Col xs={3} className='border overflow-auto' style={{height: '70vh'}}>
+                    <Col xs={3} className={`border ${theme.border} overflow-auto`} style={{height: '70vh'}}>
                         <Form onSubmit={handleFindUserAndCreateNewGroup} className='d-flex flex-column align-items-center'>
                             <Form.Control
                                 type='text'
                                 placeholder='użytkownik'
-                                className='mt-2'
+                                className={`mt-2 ${theme.border}`}
                                 value={findUser} 
                                 onChange={handleChangeFindUser}
                             />
                             <Button variant='outline-secondary' type='submit' className='my-2'>Znajdź</Button>
                         </Form>
                         <div>
-                            <p className='text-light mt-3 d-flex justify-content-center'>Konwersacje</p>
+                            <p className={`${theme.textColor} mt-3 d-flex justify-content-center`}>Konwersacje</p>
                             {
-                            groups.map((group: any) => {
-                                
+                            groups.map((group: any) => {                                
                                 return (
                                     <div onClick={() =>{handleReceiveMessages(group.id); setCurrentGroup(group)}} key={group.id} className='d-flex justify-content-center align-items-center' style={{cursor: 'pointer'}}>
-                                        <CaretDown className='text-light mx-2' />
-                                        <span className={currentGroup?.id === group.id ? 'text-warning' : 'text-white'}>{group.name}</span>
+                                        <CaretDown className={`${theme.textColor} mx-2`} />
+                                        <span className={currentGroup?.id === group.id ? 'text-warning' : theme.textColor}>{group.name}</span>
                                     </div>
                                 )
                             })                            
                             }
                         </div>
                     </Col>
-                    <Col xs={9} className='border d-flex flex-column' style={{height: '70vh'}}>
-                        <p className='text-light d-flex justify-content-center mt-2 border-bottom'>Wiadomości</p>                        
+                    <Col xs={9} className={`border ${theme.border} d-flex flex-column`} style={{height: '70vh'}}>
+                        <p className={`${theme.textColor} d-flex justify-content-center mt-2 border-bottom ${theme.border}`}>Wiadomości</p>                        
                         <div className='overflow-auto d-flex flex-column' >
                             {
                                 messages.map((message: any, index: number) => {
                                     return (
-                                        <Toast key={index} className={message.author === user?.login ? 'align-self-end bg-success mb-1' : 'mb-1'}>
+                                        <Toast key={index} className={message.author === user?.login ? `align-self-end ${theme.colorMyMessage} mb-1` : 'mb-1'}>
                                             <Toast.Body>
                                                 {message.text}
                                             </Toast.Body>
@@ -137,6 +137,7 @@ const Communicator: React.FC = (): JSX.Element => {
                             placeholder='wiadomość'
                             value={textMessage}
                             onChange={handleChangeTextMessage}
+                            className={theme.border}
                             />
                             <Button type='submit'><Cursor style={{cursor: 'pointer'}} /></Button>
                         </Form>

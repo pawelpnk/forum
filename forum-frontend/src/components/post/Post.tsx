@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button, Col, Container, Row } from 'react-bootstrap';
 import { HandThumbsDown, HandThumbsUp } from 'react-bootstrap-icons';
 import reactStringReplace from 'react-string-replace';
+import { ThemeContext } from '../../store/StoreProvider';
 
 interface PostType {
 	posts: any,
@@ -13,6 +14,7 @@ interface PostType {
 }
 
 const Post: React.FC<PostType> = ({posts, userLogged, handleUpdateRatePost, user, handleEditPost, handleDeletePost}) => {
+	const { theme } = useContext(ThemeContext);
     return (
         <>
 			{
@@ -22,7 +24,7 @@ const Post: React.FC<PostType> = ({posts, userLogged, handleUpdateRatePost, user
 				const checkRated = userLogged && post.userRated.some((userRated: string) => userRated === user.login);
 
 				return (
-					<Row key={post.id} className='border py-1'>
+					<Row key={post.id} className={`border ${theme.border} py-1`}>
 						<Col className='py-1'>
 							<Container>
 								<Row>
@@ -30,7 +32,7 @@ const Post: React.FC<PostType> = ({posts, userLogged, handleUpdateRatePost, user
 										<p className='text-muted'><small>Napisano {post.createAt}</small></p>
 									</Col>
 									<Col>
-										<small className='text-light py-1 justify-content-end d-flex align-items-center'>
+										<small className={`${theme.textColor} py-1 justify-content-end d-flex align-items-center`}>
 												<HandThumbsUp onClick={() => checkRated ? null : handleUpdateRatePost(1, post.id)} className='mx-2 text-success'/>
 												{post.rating}
 												<HandThumbsDown onClick={() => checkRated ? null : handleUpdateRatePost(-1, post.id)} className='mx-2 text-danger'/>
@@ -39,7 +41,7 @@ const Post: React.FC<PostType> = ({posts, userLogged, handleUpdateRatePost, user
 								</Row>
 								<Row>
 									<Col>
-										<p>{reactStringReplace(post.text, /@(\w+)/gi, (match: any, i: any) => (
+										<p className={theme.textColor}>{reactStringReplace(post.text, /@(\w+)/gi, (match: any, i: any) => (
 											<span key={i} style={{color: '#6699ff'}}>@{match}</span>
 										))}</p>
 									</Col>
@@ -50,7 +52,7 @@ const Post: React.FC<PostType> = ({posts, userLogged, handleUpdateRatePost, user
 								</Row>
 								<Row>
 									<Col>
-										<p className='py-0 my-0 text-white-50'>
+										<p className={`py-0 my-0 text-muted`}>
 											<small>{post.userId 
 											? `Stworzony przez ${post.userId} ` 
 											: `Stworzony przez nie istniejące konto`}
@@ -58,7 +60,7 @@ const Post: React.FC<PostType> = ({posts, userLogged, handleUpdateRatePost, user
 										</p>
 									</Col>
 									<Col>
-										{comparisonTimeCreateAndUpdate ? null : <small className='text-white-50  d-flex justify-content-end'>Edytowano: {post.updateAt}</small>}                                        
+										{comparisonTimeCreateAndUpdate ? null : <small className='text-muted  d-flex justify-content-end'>Edytowano: {post.updateAt}</small>}                                        
 									</Col>
 								</Row>
 							</Container>

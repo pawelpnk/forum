@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Route, Routes } from 'react-router';
-import { UserContext } from '../../store/StoreProvider';
+import { ThemeContext, UserContext } from '../../store/StoreProvider';
 import Communicator from '../communicator/Communicator';
 import CommunicatorAlert from '../communicator/CommunicatorAlert';
 import Games from '../games/Games';
@@ -14,11 +14,9 @@ import Topic from '../topic/Topic';
 import TopicPosts from '../topicPosts/TopicPosts';
 
 const Content: React.FC = (): JSX.Element => {
-
     const { user } = useContext(UserContext);
-
     return (
-        <Container>
+        <Container >
             <Row>
                 <Col>
                     <Routes>

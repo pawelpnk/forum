@@ -1,6 +1,7 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import req from '../../helpers/request';
+import { ThemeContext } from '../../store/StoreProvider';
 import ModalInfo from '../modal/ModalInfo';
 
 const Register: React.FC = (): JSX.Element => {
@@ -13,6 +14,8 @@ const Register: React.FC = (): JSX.Element => {
 
     const [showModal, setShowModal] = useState<boolean>(false);
     const [text, setText] = useState<string>('');
+
+    const { theme } = useContext(ThemeContext);
 
     useEffect(()=> {
         resetInputs();
@@ -79,23 +82,23 @@ const Register: React.FC = (): JSX.Element => {
         <div className='d-flex justify-content-center'>
             <Form className='my-5 p-4' onSubmit={handleOnSubmit}>
                 {checkValidationMessage}
-                <Form.Group className='my-2 col-md-6'>
+                <Form.Group className={`my-2 col-md-6 border ${theme.border}`}>
                     <Form.Control placeholder='login' type='text' onChange={handleOnLogin} value={login}/>
                 </Form.Group>
-                <Form.Group className='my-2 col-md-6'>
+                <Form.Group className={`my-2 col-md-6 border ${theme.border}`}>
                     <Form.Control placeholder='hasło' type='password' onChange={handleOnPassword} value={password}/>
                 </Form.Group>
-                <Form.Group className='my-2 col-md-6'>
+                <Form.Group className={`my-2 col-md-6 border ${theme.border}`}>
                     <Form.Control placeholder='potwierdź hasło' type='password' onChange={handleOnRepeatPassword} value={repeatPassword}/>
                 </Form.Group>
-                <Form.Group className='my-2 col-md-6'>
+                <Form.Group className={`my-2 col-md-6 border ${theme.border}`}>
                     <Form.Control placeholder='email' type='email' onChange={handleOnEmail} value={email}/>
                 </Form.Group>
                 <Form.Text muted>Po założeniu konta w ustawieniach pojawia się opcja zmiany zdjęcia profilowego</Form.Text>
-                <Form.Group className="my-2 text-light" >
+                <Form.Group className={`my-2 ${theme.textColor}`} >
                     <Form.Check type="checkbox" label="Akceptuj regulamin" onChange={handleOnCheck} />
                 </Form.Group>
-                <Button className='my-2 text-light border' variant="outline-dark" type="submit">
+                <Button className={`my-2 ${theme.textColor} border ${theme.border}`} variant={theme.buttonToLoginAndRegister} type="submit">
                     Zarejstruj
                 </Button>
             </Form>

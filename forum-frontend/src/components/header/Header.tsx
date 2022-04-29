@@ -3,7 +3,7 @@ import { Navbar, Container, Nav, OverlayTrigger, Tooltip, Button } from 'react-b
 import { Person, PersonPlus, BoxArrowRight, Gear, Bell} from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
 import req from '../../helpers/request';
-import { UserContext } from '../../store/StoreProvider';
+import { ThemeContext, UserContext } from '../../store/StoreProvider';
 import Notifications from '../notifications/Notifications';
 
 const Header: React.FC = (): JSX.Element => {
@@ -11,6 +11,7 @@ const Header: React.FC = (): JSX.Element => {
     const [notis, setNotis] = useState<any[]>([]);
 
     const { user, setUser } = useContext(UserContext);
+    const { theme, setTheme, lightTheme, darkTheme } = useContext(ThemeContext);
     const userLogged: boolean = Boolean(user);
     
     const navigate = useNavigate();
@@ -28,11 +29,11 @@ const Header: React.FC = (): JSX.Element => {
     useEffect(() => {
         const sse = new EventSource('http://localhost:5000/noti/sse', { withCredentials: true })
 
-        function test(data: any) {
+        function setNotification(data: any) {
             setNotis(data.noti);
         }
 
-        sse.onmessage = (e: any) => test(JSON.parse(e.data));
+        sse.onmessage = (e: any) => setNotification(JSON.parse(e.data));
         return () => {
             sse.close();
           };
@@ -83,6 +84,15 @@ const Header: React.FC = (): JSX.Element => {
             </OverlayTrigger>
         </Nav>
 
+    const handleChangeTheme = (e: any) => {
+        console.log(theme);
+        if(e.target.checked) {
+            setTheme(lightTheme);
+        } else {
+            setTheme(darkTheme);
+        }
+        console.log(e.target.checked)
+    };
 
     return (
         <Navbar bg="dark" variant="dark">
@@ -91,6 +101,10 @@ const Header: React.FC = (): JSX.Element => {
                     <Nav.Link onClick={handleRedirectToHome}>Forum</Nav.Link>
                     <Nav.Link onClick={handleRedirectToCommunicator}>Komunikator</Nav.Link>
                     <Nav.Link onClick={handleRedirectToGames}>Nuda?</Nav.Link>
+                    <div className="form-check form-switch align-self-center bg-dark mx-2">
+                        <input className="form-check-input bg-secondary" type="checkbox" role="switch" id="flexSwitchCheckDefault" onClick={handleChangeTheme} />
+                        <label className="form-check-label" htmlFor="flexSwitchCheckDefault"></label>
+                    </div>
                 </Nav>
                 {setPropertylabel}
             </Container>

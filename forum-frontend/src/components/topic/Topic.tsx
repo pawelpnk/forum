@@ -2,7 +2,7 @@ import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { Button, Col, Container, Nav, Row } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router';
 import req from '../../helpers/request';
-import { UserContext } from '../../store/StoreProvider';
+import { ThemeContext, UserContext } from '../../store/StoreProvider';
 import ModalInfo from '../modal/ModalInfo';
 import ModalConfirm from '../modalConfirm/modalConfirm';
 import ModalTopic from '../modalTopic/ModalTopic';
@@ -33,6 +33,7 @@ const Topic: React.FC = (): JSX.Element => {
 
     const { user } = useContext(UserContext);
     const userLogged: boolean = Boolean(user);
+    const { theme } = useContext(ThemeContext);
 
     const fetchTopics = async (): Promise<void> => {
         const data = await req.get(`/topic/all/${sectionID}`);
@@ -43,25 +44,15 @@ const Topic: React.FC = (): JSX.Element => {
         fetchTopics();
     }, [showModalInfo]);
 
-    const handleRedirectToTopicWithPosts = (topic: TopicType) => {
-        navigate(`/sekcja/${topic.id}`);
-    }
+    const handleRedirectToTopicWithPosts = (topic: TopicType) => navigate(`/sekcja/${topic.id}`);
 
-    const handleAddNewTopic = () => {
-        setShowModalTopic(true);
-    }
+    const handleAddNewTopic = () => setShowModalTopic(true);
 
-    const closeModalTopic = () => {
-        setShowModalTopic(false);
-    }
+    const closeModalTopic = () => setShowModalTopic(false);
 
-    const handleNewTopicArea = (event: ChangeEvent<HTMLInputElement>) => {
-        setTopicName(event.target.value);
-    }
+    const handleNewTopicArea = (event: ChangeEvent<HTMLInputElement>) => setTopicName(event.target.value);
 
-    const handleAddFirstPost = (e: ChangeEvent<HTMLInputElement>) => {
-        setFirstPost(e.target.value);
-    }
+    const handleAddFirstPost = (e: ChangeEvent<HTMLInputElement>) => setFirstPost(e.target.value);
 
     const validateInputs = () => {
         if(!topicName || !firstPost) {
@@ -113,25 +104,25 @@ const Topic: React.FC = (): JSX.Element => {
 
     return (
         <>
-            <Container className='my-5 text-light'>
+            <Container className={`my-5 ${theme.textColor}`}>
                 <Row className='mb-2'>
                     <Col>
                         <span>{topics[0]?.sectionName}</span>
                     </Col>
                     <Col className='d-flex justify-content-end'>
-                        {userLogged && <Button onClick={handleAddNewTopic} variant='outline-light'>Dodaj nowy temat</Button>}
+                        {userLogged && <Button onClick={handleAddNewTopic} variant={theme.buttonNewOption}>Dodaj nowy temat</Button>}
                     </Col>
                 </Row>
                 {topics.sort((a: any, b: any) => b.updatedAt.localeCompare(a.updatedAt)).map((topic: any) => {
                     return (
-                        <Row key={topic.id} className='border py-1 '>
+                        <Row key={topic.id} className={`border ${theme.border} py-1`}>
                             <Col className='py-1'>
                                 <Container>
                                     <Row>
-                                        <Col md='auto' >
-                                            <Nav.Link className='text-light px-0' onClick={() => handleRedirectToTopicWithPosts(topic)}>{topic.topic}</Nav.Link>
+                                        <Col md='auto'>
+                                            <Nav.Link className={`${theme.textColor} px-0`} onClick={() => handleRedirectToTopicWithPosts(topic)}>{topic.topic}</Nav.Link>
                                         </Col>
-                                        <Col >
+                                        <Col>
                                             <p className='d-flex justify-content-end text-muted '><small>Ostatni post: {topic.updatedAt}</small></p>
                                             <p className='d-flex justify-content-end text-muted '><small>Dodany przez: {topic.lastPostUser}</small></p>
                                             <p className='d-flex justify-content-end text-muted '><small>Ilość postów: {topic.countPostsTopic}</small></p>
@@ -139,7 +130,7 @@ const Topic: React.FC = (): JSX.Element => {
                                     </Row>
                                     <Row>
                                         <Col md='auto'>
-                                            <p className='py-0 text-white-50'>
+                                            <p className='py-0 text-muted'>
                                                 <small>{topic.userId 
                                                 ? `Stworzony przez ${topic.userId} ${topic.createdAt}` 
                                                 : `Stworzony przez nie istniejące konto ${topic.createdAt}`}

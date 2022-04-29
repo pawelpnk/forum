@@ -3,7 +3,7 @@ import req from '../../helpers/request';
 import { Container, Row, Col, Nav, Button } from 'react-bootstrap';
 import { ChatRightText } from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
-import { UserContext } from '../../store/StoreProvider';
+import { ThemeContext, UserContext } from '../../store/StoreProvider';
 import ModalSection from '../modalSection/ModalSection';
 import ModalInfo from '../modal/ModalInfo';
 import ModalConfirm from '../modalConfirm/modalConfirm';
@@ -28,6 +28,7 @@ const Home: React.FC = (): JSX.Element => {
     const [title, setTitle] = useState<string>('');
 
     const { user } = useContext(UserContext);
+    const { theme } = useContext(ThemeContext);
 
     const navigate = useNavigate();
 
@@ -118,13 +119,13 @@ const Home: React.FC = (): JSX.Element => {
                 a następnie temat lub założysz swój własny! Zapraszamy również do odwiedzenia Komunikatora, gdzie
                 można porozmawiać z wybranymi osobami, a także zajrzeć do zakładki "Nuda" :)
             </p>
-            {userLogged && user.role === 'admin' ? <Button className='mb-2' variant='outline-light' onClick={handleAddSectionButton}>Dodaj nową sekcje</Button> : null}
+            {userLogged && user.role === 'admin' ? <Button className='mb-2' variant={theme.buttonNewOption} onClick={handleAddSectionButton}>Dodaj nową sekcje</Button> : null}
             {   
                 section.map((sec: any) => {
                     return (
-                        <Row key={sec.id} className='border py-3'>
+                        <Row key={sec.id} className={`border ${theme.border} py-3`}>
                             <Col xs='auto' sm={1} className='px-4 d-flex justify-content-center align-items-center'>
-                                <ChatRightText />
+                                <ChatRightText className={theme.textColor} />
                             </Col>
                             <Col xs sm={5}>
                                 <Nav.Link onClick={() => handleRedirectToTopics(sec)}>{sec.sectionName}</Nav.Link>
