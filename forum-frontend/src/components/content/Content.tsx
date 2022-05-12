@@ -25,7 +25,7 @@ const Content: React.FC = (): JSX.Element => {
                         <Route path='/sekcja/:topicID' element={<TopicPosts/>} />
                         {!user && <Route path='/rejestracja' element={<Register/>} />}
                         {!user && <Route path='/zaloguj' element={<Login/>} />}
-                        <Route path='/games' element={<Games />} />
+                        <Route path='/gry' element={<Games />} />
                         <Route path='/snake' element={<Snake />} />
                         {
                             user ? 

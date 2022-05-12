@@ -19,14 +19,12 @@ export class PostService {
         @InjectRepository(Post) private postRepository: Repository<Post>,
         @InjectRepository(Notification) private notificationRepository: Repository<Notification>,
         @Inject(forwardRef(() => UserService)) private userService: UserService,
-        @Inject(forwardRef(() => TopicService)) private topicService: TopicService,
-        private sectionService: SectionService
+        @Inject(forwardRef(() => TopicService)) private topicService: TopicService
     ) {}
 
     async createPost(body: NewPost, user: User): Promise<PostResponse> {
         const findUser = await this.userService.findUserHelperId(body.idUser);
         const findTopic = await this.topicService.fetchOneTopic(body.topicId);
-        // const findSection = await this.sectionService.findSection(body.topicId);
 
         const checkSignedUsers = body.text.match(/(?<=@)\w+/gi);
         if(checkSignedUsers && checkSignedUsers.length <= 10) {
@@ -62,7 +60,6 @@ export class PostService {
         newPost.topic = findTopic;
         newPost.topicId = findTopic.id;
         newPost.topicName = findTopic.topic;
-        // newPost.sectionName = findSection.sectionName;
         newPost.sectionName = body.sectionName;
 
         await this.postRepository.save(newPost);
@@ -109,7 +106,12 @@ export class PostService {
     }
 
     async fetchAllPosts(idTopic: string): Promise<Post[]> {
-        return await this.postRepository.find({topicId: idTopic});
+        // return await this.postRepository.find({topicId: idTopic});
+        return await this.postRepository.find({
+            where: {
+                topicId: idTopic
+            }
+        });
     }
 
     async fetchOnePost(idPost: string): Promise<Post> {

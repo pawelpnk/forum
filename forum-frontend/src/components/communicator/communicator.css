@@ -1,0 +1,11 @@
+.communicator-list .col-xs-12 {
+    height: 35vh;
+}
+
+
+
+@media(min-width:576px) {
+    .communicator-list .col-sm-3, .communicator-list .col-sm-9 {
+        height: 70vh;
+    }     
+}

@@ -37,7 +37,8 @@ const Topic: React.FC = (): JSX.Element => {
 
     const fetchTopics = async (): Promise<void> => {
         const data = await req.get(`/topic/all/${sectionID}`);
-        setTopics(data.data);        
+        setTopics(data.data);
+        console.log(data.data);      
     }
 
     useEffect(()=> {
@@ -113,23 +114,21 @@ const Topic: React.FC = (): JSX.Element => {
                         {userLogged && <Button onClick={handleAddNewTopic} variant={theme.buttonNewOption}>Dodaj nowy temat</Button>}
                     </Col>
                 </Row>
-                {topics.sort((a: any, b: any) => b.updatedAt.localeCompare(a.updatedAt)).map((topic: any) => {
+                {topics.sort((a: any, b: any) => +new Date(b.updatedAt) - +new Date(a.updatedAt)).map((topic: any) => {
                     return (
                         <Row key={topic.id} className={`border ${theme.border} py-1`}>
                             <Col className='py-1'>
                                 <Container>
                                     <Row>
-                                        <Col md='auto'>
+                                        <Col xs={12} md={9}>
                                             <Nav.Link className={`${theme.textColor} px-0`} onClick={() => handleRedirectToTopicWithPosts(topic)}>{topic.topic}</Nav.Link>
                                         </Col>
-                                        <Col>
-                                            <p className='d-flex justify-content-end text-muted '><small>Ostatni post: {topic.updatedAt}</small></p>
-                                            <p className='d-flex justify-content-end text-muted '><small>Dodany przez: {topic.lastPostUser}</small></p>
-                                            <p className='d-flex justify-content-end text-muted '><small>Ilość postów: {topic.countPostsTopic}</small></p>
+                                        <Col xs={12} md={3}>
+                                            <p className='d-flex justify-content-start text-muted my-0'><small>Ostatni post: {topic.updatedAt}</small></p>
+                                            <p className='d-flex justify-content-start text-muted my-0'><small>Dodany przez: {topic.lastPostUser}</small></p>
+                                            <p className='d-flex justify-content-start text-muted my-0'><small>Ilość postów: {topic.countPostsTopic}</small></p>
                                         </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col md='auto'>
+                                        <Col xs={6} md={10}>
                                             <p className='py-0 text-muted'>
                                                 <small>{topic.userId 
                                                 ? `Stworzony przez ${topic.userId} ${topic.createdAt}` 
@@ -138,7 +137,7 @@ const Topic: React.FC = (): JSX.Element => {
                                             </p>
                                             
                                         </Col>
-                                        <Col className='d-flex justify-content-end align-items-center'>
+                                        <Col xs={6} md={2} className='d-flex justify-content-end align-items-center'>
                                             {userLogged && user.role === 'admin' && <Button variant='outline-danger' size='sm' onClick={() => handleShowModalDeleteTopic(topic.id)}>Usuń</Button>}                                            
                                         </Col>
                                     </Row>

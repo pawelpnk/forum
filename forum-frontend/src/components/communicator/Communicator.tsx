@@ -1,8 +1,9 @@
-import React, { ChangeEvent, FormEvent, useContext, useEffect, useRef, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { Button, Col, Container, Form, Row, Toast } from 'react-bootstrap';
 import { CaretDown, Cursor } from 'react-bootstrap-icons';
 import req from '../../helpers/request';
 import { SocketContext, ThemeContext, UserContext } from '../../store/StoreProvider';
+import './communicator.css';
 
 const Communicator: React.FC = (): JSX.Element => {
     const [groups, setGroups] = useState<any>([]);
@@ -34,39 +35,38 @@ const Communicator: React.FC = (): JSX.Element => {
         }
     }
 
-    const handleReceiveMessages = async (id: string) => {
+    const handleReceiveMessages = useCallback((id: string) => {
         socket.emit('all-message-from-database', id);
         socket.on('send-messages-group', (data:any)  => {
             setMessages(data);
         })
         return () => socket.off('send-messages-group');
-    }
+    },[])
 
-    const handleSendNewMessage = (e: FormEvent) => {
+    const handleSendNewMessage = async (e: FormEvent) => {
         e.preventDefault();
         socket.emit('message-from-client', {
             text: textMessage,
             group: currentGroup,
             userLogin: user.login
         });
-        req.patch(`group`,{
+        await req.patch(`group`,{
             id: currentGroup.id
         });
         setTextMessage('')
-    }
-
-    const fetchGroupsUser = async () => {
-        const result = await req.get('group');
-        setGroups(result.data);
-        setCurrentGroup(() => result.data[0]);
-        handleReceiveMessages(result.data[0].id);        
     }
 
     const scrollToBottom = () => {
         lastMessageRef.current?.scrollIntoView({behavior: 'smooth'})
     }
 
-    useEffect(() => {
+    useEffect(() => {        
+        const fetchGroupsUser = async () => {
+            const result = await req.get('group');
+            setGroups(result.data);
+            setCurrentGroup(() => result.data[0]);
+            handleReceiveMessages(result.data[0].id);        
+        }
         fetchGroupsUser();
     },[newGroup])
 
@@ -86,15 +86,15 @@ const Communicator: React.FC = (): JSX.Element => {
             <Container>
                 <Row>
                     <Col>
-                        <p className='d-flex justify-content-center mt-5 text-secondary'>Uwaga! Wszystkie wiadomości starsze niż 5 dni są usuwane!</p>
+                        <p className='d-flex justify-content-center mt-5 text-secondary'>Uwaga! Wszystkie wiadomości są usuwane o północy!</p>
                     </Col>
                 </Row>
-                <Row className='my-3' style={{height: '70vh'}}>
-                    <Col xs={3} className={`border ${theme.border} overflow-auto`} style={{height: '70vh'}}>
+                <Row className='my-3 communicator-list' style={{height: '70vh'}}>
+                    <Col xs={12} className={`col-xs-12 col-sm-3 border ${theme.border} overflow-auto`} >
                         <Form onSubmit={handleFindUserAndCreateNewGroup} className='d-flex flex-column align-items-center'>
                             <Form.Control
                                 type='text'
-                                placeholder='użytkownik'
+                                placeholder='user'
                                 className={`mt-2 ${theme.border}`}
                                 value={findUser} 
                                 onChange={handleChangeFindUser}
@@ -115,7 +115,7 @@ const Communicator: React.FC = (): JSX.Element => {
                             }
                         </div>
                     </Col>
-                    <Col xs={9} className={`border ${theme.border} d-flex flex-column`} style={{height: '70vh'}}>
+                    <Col xs={12} className={`col-xs-12 col-sm-9 border ${theme.border} d-flex flex-column`}>
                         <p className={`${theme.textColor} d-flex justify-content-center mt-2 border-bottom ${theme.border}`}>Wiadomości</p>                        
                         <div className='overflow-auto d-flex flex-column' >
                             {

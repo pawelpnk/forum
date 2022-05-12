@@ -8,7 +8,7 @@ import { useContext } from 'react';
 function App() {
   const { theme } = useContext(ThemeContext)
   return (
-      <div className="App" style={{minHeight: '100vh', backgroundColor: theme.backgroundColor}}> 
+      <div className="App" style={{minHeight: '100vh', backgroundColor: theme.backgroundColor, width: '100%'}}> 
         <Router>
           <Header />
           <Content />

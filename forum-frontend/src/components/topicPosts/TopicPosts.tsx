@@ -28,7 +28,7 @@ const TopicPosts: React.FC = (): JSX.Element => {
 
 	const fetchPosts = async (): Promise<void> => {
 		const data = await req.get(`post/all/${topicID}`)
-		setPosts(data.data.sort((a: any, b: any) => a.createAt.localeCompare(b.createAt)));
+		setPosts(data.data.sort((a: any, b: any) => +new Date(a.createAt) - +new Date(b.createAt)));
 		setTotalPage(Math.ceil(data.data.length/postPerPage));
 	}
 

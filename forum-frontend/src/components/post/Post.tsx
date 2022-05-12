@@ -28,10 +28,10 @@ const Post: React.FC<PostType> = ({posts, userLogged, handleUpdateRatePost, user
 						<Col className='py-1'>
 							<Container>
 								<Row>
-									<Col>
+									<Col xs={7}>
 										<p className='text-muted'><small>Napisano {post.createAt}</small></p>
 									</Col>
-									<Col>
+									<Col xs={5}>
 										<small className={`${theme.textColor} py-1 justify-content-end d-flex align-items-center`}>
 												<HandThumbsUp onClick={() => checkRated ? null : handleUpdateRatePost(1, post.id)} className='mx-2 text-success'/>
 												{post.rating}
@@ -40,12 +40,12 @@ const Post: React.FC<PostType> = ({posts, userLogged, handleUpdateRatePost, user
 									</Col>
 								</Row>
 								<Row>
-									<Col>
+									<Col xs={12} sm={9}>
 										<p className={theme.textColor}>{reactStringReplace(post.text, /@(\w+)/gi, (match: any, i: any) => (
 											<span key={i} style={{color: '#6699ff'}}>@{match}</span>
 										))}</p>
 									</Col>
-									<Col xs='auto' className='d-flex justify-content-end align-items-center'>
+									<Col sm={3} className='d-flex justify-content-end align-items-center mb-2'>
 										{userLogged && (user.role === 'admin' || user.login === post.userId) && <Button className='mx-2' variant='outline-warning' size='sm' onClick={() => handleEditPost(post.id)}>Edytuj</Button>}
 										{userLogged && user.role === 'admin' && <Button variant='outline-danger' size='sm' onClick={() => handleDeletePost(post.id)}>Usuń</Button>}
 									</Col>
