@@ -1,7 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Button } from 'react-bootstrap';
+import req from '../../helpers/request';
+import { ThemeContext } from '../../store/StoreProvider';
 import './snake.css';
 
-// const amountOfPole = 448;
 const sizePole = 25;
 const widthField = 700;
 const amountOfPoleX = widthField/sizePole;
@@ -20,8 +22,10 @@ const Snake: React.FC = (): JSX.Element => {
     const [apple, setApple] = useState<any>([]);
     const [score, setScore] = useState<number>(0);
     const [startGameFlag, setStartGameFlag] = useState<boolean>(false);
-    const [playGame, setPlayGame] = useState<boolean>(true);
+    const [playGame, setPlayGame] = useState<boolean>(false);
     const ref = useRef(directionStart);
+
+    const { theme } = useContext(ThemeContext);
 
     const applePosition = () => {
         let checkCollisionSnakeAndApple;
@@ -34,7 +38,6 @@ const Snake: React.FC = (): JSX.Element => {
     }
 
     const changeDirection = (e: any) => {
-        console.log(e.keyCode, ref)
         switch(e.keyCode) {            
             case 38:
                 if(ref.current[1] === 0){
@@ -75,15 +78,16 @@ const Snake: React.FC = (): JSX.Element => {
         setDirection(directionStart); 
         setScore(0);
         ref.current = directionStart;
-        setStartGameFlag(prev => !prev);
-        
+        setStartGameFlag(prev => !prev);        
     }
 
-    const gameOver = () => {
+    const gameOver = async (): Promise<void> => {
         setDirection([]);
         setPlayGame(false);
-        alert(`zderzenie - liczba punktów: ${score}`);
-        startGame();
+        await req.post('game', {
+            name: 'snake',
+            numberPoints: score
+        });
     }
 
     const checkCollisionWithBorder = (head: Number[]) => {
@@ -146,18 +150,28 @@ const Snake: React.FC = (): JSX.Element => {
         const a = setInterval(()=>{
             motionSnake()
         }, timeSteps);
-        return () => clearInterval(a)
-    },[direction, snakeBody])
+        return () => clearInterval(a);
+    }, [direction, snakeBody]);
 
     const appleFood = <div className='apple' style={{left:`${apple[0]}px`, top:`${apple[1]}px`}}></div>
 
     return (
-        <div className='d-flex justify-content-center mt-5'>
+        <div className='d-flex justify-content-center mt-5 flex-column'>
+            <p className={theme.textColor}>Zdobyte punkty: {score}</p>
             <div className='container-snake' onKeyDown={(e) => changeDirection(e)} style={{minWidth: `${widthField}px`, height:`${heightField}px`, backgroundColor:bgColor}}>
                 {snakeBody.map((field: any, i: any) => {
                     return <div key={i} className='snake' style={{left:`${field[0]}px`, top:`${field[1]}px`}}></div>
                 })}
                 {appleFood}
+                {!playGame &&
+                    <div className='modal-snake'>
+                        <div className='snake-info'>
+                            {score > 0 ? <p>Wynik: {score}</p> : null}
+                            <p>Rozpocznij nową grę</p>
+                            <Button onClick={startGame} variant='danger'>Start</Button>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     )

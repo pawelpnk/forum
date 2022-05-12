@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
+import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { UserObj } from 'src/decorators/user.decorator';
 import User from 'src/entity/user.entity';
@@ -19,15 +20,20 @@ export class GameController {
     }
 
     @Get('/top')
-    async getTopGames () {
-        return await this.gameService.getTopGames();
+    async getTopGames (
+        @Res() res: Response
+    ) {
+        const getTopGames = await this.gameService.getTopGames();
+        return res.status(HttpStatus.OK).json(getTopGames);
     }
 
     @UseGuards(JwtAuthGuard)
-    @Get('top-user')
+    @Get('/top-user')
     async getTopGamesUser (
-        @UserObj() user: User
+        @UserObj() user: User,
+        @Res() res: Response
     ) {
-        return await this.gameService.getTopGamesUser(user);
+        const getTopGamesUser =  await this.gameService.getTopGamesUser(user);
+        return res.status(HttpStatus.OK).json(getTopGamesUser);
     }
 } 

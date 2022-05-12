@@ -31,11 +31,20 @@ export class GameService {
 
     async getTopGamesUser(user: User): Promise<Games[]> {
         return await this.gameRepository.find({
+            relations: [
+                'user'   
+            ],
             where: {
-                user: user
+                user: {
+                    id: user.id
+                }
+                // userId: user.id
+            },
+            order: {
+                numberPoints: 'DESC'
             },
             skip: 0,
-            take: 5
+            take: 5            
         })
     }
 }

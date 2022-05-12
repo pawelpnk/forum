@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import User from "./user.entity";
 
 @Entity()
@@ -12,6 +12,6 @@ export class Games {
     @Column()
     numberPoints: number;
 
-    @ManyToOne(() => User, (user) => user.games)
-    user: User
+    @ManyToOne(() => User, (user) => user.games, { cascade: true, onDelete: "SET NULL"})
+    user: User;
 }

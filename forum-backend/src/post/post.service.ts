@@ -106,7 +106,6 @@ export class PostService {
     }
 
     async fetchAllPosts(idTopic: string): Promise<Post[]> {
-        // return await this.postRepository.find({topicId: idTopic});
         return await this.postRepository.find({
             where: {
                 topicId: idTopic

@@ -6,7 +6,6 @@ import { SectionService } from 'src/section/section.service';
 import { UserService } from 'src/user/user.service';
 import { Repository } from 'typeorm';
 import NewTopic from './topic.dto/new-topic.dto';
-import TopicResponse from './topic.interface/topic-response.interface';
 
 @Injectable()
 export class TopicService {

@@ -1,10 +1,9 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Topic } from "./topic.entity";
 import { IsEmail } from 'class-validator';
 import { Post } from "./post.entity";
 import { OptionalUser } from "./optionalUser.entity";
 import { Notification } from 'src/entity/notification.entity';
-import { Message } from "./message.entity";
 import { Group } from "./group.entity";
 import { Games } from "./games.entity";
 
@@ -16,16 +15,17 @@ export default class User {
     @Column()
     login: string;
 
-    @Column()
+    @Column({nullable: true, select: false})
     password: string;
 
-    @Column()
+    @Column({select: false})
     @IsEmail()
     email: string;
 
     @Column({
         nullable: true,
-        default: null
+        default: null,
+        select: false
     })
     token: string | null
 

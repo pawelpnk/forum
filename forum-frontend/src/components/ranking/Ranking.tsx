@@ -15,12 +15,14 @@ const Ranking: React.FC<any> = ({score}): JSX.Element => {
             </thead>
             <tbody>
                 {score.map((s:any, index: number) => {
-                     <tr>
-                     <td>{index + 1}</td>
-                     <td>{s.name}</td>
-                     <td>{s.name}</td>
-                     <td>{s.numberPoints}</td>
-                     </tr>
+                    return (
+                        <tr key={s.id}>
+                            <td>{index + 1}</td>
+                            <td>{s.name}</td>
+                            <td>{s.name}</td>
+                            <td>{s.numberPoints}</td>
+                        </tr>
+                    )
                 })}              
             </tbody>
             </Table>

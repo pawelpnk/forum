@@ -25,3 +25,24 @@
     width: 25px;
     height: 25px;
 }
+
+.modal-snake {
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.snake-info {
+    height: 200px;
+    width: 200px;
+    background-color: blueviolet;
+    color: white;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
