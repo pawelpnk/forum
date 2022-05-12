@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Table } from 'react-bootstrap';
+import { ThemeContext } from '../../store/StoreProvider';
 
 const Ranking: React.FC<any> = ({score}): JSX.Element => {
+    const { theme } = useContext(ThemeContext);
     return (
         <>
-            <Table striped bordered hover variant="dark">
+            <Table striped bordered hover variant={theme.tableColor}>
             <thead>
                 <tr>
                 <th>#</th>
@@ -18,7 +20,7 @@ const Ranking: React.FC<any> = ({score}): JSX.Element => {
                     return (
                         <tr key={s.id}>
                             <td>{index + 1}</td>
-                            <td>{s.name}</td>
+                            <td>{s.user?.login}</td>
                             <td>{s.name}</td>
                             <td>{s.numberPoints}</td>
                         </tr>

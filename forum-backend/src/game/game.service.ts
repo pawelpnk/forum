@@ -21,6 +21,9 @@ export class GameService {
 
     async getTopGames(): Promise<Games[]> {
         return await this.gameRepository.find({
+            relations: [
+                'user'   
+            ],
             order: {
                 numberPoints: 'DESC'
             },
@@ -38,7 +41,6 @@ export class GameService {
                 user: {
                     id: user.id
                 }
-                // userId: user.id
             },
             order: {
                 numberPoints: 'DESC'

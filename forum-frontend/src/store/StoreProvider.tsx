@@ -9,7 +9,8 @@ const darkTheme = {
     border: 'border-white',
     colorMyMessage: 'bg-success',
     buttonNewOption: 'outline-light',
-    buttonToLoginAndRegister: 'outline-dark'
+    buttonToLoginAndRegister: 'outline-dark',
+    tableColor: 'dark'
 }
 
 const lightTheme = {
@@ -18,7 +19,8 @@ const lightTheme = {
     border: 'border-dark',
     colorMyMessage: 'bg-light',
     buttonNewOption: 'outline-dark',
-    buttonToLoginAndRegister: 'outline-light'
+    buttonToLoginAndRegister: 'outline-light',
+    tableColor: ''
 }
 
 export const ThemeContext = createContext<any>(null);
