@@ -15,6 +15,7 @@ import { ChatGateway } from './chat/chat.gateway';
 import { ChatService } from './chat/chat.service';
 import { Message } from './entity/message.entity';
 import { GroupModule } from './group/group.module';
+import { GameModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { GroupModule } from './group/group.module';
     AuthModule,
     CronModule,
     GroupModule,
+    GameModule,
   ],
   controllers: [
     AppController, 
