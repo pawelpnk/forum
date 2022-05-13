@@ -37,7 +37,7 @@ const Games: React.FC = (): JSX.Element => {
                 <Row>
                     <Col>
                         <p className={`${theme.textColor} d-flex justify-content-center mt-5`}>Powiało nudą? Może chciałbyś zagrać w Snake'a? ;)</p>
-                        <small className='d-flex justify-content-center'>Gra dostępna tylko w wersji dektopowej</small>
+                        <small className='d-flex justify-content-center text-muted'>Gra dostępna tylko w wersji dektopowej</small>
                     </Col>
                 </Row>                
                 <Row>

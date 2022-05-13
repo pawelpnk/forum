@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Topic } from "./topic.entity";
 import { IsEmail } from 'class-validator';
 import { Post } from "./post.entity";
@@ -27,7 +27,7 @@ export default class User {
         default: null,
         select: false
     })
-    token: string | null
+    token: string | null;
 
     @Column()
     role: string;
@@ -51,10 +51,10 @@ export default class User {
 
     @OneToOne(() => OptionalUser)
     @JoinColumn()
-    optionalUser: OptionalUser
+    optionalUser: OptionalUser;
 
     @OneToMany(() => Notification, (noti)=> noti.user)
-    notifications: Notification[]
+    notifications: Notification[];
     
     @ManyToMany(() => Group, (group) => group.users)
     @JoinTable()

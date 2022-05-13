@@ -25,5 +25,5 @@ export class Notification {
     createAt: string;
 
     @ManyToOne(() => User, (user) => user.notifications, { cascade: true, onDelete:'CASCADE' })
-    user: User
+    user: User;
 }

@@ -17,7 +17,7 @@ export class GameService {
         newGame.numberPoints = body.numberPoints;
         newGame.user = user;
         return await this.gameRepository.save(newGame);
-    }
+    };
 
     async getTopGames(): Promise<Games[]> {
         return await this.gameRepository.find({
@@ -30,7 +30,7 @@ export class GameService {
             skip: 0,
             take: 5
         });
-    }
+    };
 
     async getTopGamesUser(user: User): Promise<Games[]> {
         return await this.gameRepository.find({
@@ -47,6 +47,6 @@ export class GameService {
             },
             skip: 0,
             take: 5            
-        })
-    }
+        });
+    };
 }

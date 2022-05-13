@@ -16,7 +16,7 @@ export class NotiController {
         @Res() res: Response
     ) {
         try {
-            const result = await this.notiService.UpdateDisplayNotification(user);
+            await this.notiService.UpdateDisplayNotification(user);
             return res.status(HttpStatus.OK).json({
                 positive: true
             })

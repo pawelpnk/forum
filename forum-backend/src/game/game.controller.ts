@@ -2,6 +2,7 @@ import { Body, Controller, Get, HttpStatus, Post, Res, UseGuards } from '@nestjs
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { UserObj } from 'src/decorators/user.decorator';
+import { Games } from 'src/entity/games.entity';
 import User from 'src/entity/user.entity';
 import { NewGame } from './game.dto/new-game.dto';
 import { GameService } from './game.service';
@@ -23,7 +24,7 @@ export class GameController {
     async getTopGames (
         @Res() res: Response
     ) {
-        const getTopGames = await this.gameService.getTopGames();
+        const getTopGames: Games[] = await this.gameService.getTopGames();
         return res.status(HttpStatus.OK).json(getTopGames);
     }
 
@@ -33,7 +34,7 @@ export class GameController {
         @UserObj() user: User,
         @Res() res: Response
     ) {
-        const getTopGamesUser =  await this.gameService.getTopGamesUser(user);
+        const getTopGamesUser: Games[] =  await this.gameService.getTopGamesUser(user);
         return res.status(HttpStatus.OK).json(getTopGamesUser);
     }
 } 

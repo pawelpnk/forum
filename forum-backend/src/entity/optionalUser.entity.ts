@@ -13,5 +13,5 @@ export class OptionalUser {
     dateFinish: string;
 
     @OneToOne(() => User)
-    user: User
+    user: User;
 }

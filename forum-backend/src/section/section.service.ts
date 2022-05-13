@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { NewSection } from 'src/dto/new-section.dto';
+import { NewSection } from 'src/section/section.dto/new-section.dto';
 import { Section } from 'src/entity/section.entity';
 import { Repository } from 'typeorm';
 
@@ -16,7 +16,7 @@ export class SectionService {
             throw new HttpException('Sekcja nie może mieć pustą nazwę', HttpStatus.BAD_REQUEST);
         }
 
-        const newSection = new Section();
+        const newSection: Section = new Section();
         newSection.sectionName = sectionName.sectionName;
 
         await this.sectionEntity.save(newSection);

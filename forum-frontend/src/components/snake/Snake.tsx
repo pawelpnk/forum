@@ -10,7 +10,7 @@ const amountOfPoleX = widthField/sizePole;
 const heightField = 400;
 const amountOfPoleY = heightField/sizePole;
 const bgColor = '#331a00';
-const timeSteps = 500;
+const timeSteps = 100;
 const directionStart = [0,25];
 
 const Snake: React.FC = (): JSX.Element => {

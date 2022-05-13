@@ -9,7 +9,7 @@ import { UserService } from 'src/user/user.service';
 export class AuthService {
 
     constructor(
-        @Inject(forwardRef(()=> UserService)) private userService: UserService
+        @Inject(forwardRef(() => UserService)) private userService: UserService
     ) {}
 
     async hashPassword(password: string): Promise<string> {

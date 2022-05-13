@@ -1,6 +1,8 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Section } from 'src/entity/section.entity';
 import { Topic } from 'src/entity/topic.entity';
+import User from 'src/entity/user.entity';
 import { PostService } from 'src/post/post.service';
 import { SectionService } from 'src/section/section.service';
 import { UserService } from 'src/user/user.service';
@@ -11,16 +13,16 @@ import NewTopic from './topic.dto/new-topic.dto';
 export class TopicService {
     constructor(
         @InjectRepository(Topic) private topicRepository: Repository<Topic>,
-        @Inject(forwardRef(()=> UserService)) private userService: UserService,
+        @Inject(forwardRef(() => UserService)) private userService: UserService,
         @Inject(forwardRef(() => SectionService)) private sectionService: SectionService,
-        @Inject(forwardRef(()=> PostService)) private postService: PostService
+        @Inject(forwardRef(() => PostService)) private postService: PostService
     ) {}
 
     async createTopic(bodyTopic: NewTopic): Promise<any> {
-        const findUser = await this.userService.findUserHelper(bodyTopic.userLogin);
-        const findSection = await this.sectionService.findSection(bodyTopic.sectionId);
+        const findUser: User = await this.userService.findUserHelper(bodyTopic.userLogin);
+        const findSection: Section = await this.sectionService.findSection(bodyTopic.sectionId);
 
-        const newTopic = new Topic();
+        const newTopic: Topic = new Topic();
         newTopic.topic = bodyTopic.topic;
         newTopic.createdAt = new Date().toLocaleString();
         newTopic.updatedAt = new Date().toLocaleString();
@@ -59,7 +61,7 @@ export class TopicService {
         return await this.topicRepository.findOneOrFail(id);
     }
 
-    async fetchAllTopics(id: string): Promise<any> {
+    async fetchAllTopics(id: string): Promise<Topic[]> {
         const findTopics = await this.topicRepository.find({
            where: { sectionId: id }
         });

@@ -9,9 +9,8 @@ import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';
 import PostResponse from './post.interface/post-response.interface';
 import { Notification } from 'src/entity/notification.entity';
-import { UserRole } from 'src/interface/user-role.interface';
+import { UserRole } from 'src/user/user.interface/user-role.interface';
 import User from 'src/entity/user.entity';
-import { SectionService } from 'src/section/section.service';
 
 @Injectable()
 export class PostService {

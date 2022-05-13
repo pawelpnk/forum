@@ -3,7 +3,7 @@ import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { UserObj } from 'src/decorators/user.decorator';
 import RoleGuard from 'src/guard/roles.guards';
-import { UserRole } from 'src/interface/user-role.interface';
+import { UserRole } from 'src/user/user.interface/user-role.interface';
 import NewPost from './post.dto/new-post.dto';
 import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';

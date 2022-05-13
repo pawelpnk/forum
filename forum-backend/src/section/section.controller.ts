@@ -1,10 +1,11 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import { NewSection } from 'src/dto/new-section.dto';
+import { NewSection } from 'src/section/section.dto/new-section.dto';
 import RoleGuard from 'src/guard/roles.guards';
-import { UserRole } from 'src/interface/user-role.interface';
+import { UserRole } from 'src/user/user.interface/user-role.interface';
 import { SectionService } from './section.service';
+import { Section } from 'src/entity/section.entity';
 
 @Controller('section')
 export class SectionController {
@@ -18,7 +19,7 @@ export class SectionController {
         @Res() res: Response
     ) {
         try {
-            const addedSection = await this.sectionService.addSection(newSection);
+            const addedSection: Section = await this.sectionService.addSection(newSection);
             return res.status(HttpStatus.OK).json({
                 message: 'Pomyślnie dodano nową sekcje',
                 addedSection
@@ -51,7 +52,7 @@ export class SectionController {
         @Param('id') id: string
     ) {
         try {
-            const updtSection = await this.sectionService.updateSectionName(id, updateSection);
+            const updtSection: Section = await this.sectionService.updateSectionName(id, updateSection);
             return res.status(HttpStatus.OK).json({
             message: 'Pomyślnie zaaktualizowano sekcje',
             updtSection

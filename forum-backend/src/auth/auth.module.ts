@@ -6,7 +6,7 @@ import { JwtStrategy } from './jwt.strategy';
 
 @Module({
     imports: [
-        forwardRef(()=> UserModule),
+        forwardRef(() => UserModule),
     ],
     providers: [
         AuthService, 

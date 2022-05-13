@@ -1,5 +1,6 @@
 import { ConnectedSocket, MessageBody, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { Message } from 'src/entity/message.entity';
 import { ChatCreateMessage } from './chat.interface/chat-create-message.interface';
 import { ChatService } from './chat.service';
 
@@ -15,16 +16,17 @@ export class ChatGateway {
   async handleMessage(
     @MessageBody() content: ChatCreateMessage,
   ) {
-    const message = await this.chatService.createMessage(content);
+    const message: Message = await this.chatService.createMessage(content);
     this.server.sockets.emit('new-message', message);
     return message;
   }
+
   @SubscribeMessage('all-message-from-database')
   async handleMessageResponse(
     @ConnectedSocket() socket: Socket,
     @MessageBody() id: string
   ){
-    const messages = await this.chatService.getAllMessageOneConversation(id);
+    const messages: Message[] = await this.chatService.getAllMessageOneConversation(id);
     socket.emit('send-messages-group', messages);
   }
 }

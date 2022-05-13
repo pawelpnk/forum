@@ -2,14 +2,14 @@ import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, Use
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { UserObj } from 'src/decorators/user.decorator';
-import NewUser from 'src/dto/new-user.dto';
-import UserLogin from 'src/dto/user-login.dto';
-import UserUpdateForUser from 'src/dto/user-update-for-user.dto';
-import UserUpdateForAdmin from 'src/dto/user-update.dto';
+import NewUser from 'src/user/user.dto/new-user.dto';
+import UserLogin from 'src/user/user.dto/user-login.dto';
+import UserUpdateForUser from 'src/user/user.dto/user-update-for-user.dto';
+import UserUpdateForAdmin from 'src/user/user.dto/user-update.dto';
 import User from 'src/entity/user.entity';
 import RoleGuard from 'src/guard/roles.guards';
-import UserResponse from 'src/interface/user-response.interface';
-import { UserRole } from 'src/interface/user-role.interface';
+import UserResponse from 'src/user/user.interface/user-response.interface';
+import { UserRole } from 'src/user/user.interface/user-role.interface';
 import { UserService } from './user.service';
 
 @Controller('user')

@@ -10,5 +10,5 @@ export class Section {
     sectionName: string;
 
     @OneToMany(() => Topic, (topic) => topic.section)
-    topics: Topic[]
+    topics: Topic[];
 }
