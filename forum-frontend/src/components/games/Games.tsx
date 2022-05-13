@@ -5,9 +5,16 @@ import req from '../../helpers/request';
 import { ThemeContext, UserContext } from '../../store/StoreProvider';
 import Ranking from '../ranking/Ranking';
 
+interface RankingI {
+    id: string;
+    name: string;
+    numberPoints: number;
+    user?: object;
+}
+
 const Games: React.FC = (): JSX.Element => {
-    const [topScore, setTopScore] = useState<any>([]);
-    const [topScoreUser, setTopScoreUser] = useState<any>([]);
+    const [topScore, setTopScore] = useState<RankingI[]>([]);
+    const [topScoreUser, setTopScoreUser] = useState<RankingI[]>([]);
 
     const navigate = useNavigate();
     const { theme } = useContext(ThemeContext);

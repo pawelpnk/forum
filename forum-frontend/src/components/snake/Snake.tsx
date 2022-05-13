@@ -153,13 +153,13 @@ const Snake: React.FC = (): JSX.Element => {
         return () => clearInterval(a);
     }, [direction, snakeBody]);
 
-    const appleFood = <div className='apple' style={{left:`${apple[0]}px`, top:`${apple[1]}px`}}></div>
+    const appleFood: JSX.Element = <div className='apple' style={{left:`${apple[0]}px`, top:`${apple[1]}px`}}></div>
 
     return (
         <div className='d-flex justify-content-center mt-5 flex-column'>
             <p className={theme.textColor}>Zdobyte punkty: {score}</p>
             <div className='container-snake' onKeyDown={(e) => changeDirection(e)} style={{minWidth: `${widthField}px`, height:`${heightField}px`, backgroundColor:bgColor}}>
-                {snakeBody.map((field: any, i: any) => {
+                {snakeBody.map((field: any, i: number) => {
                     return <div key={i} className='snake' style={{left:`${field[0]}px`, top:`${field[1]}px`}}></div>
                 })}
                 {appleFood}

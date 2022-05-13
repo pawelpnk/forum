@@ -6,9 +6,20 @@ import req from '../../helpers/request';
 import { ThemeContext, UserContext } from '../../store/StoreProvider';
 import Notifications from '../notifications/Notifications';
 
+export interface NotiI {
+    id: string;
+    message: string;
+    toDisplay: boolean;
+    topicId: string;
+    fromWho: string;
+    toWho: string;
+    createAt: string;
+    user?: object;
+}
+
 const Header: React.FC = (): JSX.Element => {
     const [show, setShow] = useState<boolean>(false);
-    const [notis, setNotis] = useState<any[]>([]);
+    const [notis, setNotis] = useState<NotiI[]>([]);
     const [widthLayout, setWidthLayout] = useState<number>(700);
 
     const { user, setUser } = useContext(UserContext);
@@ -25,7 +36,7 @@ const Header: React.FC = (): JSX.Element => {
 
     const handleShow = () => setShow(prev => !prev);     
 
-    const checkNewNoti: boolean = notis.some((noti: any) => noti.toDisplay === true);
+    const checkNewNoti: boolean = notis.some((noti: NotiI) => noti.toDisplay === true);
 
     useEffect(() => {
         const sse = new EventSource('http://localhost:5000/noti/sse', { withCredentials: true })
@@ -51,7 +62,7 @@ const Header: React.FC = (): JSX.Element => {
     const setPropertylabel: JSX.Element = user 
         ? 
         <Nav className="justify-content-end">
-            <Notifications show={show} handleShow={handleShow} user={user} userLogged={userLogged} bellColor={bellColor} notis={notis}/>
+            <Notifications show={show} handleShow={handleShow} userLogged={userLogged} bellColor={bellColor} notis={notis}/>
             <OverlayTrigger placement='bottom' overlay={
                 <Tooltip id='tooltip-bottom'>
                     Ustawienia
@@ -85,7 +96,7 @@ const Header: React.FC = (): JSX.Element => {
             </OverlayTrigger>
         </Nav>
 
-    const handleChangeTheme = (e: any) => {
+    const handleChangeTheme = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.checked) {
             setTheme(lightTheme);
         } else {
@@ -105,9 +116,9 @@ const Header: React.FC = (): JSX.Element => {
                     <Nav.Link onClick={handleRedirectToHome}>Forum</Nav.Link>
                     <Nav.Link onClick={handleRedirectToCommunicator}>Komunikator</Nav.Link>
                     {widthLayout > 700 ? <Nav.Link onClick={handleRedirectToGames}>Nuda?</Nav.Link> : null}
-                    <div className="form-check form-switch align-self-center bg-dark mx-2">
-                        <input className="form-check-input bg-secondary" type="checkbox" role="switch" id="flexSwitchCheckDefault" onClick={handleChangeTheme} />
-                        <label className="form-check-label" htmlFor="flexSwitchCheckDefault"></label>
+                    <div className="form-check form-switch align-self-center bg-dark mx-2" style={{cursor: 'pointer'}}>
+                        <input className="form-check-input bg-secondary" type="checkbox" role="switch" id="flexSwitchCheckDefault" onChange={handleChangeTheme} style={{cursor: 'pointer'}}/>
+                        <label className="form-check-label" htmlFor="flexSwitchCheckDefault" style={{cursor: 'pointer'}}></label>
                     </div>
                 </Nav>
                 {setPropertylabel}

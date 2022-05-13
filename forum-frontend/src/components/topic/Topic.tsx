@@ -12,9 +12,11 @@ interface TopicType {
     sectionId: string;
     sectionName: string;
     topic: string;
-    createdAt: string;
-    updateAt: string;
+    createdAt: Date;
+    updatedAt: Date;
     userId: string | null;
+    lastPostUser: string;
+    countPostsTopic: number;
 }
 
 const Topic: React.FC = (): JSX.Element => {
@@ -46,16 +48,12 @@ const Topic: React.FC = (): JSX.Element => {
     }, [showModalInfo]);
 
     const handleRedirectToTopicWithPosts = (topic: TopicType) => navigate(`/sekcja/${topic.id}`);
-
     const handleAddNewTopic = () => setShowModalTopic(true);
-
     const closeModalTopic = () => setShowModalTopic(false);
-
     const handleNewTopicArea = (event: ChangeEvent<HTMLInputElement>) => setTopicName(event.target.value);
-
     const handleAddFirstPost = (e: ChangeEvent<HTMLInputElement>) => setFirstPost(e.target.value);
 
-    const validateInputs = () => {
+    const validateInputs = (): boolean => {
         if(!topicName || !firstPost) {
             return false;
         }
@@ -114,7 +112,7 @@ const Topic: React.FC = (): JSX.Element => {
                         {userLogged && <Button onClick={handleAddNewTopic} variant={theme.buttonNewOption}>Dodaj nowy temat</Button>}
                     </Col>
                 </Row>
-                {topics.sort((a: any, b: any) => +new Date(b.updatedAt) - +new Date(a.updatedAt)).map((topic: any) => {
+                {topics.sort((a: TopicType, b: TopicType) => +new Date(b.updatedAt) - +new Date(a.updatedAt)).map((topic: TopicType) => {
                     return (
                         <Row key={topic.id} className={`border ${theme.border} py-1`}>
                             <Col className='py-1'>

@@ -24,7 +24,7 @@ const Login: React.FC = (): JSX.Element => {
         setMessage('');
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         resetInputs();
     },[]);
 
@@ -36,7 +36,6 @@ const Login: React.FC = (): JSX.Element => {
                 login,
                 password
             });
-            console.log(result);
             setMessage(result.data.message);
             if(result.data.message !== 'Zły login lub hasło') {
                 resetInputs();

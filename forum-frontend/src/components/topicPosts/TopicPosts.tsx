@@ -7,9 +7,26 @@ import ModalPostEdit from '../modalPostEdit/ModalPostEdit';
 import PaginationPost from '../pagination/PaginationPost';
 import Post from '../post/Post';
 
+export interface PostI {
+	id: string;
+    text: string;
+    rating: number;
+    createAt: Date;
+    updateAt: Date;
+    user?: any;
+    userId?: string | null;
+    topic?: object;
+    topicId?: string;
+    topicName?: string;
+    sectionName?: string;
+    userRated: string[];
+}
+
+const postPerPage = 10;
+
 const TopicPosts: React.FC = (): JSX.Element => {
-	const [posts, setPosts] = useState<any>([]);
-	const [postsInOnePage, setPostsInOnePage] = useState<any>([]);
+	const [posts, setPosts] = useState<PostI[]>([]);
+	const [postsInOnePage, setPostsInOnePage] = useState<PostI[]>([]);
 	const [newPost, setNewPost] = useState<string>('');
 	const [refreshPage, setRefreshPage] = useState<boolean>(false);
 	const [showModalEditPost, setShowModalEditPost] = useState<boolean>(false);
@@ -19,8 +36,6 @@ const TopicPosts: React.FC = (): JSX.Element => {
 	const [totalPage, setTotalPage] = useState<number>(1);
 	const [currentTopicLS, setCurrentTopicLS] = useState<string | undefined>('');
 
-	const postPerPage = 10;
-
 	const { topicID } = useParams();
 	const { user } = useContext(UserContext);
 	const { theme } = useContext(ThemeContext);
@@ -28,19 +43,19 @@ const TopicPosts: React.FC = (): JSX.Element => {
 
 	const fetchPosts = async (): Promise<void> => {
 		const data = await req.get(`post/all/${topicID}`)
-		setPosts(data.data.sort((a: any, b: any) => +new Date(a.createAt) - +new Date(b.createAt)));
+		setPosts(data.data.sort((a: PostI, b: PostI) => +new Date(a.createAt) - +new Date(b.createAt)));
 		setTotalPage(Math.ceil(data.data.length/postPerPage));
 	}
 
-	useEffect(()=>{
+	useEffect(() => {
 		fetchPosts();
 		setCurrentTopicLS(topicID);
 	},[refreshPage, currentTopicLS, topicID]);
 
 	const setPostInPage = () => {
-		const lastIndexPost = currentPage * postPerPage;
-		const firstIndexPost = lastIndexPost - postPerPage;;
-		const currentPosts = posts.slice(firstIndexPost, lastIndexPost);
+		const lastIndexPost: number = currentPage * postPerPage;
+		const firstIndexPost: number = lastIndexPost - postPerPage;;
+		const currentPosts: PostI[] = posts.slice(firstIndexPost, lastIndexPost);
 		setPostsInOnePage(currentPosts);
 	}	
 

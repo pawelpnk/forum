@@ -2,8 +2,17 @@ import React from 'react';
 import { Button, Col, OverlayTrigger, Popover, Row } from 'react-bootstrap';
 import { useNavigate } from 'react-router';
 import req from '../../helpers/request';
+import { NotiI } from '../header/Header';
 
-const Notifications: React.FC<any> = ({show, handleShow, user, userLogged, notis, bellColor}): JSX.Element => {
+interface IProps {
+    show: boolean;
+    handleShow: any;
+    userLogged: boolean;
+    notis: NotiI[];
+    bellColor: JSX.Element;
+}
+
+const Notifications: React.FC<IProps> = ({show, handleShow, userLogged, notis, bellColor}): JSX.Element => {
     const navigate = useNavigate();
 
     const changeColorToDefault = async (): Promise<any> => {
@@ -32,7 +41,7 @@ const Notifications: React.FC<any> = ({show, handleShow, user, userLogged, notis
                     <Popover id={`popover-positioned-bottom`}>
                     <Popover.Header as="h3">{`Powiadomienia`}</Popover.Header>
                     {userLogged && notis.length > 0 && 
-                    notis.map((noti: any)=> {
+                    notis.map((noti: NotiI)=> {
                       return (  
                         <Popover.Body key={noti.id} onClick={() => handleRedirectToTopic(noti.topicId)} style={{cursor: 'pointer'}}>
                             <Row>

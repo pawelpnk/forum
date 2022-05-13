@@ -41,13 +41,9 @@ const Home: React.FC = (): JSX.Element => {
         sectionData();
     },[showModalInfo]);
 
-    const handleRedirectToTopics = (sec: SectionType) => {
-        navigate(`/s/${sec.id}`)
-    }
+    const handleRedirectToTopics = (sec: SectionType) =>  navigate(`/s/${sec.id}`)
 
-    const handleAddSectionButton = () => {
-        setShowModalSection(true);
-    }
+    const handleAddSectionButton = () => setShowModalSection(true);
 
     const cleanModalSection = () => {
         setShowModalSection(false);
@@ -116,12 +112,12 @@ const Home: React.FC = (): JSX.Element => {
     return (        
         <Container className='my-5 text-light'>
             <p className='text-secondary mb-5'>Witaj na forum, gdzie możesz porozmawiać na każdy temat. Wystarczy, że odszukasz odpowiedni dział,
-                a następnie temat lub założysz swój własny! Zapraszamy również do odwiedzenia Komunikatora, gdzie
-                można porozmawiać z wybranymi osobami, a także zajrzeć do zakładki "Nuda" :)
+                a następnie temat lub założysz swój własny! Zapraszam również do odwiedzenia Komunikatora, gdzie
+                możesz porozmawiać z wybranymi osobami, a także jeśli Ci się nudzi i jesteś na komputerze zajrzyj do zakładki "Nuda" :)
             </p>
             {userLogged && user.role === 'admin' ? <Button className='mb-2' variant={theme.buttonNewOption} onClick={handleAddSectionButton}>Dodaj nową sekcje</Button> : null}
             {   
-                section.map((sec: any) => {
+                section.map((sec: SectionType) => {
                     return (
                         <Row key={sec.id} className={`border ${theme.border} py-3`}>
                             <Col xs='auto' sm={1} className='px-4 d-flex justify-content-center align-items-center'>
@@ -131,8 +127,8 @@ const Home: React.FC = (): JSX.Element => {
                                 <Nav.Link onClick={() => handleRedirectToTopics(sec)}>{sec.sectionName}</Nav.Link>
                             </Col>
                             <Col xs className='d-flex justify-content-end'>
-                                {userLogged && user.role === 'admin'? <Button variant='outline-warning' className='mx-2' onClick={() => handleEditSection(sec.id)}>Edytuj</Button> : null}
-                                {userLogged && user.role === 'admin'? <Button variant='outline-danger' onClick={() => handleDeleteSection(sec.id)}>Usuń</Button> : null}
+                                {userLogged && user.role === 'admin' ? <Button variant='outline-warning' className='mx-2' onClick={() => handleEditSection(sec.id)}>Edytuj</Button> : null}
+                                {userLogged && user.role === 'admin' ? <Button variant='outline-danger' onClick={() => handleDeleteSection(sec.id)}>Usuń</Button> : null}
                             </Col>
                         </Row>
                     )

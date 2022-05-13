@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Route, Routes } from 'react-router';
-import { ThemeContext, UserContext } from '../../store/StoreProvider';
+import { UserContext } from '../../store/StoreProvider';
 import Communicator from '../communicator/Communicator';
 import CommunicatorAlert from '../communicator/CommunicatorAlert';
 import Games from '../games/Games';

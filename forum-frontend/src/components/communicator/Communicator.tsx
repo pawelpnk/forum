@@ -5,13 +5,28 @@ import req from '../../helpers/request';
 import { SocketContext, ThemeContext, UserContext } from '../../store/StoreProvider';
 import './communicator.css';
 
+interface GroupI {
+    id: string;
+    name: string;
+    updateAt: string;
+    user?: object;
+}
+
+interface MessageI {
+    id: string;
+    text: string;
+    author: string;
+    createAt: string;
+    group?: GroupI;
+}
+
 const Communicator: React.FC = (): JSX.Element => {
-    const [groups, setGroups] = useState<any>([]);
-    const [findUser, setFindUser] = useState<any>('');
-    const [newGroup, setNewGroup] = useState<any>('');
-    const [textMessage, setTextMessage] = useState<any>('');
-    const [messages, setMessages] = useState<any>([]);
-    const [currentGroup, setCurrentGroup] = useState<any>([]);
+    const [groups, setGroups] = useState<GroupI[]>([]);
+    const [findUser, setFindUser] = useState<string>('');
+    const [newGroup, setNewGroup] = useState<string>('');
+    const [textMessage, setTextMessage] = useState<string>('');
+    const [messages, setMessages] = useState<MessageI[]>([]);
+    const [currentGroup, setCurrentGroup] = useState<any>('');
 
     const { user } = useContext(UserContext);
     const socket = useContext(SocketContext);
@@ -37,13 +52,13 @@ const Communicator: React.FC = (): JSX.Element => {
 
     const handleReceiveMessages = useCallback((id: string) => {
         socket.emit('all-message-from-database', id);
-        socket.on('send-messages-group', (data:any)  => {
+        socket.on('send-messages-group', (data: MessageI[])  => {
             setMessages(data);
         })
         return () => socket.off('send-messages-group');
     },[])
 
-    const handleSendNewMessage = async (e: FormEvent) => {
+    const handleSendNewMessage = async (e: FormEvent): Promise<void> => {
         e.preventDefault();
         socket.emit('message-from-client', {
             text: textMessage,
@@ -71,7 +86,7 @@ const Communicator: React.FC = (): JSX.Element => {
     },[newGroup])
 
     useEffect(() => {
-        socket.on('new-message', (data: any) => {
+        socket.on('new-message', (data: MessageI[]) => {
             setMessages((prev: any) => [...prev, data]);
         });
         return () => socket.off('new-message')
@@ -104,7 +119,7 @@ const Communicator: React.FC = (): JSX.Element => {
                         <div>
                             <p className={`${theme.textColor} mt-3 d-flex justify-content-center`}>Konwersacje</p>
                             {
-                            groups.map((group: any) => {                                
+                            groups.sort((a: GroupI, b: GroupI) => +new Date(b.updateAt) - +new Date(a.updateAt)).map((group: GroupI) => {                                
                                 return (
                                     <div onClick={() =>{handleReceiveMessages(group.id); setCurrentGroup(group)}} key={group.id} className='d-flex justify-content-center align-items-center' style={{cursor: 'pointer'}}>
                                         <CaretDown className={`${theme.textColor} mx-2`} />
@@ -119,7 +134,7 @@ const Communicator: React.FC = (): JSX.Element => {
                         <p className={`${theme.textColor} d-flex justify-content-center mt-2 border-bottom ${theme.border}`}>Wiadomości</p>                        
                         <div className='overflow-auto d-flex flex-column' >
                             {
-                                messages.map((message: any, index: number) => {
+                                messages.map((message: MessageI, index: number) => {
                                     return (
                                         <Toast key={index} className={message.author === user?.login ? `align-self-end ${theme.colorMyMessage} mb-1` : 'mb-1'}>
                                             <Toast.Body>
