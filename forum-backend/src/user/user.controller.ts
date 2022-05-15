@@ -83,6 +83,8 @@ export class UserController {
         }       
     }
 
+    @UseGuards(RoleGuard(UserRole.ADMIN))
+    @UseGuards(JwtAuthGuard)
     @Get('/all')
     async findAllUsers(
         @Res() res: Response
@@ -133,13 +135,13 @@ export class UserController {
 
     @UseGuards(RoleGuard(UserRole.ADMIN))
     @UseGuards(JwtAuthGuard)
-    @Delete('/delete')
+    @Delete('/delete/:id')
     async deleteUser(
         @Res() res: Response,
-        @Body() login: string
+        @Param('id') id: string
     ) {
         try {
-            await this.userService.deleteUser(login);
+            await this.userService.deleteUser(id);
             return res.status(HttpStatus.OK).json({
                 message: 'Konto zostało usunięte'
             })

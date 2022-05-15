@@ -33,7 +33,7 @@ const Content: React.FC = (): JSX.Element => {
                             <Route path='/komunikator' element={<Communicator />} /> : 
                             <Route path='/komunikator' element={<CommunicatorAlert />} />
                         }
-                        { user ? <Route path='/ustawienia' element={<UserSettings />} /> : null }
+                        { user ? <Route path='/ustawienia/*' element={<UserSettings />} /> : null }
                         <Route path='/*' element={<NotFoundPage/>} />
                     </Routes>
                 </Col>

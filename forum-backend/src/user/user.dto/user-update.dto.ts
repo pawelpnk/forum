@@ -1,8 +1,9 @@
 export default class UserUpdateForAdmin {
+    id: string;
     login?: string;
     role: string;
     active: boolean;
-    image?: string;
+    image?: boolean;
     dateFinish?: string;
     reasonBan?: string;
 }

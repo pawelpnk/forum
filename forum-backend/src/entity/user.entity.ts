@@ -48,7 +48,7 @@ export default class User {
     @OneToMany(() => Post, (post) => post.user)
     posts: Post[];
 
-    @OneToOne(() => OptionalUser)
+    @OneToOne(() => OptionalUser, { cascade: true, onDelete:'CASCADE' })
     @JoinColumn()
     optionalUser: OptionalUser;
 

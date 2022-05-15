@@ -1,3 +1,5 @@
+import { OptionalUser } from "src/entity/optionalUser.entity";
+
 export default interface UserResponse {
     id: string;
     login: string;
@@ -5,4 +7,6 @@ export default interface UserResponse {
     active: boolean;
     createAt?: Date;
     image?: string;
+    email?: string;
+    optionalUser?: OptionalUser;
 }

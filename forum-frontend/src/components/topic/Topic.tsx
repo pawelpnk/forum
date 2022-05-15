@@ -39,8 +39,7 @@ const Topic: React.FC = (): JSX.Element => {
 
     const fetchTopics = async (): Promise<void> => {
         const data = await req.get(`/topic/all/${sectionID}`);
-        setTopics(data.data);
-        console.log(data.data);      
+        setTopics(data.data);    
     }
 
     useEffect(()=> {

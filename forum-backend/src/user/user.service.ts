@@ -128,32 +128,43 @@ export class UserService {
     }
 
     async findAllUsers(): Promise<UserResponse[]> {
-        const allUsers = await this.userRepository.find();
-        const filterAllUsers = allUsers.map(user => this.filter(user));
-        return filterAllUsers;
+        const allUsers = await this.userRepository.find({
+            relations: ["optionalUser"]
+        });
+        allUsers.map(user => {
+            delete user.password;
+            delete user.token;
+        });
+        return allUsers;
     }
 
     async updateUserForAdmin(user: UserUpdateForAdmin): Promise<UserResponse> {
-        await this.userRepository.update({login: user.login}, {
-            role: user.role,
-            active: user.active,
-            image: user.image
+        const findUser = await this.userRepository.findOneOrFail({
+            where: {
+                id: user.id
+            },
+            relations: ["optionalUser"]
         });
 
-        const updatedUser = await this.userRepository.findOne({
-            relations: ["optionalUser"],
-            where: {
-                login: user.login
-            }
-        })
+        if(user.image) {
+           findUser.image = '';
+        }
 
-        if(user.active === false && user.dateFinish) {
-            updatedUser.optionalUser.dateFinish = user.dateFinish;
-            updatedUser.optionalUser.message = user.reasonBan;
-            await this.userRepository.save(updatedUser);
-        }        
+        if(!user.active && user.dateFinish) {
+            const banDate = new Date(user.dateFinish).toLocaleString();
+            findUser.optionalUser.dateFinish = banDate;
+            findUser.optionalUser.message = user.reasonBan;
+            findUser.active = false; 
+            findUser.token = null;       
+        }
 
-        return this.filter(updatedUser);
+        if(user.role === 'admin' || user.role === 'user') {
+            findUser.role = user.role;
+        }
+
+        await this.userRepository.save(findUser);               
+
+        return this.filter(findUser);
     }
 
     async updateUser(user: UserUpdateForUser): Promise<UserResponse> {
@@ -193,10 +204,10 @@ export class UserService {
         return this.filter(fetchUserUpdate);        
     }
 
-    async deleteUser(login: string): Promise<any> {
-        await this.userRepository.findOneOrFail(login);        
+    async deleteUser(id: string): Promise<any> {
+        await this.userRepository.findOneOrFail(id);        
         
-        return await this.userRepository.delete(login);
+        return await this.userRepository.delete(id);
     }
 
     /// helper functions
