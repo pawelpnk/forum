@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { Button, Form } from 'react-bootstrap';
+import { useNavigate } from 'react-router';
 import req from '../../helpers/request';
 import { ThemeContext } from '../../store/StoreProvider';
 import ModalInfo from '../modal/ModalInfo';
@@ -16,6 +17,8 @@ const Register: React.FC = (): JSX.Element => {
     const [text, setText] = useState<string>('');
 
     const { theme } = useContext(ThemeContext);
+
+    const navigate = useNavigate();
 
     useEffect(()=> {
         resetInputs();
@@ -67,6 +70,7 @@ const Register: React.FC = (): JSX.Element => {
                 setShowModal(true);
                 setText(result.data.message);
                 resetInputs();
+                navigate('/');
             } catch {}            
         }
     }

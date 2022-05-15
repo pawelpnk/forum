@@ -15,17 +15,16 @@ export default class User {
     @Column()
     login: string;
 
-    @Column({nullable: true, select: false})
+    @Column({nullable: true})
     password: string;
 
-    @Column({select: false})
+    @Column()
     @IsEmail()
     email: string;
 
     @Column({
         nullable: true,
-        default: null,
-        select: false
+        default: null
     })
     token: string | null;
 

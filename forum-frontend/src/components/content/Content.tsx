@@ -9,6 +9,7 @@ import Home from '../home/Home';
 import Login from '../login/Login';
 import NotFoundPage from '../notFoundPage/NotFoundPage';
 import Register from '../register/Register';
+import UserSettings from '../settings/userSettings';
 import Snake from '../snake/Snake';
 import Topic from '../topic/Topic';
 import TopicPosts from '../topicPosts/TopicPosts';
@@ -32,6 +33,7 @@ const Content: React.FC = (): JSX.Element => {
                             <Route path='/komunikator' element={<Communicator />} /> : 
                             <Route path='/komunikator' element={<CommunicatorAlert />} />
                         }
+                        { user ? <Route path='/ustawienia' element={<UserSettings />} /> : null }
                         <Route path='/*' element={<NotFoundPage/>} />
                     </Routes>
                 </Col>

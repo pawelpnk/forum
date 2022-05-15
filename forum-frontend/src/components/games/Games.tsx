@@ -25,12 +25,14 @@ const Games: React.FC = (): JSX.Element => {
         const topScore = async (): Promise<void> => {
             const data = await req.get(`game/top`);
             setTopScore(data.data);
+            console.log(data.data)
         };
 
         const topScoreUser = async (): Promise<void> => {
             if(user) {
                 const data = await req.get(`game/top-user`);
                 setTopScoreUser(data.data);
+                console.log(data.data)
             };
         };
 

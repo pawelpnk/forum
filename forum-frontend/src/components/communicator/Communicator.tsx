@@ -80,7 +80,7 @@ const Communicator: React.FC = (): JSX.Element => {
             const result = await req.get('group');
             setGroups(result.data);
             setCurrentGroup(() => result.data[0]);
-            handleReceiveMessages(result.data[0].id);        
+            handleReceiveMessages(result.data[0]?.id);        
         }
         fetchGroupsUser();
     },[newGroup])

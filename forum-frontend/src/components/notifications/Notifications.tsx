@@ -15,7 +15,7 @@ interface IProps {
 const Notifications: React.FC<IProps> = ({show, handleShow, userLogged, notis, bellColor}): JSX.Element => {
     const navigate = useNavigate();
 
-    const changeColorToDefault = async (): Promise<any> => {
+    const changeColorToDefault = async (): Promise<void> => {
         try {
             await req.patch(`noti`);
         } catch {}        

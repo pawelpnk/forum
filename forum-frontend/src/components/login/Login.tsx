@@ -26,7 +26,7 @@ const Login: React.FC = (): JSX.Element => {
 
     useEffect(() => {
         resetInputs();
-    },[]);
+    }, []);
 
     const handleOnSubmit = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
@@ -37,7 +37,7 @@ const Login: React.FC = (): JSX.Element => {
                 password
             });
             setMessage(result.data.message);
-            if(result.data.message !== 'Zły login lub hasło') {
+            if(result.data.message === 'Zalogowano pomyślnie') {
                 resetInputs();
                 setUser(result.data.user);
                 sessionStorage.setItem('currentUser', JSON.stringify(result.data.user));
