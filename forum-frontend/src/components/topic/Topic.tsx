@@ -12,8 +12,8 @@ interface TopicType {
     sectionId: string;
     sectionName: string;
     topic: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: string;
+    updatedAt: string;
     userId: string | null;
     lastPostUser: string;
     countPostsTopic: number;
@@ -111,7 +111,7 @@ const Topic: React.FC = (): JSX.Element => {
                         {userLogged && <Button onClick={handleAddNewTopic} variant={theme.buttonNewOption}>Dodaj nowy temat</Button>}
                     </Col>
                 </Row>
-                {topics.sort((a: TopicType, b: TopicType) => +new Date(b.updatedAt) - +new Date(a.updatedAt)).map((topic: TopicType) => {
+                {topics.sort((a: TopicType, b: TopicType) => b.updatedAt.localeCompare(a.updatedAt)).map((topic: TopicType) => {
                     return (
                         <Row key={topic.id} className={`border ${theme.border} py-1`}>
                             <Col className='py-1'>

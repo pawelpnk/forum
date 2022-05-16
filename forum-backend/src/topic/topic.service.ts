@@ -18,7 +18,7 @@ export class TopicService {
         @Inject(forwardRef(() => PostService)) private postService: PostService
     ) {}
 
-    async createTopic(bodyTopic: NewTopic): Promise<any> {
+    async createTopic(bodyTopic: NewTopic): Promise<string> {
         const findUser: User = await this.userService.findUserHelper(bodyTopic.userLogin);
         const findSection: Section = await this.sectionService.findSection(bodyTopic.sectionId);
 
@@ -46,14 +46,8 @@ export class TopicService {
 
         const firstPost = await this.postService.createPostWithTopic(postDTO);
 
-        const topicResponse = {
-            id: newTopic.id,
-            topic: newTopic.topic,
-            createdAT: newTopic.createdAt,
-            authorLogin: newTopic.user.login,
-            sectionName: newTopic.section.sectionName,
-            idPost: firstPost.id
-        }
+        const topicResponse = newTopic.topic;
+        
         return topicResponse;
     }
 
@@ -72,7 +66,7 @@ export class TopicService {
         return await this.topicRepository.delete(id);
     }
 
-    async updateTopic(data): Promise<any> {
+    async updateTopic(data): Promise<Topic> {
         return await this.topicRepository.save(data);
     }
 }

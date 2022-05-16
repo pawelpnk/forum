@@ -81,7 +81,7 @@ export class PostService {
         return PostResponse;        
     }
 
-    async createPostWithTopic(body): Promise<any> {
+    async createPostWithTopic(body): Promise<string> {
         const newPost: Post = new Post();
 
         newPost.text = body.firstPost;
@@ -97,9 +97,7 @@ export class PostService {
 
         await this.postRepository.save(newPost);
         
-        const PostResponse = {
-            id: newPost.id,
-        }
+        const PostResponse = newPost.id;
 
         return PostResponse;
     }

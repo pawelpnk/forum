@@ -6,5 +6,4 @@ export default class NewUserInside {
     role: string;
     active: boolean;
     createAt?: Date;
-    image?: string;
 }

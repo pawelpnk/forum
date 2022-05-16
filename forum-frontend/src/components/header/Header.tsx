@@ -57,7 +57,7 @@ const Header: React.FC = (): JSX.Element => {
     const handleRedirectToCommunicator = () => navigate('/komunikator');
     const handleRedirectToGames = () => navigate('/gry');
 
-    const handleRedirectToSettings = () => navigate('/ustawienia');
+    const handleRedirectToSettings = () => navigate('/ustawienia/info');
 
     const setPropertylabel: JSX.Element = user 
         ? 

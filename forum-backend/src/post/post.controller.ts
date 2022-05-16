@@ -2,12 +2,15 @@ import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, Use
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { UserObj } from 'src/decorators/user.decorator';
+import User from 'src/entity/user.entity';
 import RoleGuard from 'src/guard/roles.guards';
 import { UserRole } from 'src/user/user.interface/user-role.interface';
 import NewPost from './post.dto/new-post.dto';
 import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';
+import PostResponse from './post.interface/post-response.interface';
 import { PostService } from './post.service';
+import { Post as PostT } from 'src/entity/post.entity';
 
 @Controller('post')
 export class PostController {
@@ -18,10 +21,10 @@ export class PostController {
     async addNewPost(
         @Res() res: Response,
         @Body() postDTO: NewPost,
-        @UserObj() user
+        @UserObj() user: User
     ) {
         try {
-            const addedPost = await this.postService.createPost(postDTO, user);
+            const addedPost: PostResponse = await this.postService.createPost(postDTO, user);
             return res.status(HttpStatus.OK).json({
                 message: "Dodano nowy post",
                 addedPost
@@ -39,7 +42,7 @@ export class PostController {
         @Param('id') idTopic: string
     ) {
         try {
-            const fetchAllPosts = await this.postService.fetchAllPosts(idTopic);
+            const fetchAllPosts: PostT[] = await this.postService.fetchAllPosts(idTopic);
             return res.status(HttpStatus.OK).json(fetchAllPosts);
         } catch (err) {
             return res.json({
@@ -57,7 +60,7 @@ export class PostController {
         @UserObj() user
     ) {
         try {
-            const updatePost = await this.postService.updatePost(id, bodyUpdatePost, user);
+            const updatePost: PostT = await this.postService.updatePost(id, bodyUpdatePost, user);
             return res.status(HttpStatus.OK).json({
                 message: "Zaaktualizowano pomyślnie",
                 updatePost
@@ -77,7 +80,7 @@ export class PostController {
         @Param('id') id: string
     ) {
         try {
-            const changeRate = await this.postService.changeRate(id, rateUpdatePost);
+            const changeRate: PostT = await this.postService.changeRate(id, rateUpdatePost);
             return res.status(HttpStatus.OK).json({
                 message: 'Pomyślnie zmieniono ocene',
                 changeRate

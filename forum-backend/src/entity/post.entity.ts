@@ -35,10 +35,10 @@ export class Post {
     @Column()
     topicId: string;
 
-    @Column({nullable: true})
+    @Column()
     topicName: string;
 
-    @Column({nullable: true})
+    @Column()
     sectionName: string;
 
     @Column("text", {

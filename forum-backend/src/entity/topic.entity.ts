@@ -10,7 +10,7 @@ export class Topic {
     id: string;
 
     @Column()
-    @Length(10, 100)
+    @Length(10, 1000)
     topic: string;
 
     @Column()
@@ -30,18 +30,18 @@ export class Topic {
     @JoinColumn({name: "sectionId"})
     section: Section;
 
-    @Column({nullable: false})
+    @Column()
     sectionId: string;
 
-    @Column({nullable: true})
+    @Column()
     sectionName: string;
 
     @OneToMany(() => Post, (post) => post.topic)
     posts: Post[];
 
-    @Column({nullable: true})
+    @Column()
     lastPostUser: string;
 
-    @Column({nullable: true})
+    @Column()
     countPostsTopic: number;
 }

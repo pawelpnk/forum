@@ -56,7 +56,6 @@ export class UserService {
         createNewUser.email = newUser.email.toLowerCase();
         createNewUser.role = UserRole.USER;
         createNewUser.active = true;
-        createNewUser.image = '';
         createNewUser.createdAt = new Date().toLocaleString();
         createNewUser.optionalUser = additionalSettings;
 
@@ -123,7 +122,7 @@ export class UserService {
 
     async findUser(login: string): Promise<UserResponse> {
         const findUser = await this.userRepository.findOneOrFail(login);
-
+        
         return this.filter(findUser);
     }
 
@@ -146,10 +145,6 @@ export class UserService {
             relations: ["optionalUser"]
         });
 
-        if(user.image) {
-           findUser.image = '';
-        }
-
         if(!user.active && user.dateFinish) {
             const banDate = new Date(user.dateFinish).toLocaleString();
             findUser.optionalUser.dateFinish = banDate;
@@ -169,7 +164,6 @@ export class UserService {
 
     async updateUser(user: UserUpdateForUser): Promise<UserResponse> {
         const checkChangePassword: boolean = user.newPassword?.length > 0 && user.oldPassword.length > 0;
-        const checkChangeImage: boolean = user.image?.length > 0;
 
         if(checkChangePassword){
             const checkUser = await this.userRepository.findOne({
@@ -186,11 +180,6 @@ export class UserService {
             } else {
                 throw new HttpException("Niepoprawne hasło", HttpStatus.UNAUTHORIZED)
             }
-        }
-        if(checkChangeImage){
-            await this.userRepository.update({login: user.login}, {
-                image: user.image
-            });
         }
 
         const fetchUserUpdate = await this.userRepository.findOne({

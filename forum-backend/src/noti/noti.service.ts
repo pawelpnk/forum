@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 import { Notification } from 'src/entity/notification.entity';
 import User from 'src/entity/user.entity';
 
@@ -10,7 +10,7 @@ export class NotiService {
         @InjectRepository(Notification) private notificationRepository: Repository<Notification>
     ) {}
 
-    async UpdateDisplayNotification(user: User): Promise<any> {
+    async UpdateDisplayNotification(user: User): Promise<UpdateResult> {
         const updt = await this.notificationRepository.update({
             user: user
         },{

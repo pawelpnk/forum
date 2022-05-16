@@ -32,14 +32,14 @@ export class SectionController {
     }
 
     @Get('/')
-    async getAllSections() {
+    async getAllSections(): Promise<Section[]> {
         return await this.sectionService.getSections(); 
     }
 
     @Get(':id')
     async getOneSection(
         @Param('id') id: string
-    ) {
+    ): Promise<Section> {
         return await this.sectionService.findSection(id);
     }
 

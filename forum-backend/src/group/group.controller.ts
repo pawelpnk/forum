@@ -6,6 +6,7 @@ import User from 'src/entity/user.entity';
 import { UpdateGroup } from './group.dto/update-group.dto';
 import { NewGroup } from './group.dto/new-group.dto';
 import { GroupService } from './group.service';
+import { Group } from 'src/entity/group.entity';
 
 @Controller('group')
 export class GroupController {
@@ -20,7 +21,7 @@ export class GroupController {
         @Res() res: Response,
         @Body() content: NewGroup
     ) {
-        const createConversation = await this.groupService.createGroup(user, content);
+        const createConversation: Group = await this.groupService.createGroup(user, content);
         return res.status(HttpStatus.OK).json(createConversation);
     }
 
@@ -30,7 +31,7 @@ export class GroupController {
         @UserObj() user: User,
         @Res() res: Response
     ) {
-        const allGroups = await this.groupService.getGroups(user);
+        const allGroups: Group[] = await this.groupService.getGroups(user);
         return res.status(HttpStatus.OK).json(allGroups);
     }
 

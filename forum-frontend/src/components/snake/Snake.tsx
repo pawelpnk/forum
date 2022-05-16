@@ -10,7 +10,7 @@ const amountOfPoleX = widthField/sizePole;
 const heightField = 400;
 const amountOfPoleY = heightField/sizePole;
 const bgColor = '#331a00';
-const timeSteps = 100;
+const timeSteps = 200;
 const directionStart = [0,25];
 
 const Snake: React.FC = (): JSX.Element => {
@@ -92,6 +92,7 @@ const Snake: React.FC = (): JSX.Element => {
 
     const checkCollisionWithBorder = (head: Number[]) => {
         if(head[0] >= widthField || head[0] < 0 || head[1] < 0 || head[1] >= heightField) {
+            gameOver();
             return false;
         }
         return true;
@@ -105,6 +106,7 @@ const Snake: React.FC = (): JSX.Element => {
         snake.forEach((pixel: Number[]) => {
            if(head[0] === pixel[0] && head[1] === pixel[1]) {
                 check = false;
+                gameOver();
            }
         })
         return check;
@@ -130,11 +132,10 @@ const Snake: React.FC = (): JSX.Element => {
                 positionsSnake.shift();
             }
             
-            if(checkCollisionWithBorder(head) && checkCollisionWithBody()) {
-                setSnakeBody(positionsSnake);
-            } else {
-                gameOver();
-            }
+            checkCollisionWithBody();
+            checkCollisionWithBorder(head);
+
+            setSnakeBody(positionsSnake);
         }        
     }
 

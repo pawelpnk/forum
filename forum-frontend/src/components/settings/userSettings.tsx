@@ -4,6 +4,7 @@ import { Route, Routes, useNavigate } from 'react-router';
 import { ThemeContext, UserContext } from '../../store/StoreProvider';
 import ChangePassword from '../changePassword/ChangePassword';
 import PanelAdmin from '../panelAdmin/PanelAdmin';
+import UserInformation from '../userInformation/UserInformation';
 
 const UserSettings: React.FC = (): JSX.Element => {
 
@@ -14,27 +15,29 @@ const UserSettings: React.FC = (): JSX.Element => {
 
     const handleRedirectToAdmin = () => navigate('admin');
     const handleRedirectToPassword = () => navigate('password');
+    const handleRedirectToInfo = () => navigate('info');
 
     return (
         <>
             <Container>
                 <Row className={`${theme.textColor} my-5`}>
+                    <Col className="py-3 d-flex justify-content-center align-items-center" style={{cursor: 'pointer'}}>
+                        <p onClick={handleRedirectToInfo}>Informacje</p>
+                    </Col>
+                    <Col className="py-3 d-flex justify-content-center align-items-center" style={{cursor: 'pointer'}}>
+                        <p onClick={handleRedirectToPassword}>Zmiana hasła</p>
+                    </Col>
                     { user?.role === 'admin' ?
                         <Col className="py-3  d-flex justify-content-center align-items-center" style={{cursor: 'pointer'}}>
                             <p onClick={handleRedirectToAdmin}>Panel Administratora</p>
                         </Col> : null
-                    }
-                    <Col className="py-3 d-flex justify-content-center align-items-center" style={{cursor: 'pointer'}}>
-                        <p onClick={handleRedirectToPassword}>Zmiana hasła</p>
-                    </Col>
-                    <Col className="py-3 d-flex justify-content-center align-items-center" style={{cursor: 'pointer'}}>
-                        <p>Ustaw avatar</p>
-                    </Col>
+                    }                    
                 </Row>
                 <Row>
                     <Routes>
-                        {user?.role === 'admin' ? <Route path="admin" element={<PanelAdmin />} /> : null}
+                        <Route path='info' element={<UserInformation />} />
                         <Route path="password" element={<ChangePassword />} />
+                        {user?.role === 'admin' ? <Route path="admin" element={<PanelAdmin />} /> : null}
                     </Routes>
                 </Row>
             </Container>

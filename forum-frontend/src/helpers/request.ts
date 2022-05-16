@@ -8,7 +8,6 @@ const req = axios.create({
         'Content-Type': 'application/json'
     },
     withCredentials: true,
-    // validateStatus: () => true
 });
 
 export default req;

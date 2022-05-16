@@ -120,13 +120,13 @@ const Home: React.FC = (): JSX.Element => {
                 section.map((sec: SectionType) => {
                     return (
                         <Row key={sec.id} className={`border ${theme.border} py-3`}>
-                            <Col xs='auto' sm={1} className='px-4 d-flex justify-content-center align-items-center'>
+                            <Col xs={3} sm={2} className='px-4 d-flex justify-content-center align-items-center'>
                                 <ChatRightText className={theme.textColor} />
                             </Col>
-                            <Col xs sm={5}>
+                            <Col xs={9} sm={7}>
                                 <Nav.Link onClick={() => handleRedirectToTopics(sec)}>{sec.sectionName}</Nav.Link>
                             </Col>
-                            <Col xs className='d-flex justify-content-end'>
+                            <Col xs={12} sm={3} className='d-flex justify-content-end'>
                                 {userLogged && user.role === 'admin' ? <Button variant='outline-warning' className='mx-2' onClick={() => handleEditSection(sec.id)}>Edytuj</Button> : null}
                                 {userLogged && user.role === 'admin' ? <Button variant='outline-danger' onClick={() => handleDeleteSection(sec.id)}>Usuń</Button> : null}
                             </Col>

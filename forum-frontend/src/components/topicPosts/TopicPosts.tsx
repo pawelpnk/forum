@@ -11,8 +11,8 @@ export interface PostI {
 	id: string;
     text: string;
     rating: number;
-    createAt: Date;
-    updateAt: Date;
+    createAt: string;
+    updateAt: string;
     user?: any;
     userId?: string | null;
     topic?: object;
@@ -43,7 +43,7 @@ const TopicPosts: React.FC = (): JSX.Element => {
 
 	const fetchPosts = async (): Promise<void> => {
 		const data = await req.get(`post/all/${topicID}`)
-		setPosts(data.data.sort((a: PostI, b: PostI) => +new Date(a.createAt) - +new Date(b.createAt)));
+		setPosts(data.data.sort((a: PostI, b: PostI) => a.createAt.localeCompare(b.createAt)));
 		setTotalPage(Math.ceil(data.data.length/postPerPage));
 	}
 

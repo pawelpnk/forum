@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useContext, useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import req from '../../helpers/request';
-import { ThemeContext } from '../../store/StoreProvider';
+import { ThemeContext, UserContext } from '../../store/StoreProvider';
 import ModalUser from '../modalUser/ModalUser';
 
 interface OptionalUserI {
@@ -13,7 +13,6 @@ interface OptionalUserI {
 interface UserAdminI {
     id: string;
     login: string;
-    image: string;
     email: string;
     role: string;
     active: boolean;
@@ -33,6 +32,7 @@ const PanelAdmin: React.FC = (): JSX.Element => {
     const [reasonBan, setReasonBan] = useState<string>('');
 
     const { theme } = useContext(ThemeContext);
+    const { user } = useContext(UserContext);
 
     const handleOnCheckDeleteAvatar = (event: ChangeEvent<HTMLInputElement>): void => setDeleteAvatar(event.target.checked);
     const handleChangeRole = (event: ChangeEvent<HTMLSelectElement>): void => setCurrentRole(event.target.value);
@@ -88,9 +88,11 @@ const PanelAdmin: React.FC = (): JSX.Element => {
         fetchUsers();
     }, [showModalUser]);
 
-    const handleShowModalUser = (user: UserAdminI) => {
-        setUserSettings(user);
-        setShowModalUser(true);
+    const handleShowModalUser = (userS: UserAdminI) => {
+        if(user?.login !== userS?.login) {
+            setUserSettings(userS);
+            setShowModalUser(true);
+        }        
     } 
     const closeModal = () => setShowModalUser(false);
     
@@ -101,7 +103,6 @@ const PanelAdmin: React.FC = (): JSX.Element => {
                     <tr>
                     <th>#</th>
                     <th>Login</th>
-                    <th>Avatar</th>
                     <th>Email</th>
                     <th>Rola</th>
                     <th>Aktywny</th>
@@ -119,7 +120,6 @@ const PanelAdmin: React.FC = (): JSX.Element => {
                         >                            
                             <td>{index+1}</td>
                             <td>{user?.login}</td>
-                            <td>{user?.image}</td>
                             <td>{user?.email}</td>
                             <td>{user?.role}</td>
                             <td>{user?.active ? 'tak' : 'nie'}</td>

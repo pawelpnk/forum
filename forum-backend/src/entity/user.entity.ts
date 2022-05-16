@@ -15,7 +15,7 @@ export default class User {
     @Column()
     login: string;
 
-    @Column({nullable: true})
+    @Column()
     password: string;
 
     @Column()
@@ -34,13 +34,8 @@ export default class User {
     @Column()
     active: boolean;
 
-    @Column({
-        nullable: true
-    })
-    createdAt: string;
-
     @Column()
-    image: string;
+    createdAt: string;
 
     @OneToMany(() => Topic, (topic) => topic.user)
     topics: Topic[];

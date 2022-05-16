@@ -146,16 +146,19 @@ const Communicator: React.FC = (): JSX.Element => {
                             }
                             <div ref={lastMessageRef} />
                         </div>
-                        <Form onSubmit={handleSendNewMessage} className='d-flex justify-self-end mb-1' style={{marginTop: 'auto'}}>
-                            <Form.Control
-                            type='text'
-                            placeholder='wiadomość'
-                            value={textMessage}
-                            onChange={handleChangeTextMessage}
-                            className={theme.border}
-                            />
-                            <Button type='submit'><Cursor style={{cursor: 'pointer'}} /></Button>
-                        </Form>
+                        { groups.length > 0 &&
+                            <Form onSubmit={handleSendNewMessage} className='d-flex justify-self-end mb-1' style={{marginTop: 'auto'}}>
+                                <Form.Control
+                                type='text'
+                                placeholder='wiadomość'
+                                value={textMessage}
+                                onChange={handleChangeTextMessage}
+                                className={theme.border}
+                                />
+                                <Button type='submit'><Cursor style={{cursor: 'pointer'}} /></Button>
+                            </Form>
+                        }
+                       
                     </Col>
                 </Row>
             </Container>

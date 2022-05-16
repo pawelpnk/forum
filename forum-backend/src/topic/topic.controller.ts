@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { Topic } from 'src/entity/topic.entity';
 import RoleGuard from 'src/guard/roles.guards';
 import { UserRole } from 'src/user/user.interface/user-role.interface';
 import NewTopic from './topic.dto/new-topic.dto';
@@ -17,7 +18,7 @@ export class TopicController {
         @Body() newTopic: NewTopic
     ) {
         try {
-            const addedNewTopic = await this.topicService.createTopic(newTopic);
+            const addedNewTopic: string = await this.topicService.createTopic(newTopic);
             return res.status(HttpStatus.OK).json({
                 message: "Dodano nowy temat",
                 addedNewTopic
@@ -35,7 +36,7 @@ export class TopicController {
         @Body() id: string
     ) {
         try {
-            const fetchTopic = await this.topicService.fetchOneTopic(id);
+            const fetchTopic: Topic = await this.topicService.fetchOneTopic(id);
             return res.status(HttpStatus.OK).json(fetchTopic);
         } catch (err) {
             return res.json({
@@ -50,7 +51,7 @@ export class TopicController {
         @Param('sectionID') idSection: string
     ) {
         try {
-            const fetchAllTopics = await this.topicService.fetchAllTopics(idSection);
+            const fetchAllTopics: Topic[] = await this.topicService.fetchAllTopics(idSection);
             return res.status(HttpStatus.OK).json(fetchAllTopics);
         } catch {
             return res.status(HttpStatus.BAD_REQUEST).json({

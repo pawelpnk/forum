@@ -3,7 +3,6 @@ export default class UserUpdateForAdmin {
     login?: string;
     role: string;
     active: boolean;
-    image?: boolean;
     dateFinish?: string;
     reasonBan?: string;
 }

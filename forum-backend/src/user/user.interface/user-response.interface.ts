@@ -6,7 +6,6 @@ export default interface UserResponse {
     role: string;
     active: boolean;
     createAt?: Date;
-    image?: string;
     email?: string;
     optionalUser?: OptionalUser;
 }

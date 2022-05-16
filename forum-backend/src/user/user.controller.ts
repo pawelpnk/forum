@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { UserObj } from 'src/decorators/user.decorator';
@@ -11,6 +11,7 @@ import RoleGuard from 'src/guard/roles.guards';
 import UserResponse from 'src/user/user.interface/user-response.interface';
 import { UserRole } from 'src/user/user.interface/user-role.interface';
 import { UserService } from './user.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 export class UserController {
