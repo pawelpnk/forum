@@ -168,12 +168,10 @@ export class UserService {
     }
 
     async updateUser(user: UserUpdateForUser): Promise<UserResponse> {
-        let changePassword = false;
-        let changeImage = false;
-        const checkChangePassword: boolean = user.newPassword.length > 0 && user.oldPassword.length > 0 ? changePassword = true : false;
-        const checkChangeImage: boolean = user.image.length > 0 ? changeImage = true : false;
+        const checkChangePassword: boolean = user.newPassword?.length > 0 && user.oldPassword.length > 0;
+        const checkChangeImage: boolean = user.image?.length > 0;
 
-        if(changePassword){
+        if(checkChangePassword){
             const checkUser = await this.userRepository.findOne({
                 where: {
                     login: user.login
@@ -189,7 +187,7 @@ export class UserService {
                 throw new HttpException("Niepoprawne hasło", HttpStatus.UNAUTHORIZED)
             }
         }
-        if(changeImage){
+        if(checkChangeImage){
             await this.userRepository.update({login: user.login}, {
                 image: user.image
             });

@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
 import { Route, Routes, useNavigate } from 'react-router';
 import { ThemeContext, UserContext } from '../../store/StoreProvider';
+import ChangePassword from '../changePassword/ChangePassword';
 import PanelAdmin from '../panelAdmin/PanelAdmin';
 
 const UserSettings: React.FC = (): JSX.Element => {
@@ -12,6 +13,7 @@ const UserSettings: React.FC = (): JSX.Element => {
     const navigate = useNavigate();
 
     const handleRedirectToAdmin = () => navigate('admin');
+    const handleRedirectToPassword = () => navigate('password');
 
     return (
         <>
@@ -23,7 +25,7 @@ const UserSettings: React.FC = (): JSX.Element => {
                         </Col> : null
                     }
                     <Col className="py-3 d-flex justify-content-center align-items-center" style={{cursor: 'pointer'}}>
-                        <p>Zmiana hasła</p>
+                        <p onClick={handleRedirectToPassword}>Zmiana hasła</p>
                     </Col>
                     <Col className="py-3 d-flex justify-content-center align-items-center" style={{cursor: 'pointer'}}>
                         <p>Ustaw avatar</p>
@@ -32,6 +34,7 @@ const UserSettings: React.FC = (): JSX.Element => {
                 <Row>
                     <Routes>
                         {user?.role === 'admin' ? <Route path="admin" element={<PanelAdmin />} /> : null}
+                        <Route path="password" element={<ChangePassword />} />
                     </Routes>
                 </Row>
             </Container>
