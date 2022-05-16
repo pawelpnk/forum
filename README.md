@@ -1,18 +1,21 @@
 # Forum
 
-Aplikacja napisana w React.js wraz z TypeScriptem oraz NestJS z PostgreSQL.
+Aplikacja napisana w React.js, TypeScript oraz NestJS. Wykorzystana baza danych to PostgreSQL.
 
 ## Podstawowe informacje
 
-Aplikacja została stworzona na potrzeby dalszej nauki wyżej wymienionych technologii. Jest implementacją forum na bazie własnego pomysłu. Aplikacja na dzień 20.04.2022 oferuje takie funkcjonalności jak:
+Aplikacja została stworzona na potrzeby dalszej nauki wyżej wymienionych technologii. Jest implementacją forum na bazie własnego pomysłu. Aplikacja oferuje takie funkcjonalności jak:
 - Możliwość zakładania kont oraz logowania
 - Zakładanie nowych sekcji przez administratora
-- Dodawanie nowych tematów oraz postów
-- Posty mogą być edytowanie tylko przez właścicieli lub administratora
+- Dodawanie nowych tematów oraz postów przez zalogowanych użytkowników
+- Posty mogą być edytowane tylko przez właścicieli lub administratora
 - Posty i tematy mogą być usuwane tylko przez administratora
 - Możliwość pozytywnej i negatywnej oceny posta
 - Możliwość oznaczenia użytkownika w poście
-- Powiadomienia po zalogowaniu o oznaczeniach i możliwość przejścia do tematu z oznaczeniem
+- Powiadomienia o oznaczeniach w postach w czasie rzeczywistym i możliwość przejścia do tematu z oznaczeniem
+- Komunikator w czasie rzeczywistym do prywatnych rozmów
+- Gra snake dostępna na desktopie oraz możliwość zbierania punktów
+- Banowanie użytkowników oraz automatyczne odbanowanie
 
 ## Instalacja
 Lokalna instalacja jest możliwa poprzez pobranie aplikacji, skonfigurowanie dostępu do bazy danych, a następnie uruchomienie w folderze z frontendem oraz backendem serwera poprzez wpisanie komendy:
@@ -40,5 +43,5 @@ Przykładowa konfiguracja bazy danych z stworzeniem pliku `ormconfig.json`, a na
 - CSS
 - HTML
 - Passport-JWT
-
-#### Aplikacja jest w fazie ciągłego rozwoju
+- Socket.IO
+- Server Sent Event

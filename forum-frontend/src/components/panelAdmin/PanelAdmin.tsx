@@ -25,7 +25,6 @@ const PanelAdmin: React.FC = (): JSX.Element => {
     const [showModalUser, setShowModalUser] = useState<boolean>(false);
     const [userSettings, setUserSettings] = useState<UserAdminI | null>(null);
 
-    const [deleteAvatar, setDeleteAvatar] = useState<boolean>(false);
     const [currentRole, setCurrentRole] = useState<string>('');
     const [timeBan, setTimeBan] = useState<string>('');
     const [isActive, setIsActive] = useState<boolean>(true);
@@ -34,7 +33,6 @@ const PanelAdmin: React.FC = (): JSX.Element => {
     const { theme } = useContext(ThemeContext);
     const { user } = useContext(UserContext);
 
-    const handleOnCheckDeleteAvatar = (event: ChangeEvent<HTMLInputElement>): void => setDeleteAvatar(event.target.checked);
     const handleChangeRole = (event: ChangeEvent<HTMLSelectElement>): void => setCurrentRole(event.target.value);
     const handleSetBan = (event: ChangeEvent<HTMLInputElement>): void => {
         setTimeBan(event.target.value);
@@ -68,7 +66,6 @@ const PanelAdmin: React.FC = (): JSX.Element => {
                 login: userSettings?.login,
                 role: currentRole,
                 active: isActive,
-                image: deleteAvatar,
                 dateFinish: timeBan,
                 reasonBan: reasonBan
             });
@@ -131,7 +128,7 @@ const PanelAdmin: React.FC = (): JSX.Element => {
                 }
                 </tbody>
             </Table>
-            <ModalUser show={showModalUser} onHide={closeModal} handleOnCheckDeleteAvatar={handleOnCheckDeleteAvatar} handleChangeRole={handleChangeRole} handleSetBan={handleSetBan} currentRole={currentRole} timeBan={timeBan} userName={userSettings?.login} handleSubmitChanges={handleSubmitChanges} handleDeleteAccount={handleDeleteAccount} handleSetReasonBan={handleSetReasonBan} reasonBan={reasonBan}/>           
+            <ModalUser show={showModalUser} onHide={closeModal} handleChangeRole={handleChangeRole} handleSetBan={handleSetBan} currentRole={currentRole} timeBan={timeBan} userName={userSettings?.login} handleSubmitChanges={handleSubmitChanges} handleDeleteAccount={handleDeleteAccount} handleSetReasonBan={handleSetReasonBan} reasonBan={reasonBan}/>           
         </>
     )
 }

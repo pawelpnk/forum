@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import req from '../../helpers/request';
 import { ThemeContext, UserContext } from '../../store/StoreProvider';
 import Notifications from '../notifications/Notifications';
+import './header.css';
 
 export interface NotiI {
     id: string;
@@ -115,7 +116,7 @@ const Header: React.FC = (): JSX.Element => {
                 <Nav className="me-auto">
                     <Nav.Link onClick={handleRedirectToHome}>Forum</Nav.Link>
                     <Nav.Link onClick={handleRedirectToCommunicator}>Komunikator</Nav.Link>
-                    {widthLayout > 700 ? <Nav.Link onClick={handleRedirectToGames}>Nuda?</Nav.Link> : null}
+                    <Nav.Link className="visible-width" onClick={handleRedirectToGames}>Nuda?</Nav.Link>
                     <div className="form-check form-switch align-self-center bg-dark mx-2" style={{cursor: 'pointer'}}>
                         <input className="form-check-input bg-secondary" type="checkbox" role="switch" id="flexSwitchCheckDefault" onChange={handleChangeTheme} style={{cursor: 'pointer'}}/>
                         <label className="form-check-label" htmlFor="flexSwitchCheckDefault" style={{cursor: 'pointer'}}></label>

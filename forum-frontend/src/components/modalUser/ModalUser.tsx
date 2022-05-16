@@ -4,7 +4,6 @@ import { Button, Form, Modal } from 'react-bootstrap';
 interface IProps {
     show: boolean,
     onHide: () => void,
-    handleOnCheckDeleteAvatar: (event: ChangeEvent<HTMLInputElement>) => void,
     handleChangeRole: (event: ChangeEvent<HTMLSelectElement>) => void,
     handleSetBan: (event: ChangeEvent<HTMLInputElement>) => void,
     currentRole: string,
@@ -16,7 +15,7 @@ interface IProps {
     reasonBan: string
 }
 
-const ModalUser: React.FC<IProps> = ({show, onHide, handleOnCheckDeleteAvatar, handleChangeRole, handleSetBan, currentRole, timeBan, userName, handleSubmitChanges, handleDeleteAccount, handleSetReasonBan, reasonBan}): JSX.Element => {
+const ModalUser: React.FC<IProps> = ({show, onHide, handleChangeRole, handleSetBan, currentRole, timeBan, userName, handleSubmitChanges, handleDeleteAccount, handleSetReasonBan, reasonBan}): JSX.Element => {
     return (
         <Modal show={show} onHide={onHide}
             size="sm"
@@ -30,9 +29,6 @@ const ModalUser: React.FC<IProps> = ({show, onHide, handleOnCheckDeleteAvatar, h
             </Modal.Header>
             <Modal.Body className="d-flex flex-column align-items-center">
                 <Form>
-                    <Form.Group >
-                        <Form.Check type="checkbox" label="Usuń avatar" onChange={handleOnCheckDeleteAvatar} />
-                    </Form.Group>
                     <Form.Group>
                         <Form.Label>Zmień role</Form.Label>
                         <Form.Select size="sm" onChange={handleChangeRole} value={currentRole}>
