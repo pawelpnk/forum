@@ -21,43 +21,25 @@ export class GameService {
 
     async getTopGames(): Promise<Games[]> {
         const allGames = await this.gameRepository.find({
-            relations: [
-                'user'   
-            ],
-            order: {
-                numberPoints: 'DESC'
-            },
-            skip: 0,
-            take: 5
-        });
-        allGames.map(item => {
-            delete item.user.password;
-            delete item.user.token;
-            delete item.user.email;
-        });
-        return allGames;
-    };
-
-    async getTopGamesUser(user: User): Promise<Games[]> {
-        const allGamesUser = await this.gameRepository.find({
-            relations: [
-                'user'   
-            ],
-            where: {
-                user: {
-                    id: user.id
-                }
-            },
             order: {
                 numberPoints: 'DESC'
             },
             skip: 0,
             take: 5            
         });
-        allGamesUser.map(item => {
-            delete item.user.password;
-            delete item.user.token;
-            delete item.user.email;
+        return allGames;
+    };
+
+    async getTopGamesUser(user: User): Promise<Games[]> {
+        const allGamesUser = await this.gameRepository.find({
+            where: {
+                userLogin: user.login
+            },
+            order: {
+                numberPoints: 'DESC'
+            },
+            skip: 0,
+            take: 5            
         });
         return allGamesUser;
     };

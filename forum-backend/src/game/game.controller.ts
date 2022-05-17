@@ -20,7 +20,7 @@ export class GameController {
         return await this.gameService.newGame(user, body);
     }
 
-    @Get('/top')
+    @Get('/all')
     async getTopGames (
         @Res() res: Response
     ) {

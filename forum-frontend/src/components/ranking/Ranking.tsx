@@ -1,13 +1,7 @@
 import React, { useContext } from 'react';
 import { Table } from 'react-bootstrap';
 import { ThemeContext } from '../../store/StoreProvider';
-
-interface RankingI {
-    id: string;
-    name: string;
-    numberPoints: number;
-    user?: any;
-}
+import { RankingI } from '../games/Games';
 
 interface ScoreI {
     score: RankingI[]
@@ -31,7 +25,7 @@ const Ranking: React.FC<ScoreI> = ({score}): JSX.Element => {
                         return (
                             <tr key={s.id}>
                                 <td>{index + 1}</td>
-                                <td>{s.user?.login}</td>
+                                <td>{s.userLogin ? s.userLogin : ''}</td>
                                 <td>{s.name}</td>
                                 <td>{s.numberPoints}</td>
                             </tr>

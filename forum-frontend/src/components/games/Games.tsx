@@ -5,39 +5,41 @@ import req from '../../helpers/request';
 import { ThemeContext, UserContext } from '../../store/StoreProvider';
 import Ranking from '../ranking/Ranking';
 
-interface RankingI {
+export interface RankingI {
     id: string;
     name: string;
     numberPoints: number;
-    user?: object;
+    userLogin?: string | null;
 }
 
 const Games: React.FC = (): JSX.Element => {
-    const [topScore, setTopScore] = useState<RankingI[]>([]);
-    const [topScoreUser, setTopScoreUser] = useState<RankingI[]>([]);
+    const [topScore, setTopScore] = useState<RankingI[] | []>([]);
+    const [topScoreUser, setTopScoreUser] = useState<RankingI[] | []>([]);
 
     const navigate = useNavigate();
     const { theme } = useContext(ThemeContext);
     const { user } = useContext(UserContext);
     const handleRedirectToSnake = () => navigate('/snake');
 
-    useEffect(() => {
-        const topScore = async (): Promise<void> => {
-            const data = await req.get(`game/top`);
+    const topScoreFetch = async (): Promise<void> => {
+        try {
+            const data = await req.get('game/all');
             setTopScore(data.data);
-            console.log(data.data)
-        };
+        } catch {
+            console.log("Błąd pobrania wyników");
+        }            
+    };
 
-        const topScoreUser = async (): Promise<void> => {
-            if(user) {
-                const data = await req.get(`game/top-user`);
-                setTopScoreUser(data.data);
-                console.log(data.data)
-            };
+    const topScoreUserFetch = async (): Promise<void> => {
+        if(user) {
+            const data = await req.get(`game/top-user`);
+            setTopScoreUser(data.data);
         };
+    };   
 
-        topScore();
-        topScoreUser();
+    useEffect(() => {
+        topScoreFetch();
+        topScoreUserFetch();
     },[]);
 
     return (
@@ -65,9 +67,12 @@ const Games: React.FC = (): JSX.Element => {
                     <Col xs={12} sm={6}>
                         <Ranking score={topScore}/>
                     </Col>
-                    <Col xs={12} sm={6}>
-                        {user ? <Ranking score={topScoreUser}/> : null }
-                    </Col>
+                    { user ? 
+                        <Col xs={12} sm={6}>
+                            <Ranking score={topScoreUser}/>
+                        </Col>
+                        : null
+                    }                    
                 </Row>           
             </Container>
         </>
