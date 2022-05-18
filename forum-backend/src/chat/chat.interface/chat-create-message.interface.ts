@@ -1,4 +1,4 @@
-import { Group } from "src/entity/group.entity";
+import { Group } from "../../entity/group.entity";
 
 export class ChatCreateMessage {
     text: string;

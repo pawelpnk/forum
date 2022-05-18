@@ -1,11 +1,11 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import { NewSection } from 'src/section/section.dto/new-section.dto';
-import RoleGuard from 'src/guard/roles.guards';
-import { UserRole } from 'src/user/user.interface/user-role.interface';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { NewSection } from '../section/section.dto/new-section.dto';
+import RoleGuard from '../guard/roles.guards';
+import { UserRole } from '../user/user.interface/user-role.interface';
 import { SectionService } from './section.service';
-import { Section } from 'src/entity/section.entity';
+import { Section } from '../entity/section.entity';
 
 @Controller('section')
 export class SectionController {

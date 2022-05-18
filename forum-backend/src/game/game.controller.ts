@@ -1,9 +1,9 @@
 import { Body, Controller, Get, HttpStatus, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import { UserObj } from 'src/decorators/user.decorator';
-import { Games } from 'src/entity/games.entity';
-import User from 'src/entity/user.entity';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { UserObj } from '../decorators/user.decorator';
+import { Games } from '../entity/games.entity';
+import User from '../entity/user.entity';
 import { NewGame } from './game.dto/new-game.dto';
 import { GameService } from './game.service';
 

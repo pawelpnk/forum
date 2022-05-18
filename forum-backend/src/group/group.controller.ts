@@ -1,12 +1,12 @@
 import { Body, Controller, Get, HttpStatus, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import { UserObj } from 'src/decorators/user.decorator';
-import User from 'src/entity/user.entity';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { UserObj } from '../decorators/user.decorator';
+import User from '../entity/user.entity';
 import { UpdateGroup } from './group.dto/update-group.dto';
 import { NewGroup } from './group.dto/new-group.dto';
 import { GroupService } from './group.service';
-import { Group } from 'src/entity/group.entity';
+import { Group } from '../entity/group.entity';
 
 @Controller('group')
 export class GroupController {

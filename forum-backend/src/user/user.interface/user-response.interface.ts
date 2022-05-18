@@ -1,4 +1,4 @@
-import { OptionalUser } from "src/entity/optionalUser.entity";
+import { OptionalUser } from "../../entity/optionalUser.entity";
 
 export default interface UserResponse {
     id: string;

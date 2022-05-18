@@ -1,17 +1,16 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import { UserObj } from 'src/decorators/user.decorator';
-import NewUser from 'src/user/user.dto/new-user.dto';
-import UserLogin from 'src/user/user.dto/user-login.dto';
-import UserUpdateForUser from 'src/user/user.dto/user-update-for-user.dto';
-import UserUpdateForAdmin from 'src/user/user.dto/user-update.dto';
-import User from 'src/entity/user.entity';
-import RoleGuard from 'src/guard/roles.guards';
-import UserResponse from 'src/user/user.interface/user-response.interface';
-import { UserRole } from 'src/user/user.interface/user-role.interface';
+import { UserObj } from '../decorators/user.decorator';
+import NewUser from '../user/user.dto/new-user.dto';
+import UserLogin from '../user/user.dto/user-login.dto';
+import UserUpdateForUser from '../user/user.dto/user-update-for-user.dto';
+import UserUpdateForAdmin from '../user/user.dto/user-update.dto';
+import User from '../entity/user.entity';
+import RoleGuard from '../guard/roles.guards';
+import UserResponse from '../user/user.interface/user-response.interface';
+import { UserRole } from '../user/user.interface/user-role.interface';
 import { UserService } from './user.service';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('user')
 export class UserController {

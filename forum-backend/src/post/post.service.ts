@@ -1,16 +1,16 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Post } from 'src/entity/post.entity';
-import { TopicService } from 'src/topic/topic.service';
-import { UserService } from 'src/user/user.service';
+import { Post } from '../entity/post.entity';
+import { TopicService } from '../topic/topic.service';
+import { UserService } from '../user/user.service';
 import { Repository } from 'typeorm';
 import NewPost from './post.dto/new-post.dto';
 import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';
 import PostResponse from './post.interface/post-response.interface';
-import { Notification } from 'src/entity/notification.entity';
-import { UserRole } from 'src/user/user.interface/user-role.interface';
-import User from 'src/entity/user.entity';
+import { Notification } from '../entity/notification.entity';
+import { UserRole } from '../user/user.interface/user-role.interface';
+import User from '../entity/user.entity';
 
 @Injectable()
 export class PostService {

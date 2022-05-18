@@ -1,9 +1,9 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import { Topic } from 'src/entity/topic.entity';
-import RoleGuard from 'src/guard/roles.guards';
-import { UserRole } from 'src/user/user.interface/user-role.interface';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { Topic } from '../entity/topic.entity';
+import RoleGuard from '../guard/roles.guards';
+import { UserRole } from '../user/user.interface/user-role.interface';
 import NewTopic from './topic.dto/new-topic.dto';
 import { TopicService } from './topic.service';
 

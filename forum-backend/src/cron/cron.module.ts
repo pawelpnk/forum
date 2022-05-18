@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { CronService } from './cron.service';
 import { ScheduleModule } from '@nestjs/schedule';
-import { UserModule } from 'src/user/user.module';
-import { ChatService } from 'src/chat/chat.service';
+import { UserModule } from '../user/user.module';
+import { ChatService } from '../chat/chat.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Message } from 'src/entity/message.entity';
+import { Message } from '../entity/message.entity';
 
 @Module({
   imports: [

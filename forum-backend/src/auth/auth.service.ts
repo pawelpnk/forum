@@ -3,7 +3,7 @@ import { JwtPayload } from './jwt.strategy';
 const bcrypt = require('bcrypt');
 import { v4 as uuid } from 'uuid';
 import { sign } from 'jsonwebtoken';
-import { UserService } from 'src/user/user.service';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {

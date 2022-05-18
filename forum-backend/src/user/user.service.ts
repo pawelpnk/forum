@@ -1,15 +1,15 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Response } from 'express';
-import { AuthService } from 'src/auth/auth.service';
-import NewUser from 'src/user/user.dto/new-user.dto';
-import UserLogin from 'src/user/user.dto/user-login.dto';
-import UserUpdateForUser from 'src/user/user.dto/user-update-for-user.dto';
-import UserUpdateForAdmin from 'src/user/user.dto/user-update.dto';
-import { OptionalUser } from 'src/entity/optionalUser.entity';
-import User from 'src/entity/user.entity';
-import UserResponse from 'src/user/user.interface/user-response.interface';
-import { UserRole } from 'src/user/user.interface/user-role.interface';
+import { AuthService } from '../auth/auth.service';
+import NewUser from '../user/user.dto/new-user.dto';
+import UserLogin from '../user/user.dto/user-login.dto';
+import UserUpdateForUser from '../user/user.dto/user-update-for-user.dto';
+import UserUpdateForAdmin from '../user/user.dto/user-update.dto';
+import { OptionalUser } from '../entity/optionalUser.entity';
+import User from '../entity/user.entity';
+import UserResponse from '../user/user.interface/user-response.interface';
+import { UserRole } from '../user/user.interface/user-role.interface';
 import { Repository } from 'typeorm';
 
 @Injectable()

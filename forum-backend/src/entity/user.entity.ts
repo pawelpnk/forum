@@ -3,7 +3,7 @@ import { Topic } from "./topic.entity";
 import { IsEmail } from 'class-validator';
 import { Post } from "./post.entity";
 import { OptionalUser } from "./optionalUser.entity";
-import { Notification } from 'src/entity/notification.entity';
+import { Notification } from '../entity/notification.entity';
 import { Group } from "./group.entity";
 import { Games } from "./games.entity";
 

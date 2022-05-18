@@ -1,16 +1,16 @@
 import { Body, Controller, Delete, Get, HttpStatus, Param, Patch, Post, Res, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import { UserObj } from 'src/decorators/user.decorator';
-import User from 'src/entity/user.entity';
-import RoleGuard from 'src/guard/roles.guards';
-import { UserRole } from 'src/user/user.interface/user-role.interface';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { UserObj } from '../decorators/user.decorator';
+import User from '../entity/user.entity';
+import RoleGuard from '../guard/roles.guards';
+import { UserRole } from '../user/user.interface/user-role.interface';
 import NewPost from './post.dto/new-post.dto';
 import { RateUpdatePost } from './post.dto/rate-update-post';
 import UpdatePost from './post.dto/update-post.dto';
 import PostResponse from './post.interface/post-response.interface';
 import { PostService } from './post.service';
-import { Post as PostT } from 'src/entity/post.entity';
+import { Post as PostT } from '../entity/post.entity';
 
 @Controller('post')
 export class PostController {

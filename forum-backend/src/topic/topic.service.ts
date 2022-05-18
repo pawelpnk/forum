@@ -1,11 +1,11 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Section } from 'src/entity/section.entity';
-import { Topic } from 'src/entity/topic.entity';
-import User from 'src/entity/user.entity';
-import { PostService } from 'src/post/post.service';
-import { SectionService } from 'src/section/section.service';
-import { UserService } from 'src/user/user.service';
+import { Section } from '../entity/section.entity';
+import { Topic } from '../entity/topic.entity';
+import User from '../entity/user.entity';
+import { PostService } from '../post/post.service';
+import { SectionService } from '../section/section.service';
+import { UserService } from '../user/user.service';
 import { Repository } from 'typeorm';
 import NewTopic from './topic.dto/new-topic.dto';
 

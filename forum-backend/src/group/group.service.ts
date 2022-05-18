@@ -1,8 +1,8 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Group } from 'src/entity/group.entity';
-import User from 'src/entity/user.entity';
-import { UserService } from 'src/user/user.service';
+import { Group } from '../entity/group.entity';
+import User from '../entity/user.entity';
+import { UserService } from '../user/user.service';
 import { Connection, Repository } from 'typeorm';
 import { UpdateGroup } from './group.dto/update-group.dto';
 import { NewGroup } from './group.dto/new-group.dto';

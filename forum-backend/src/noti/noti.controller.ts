@@ -1,8 +1,8 @@
 import { Controller, HttpStatus, Patch, Res, Sse, UseGuards } from '@nestjs/common';
 import { Response } from 'express';
 import { interval, map, Observable, switchMap } from 'rxjs';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import { UserObj } from 'src/decorators/user.decorator';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { UserObj } from '../decorators/user.decorator';
 import { NotiService } from './noti.service';
 
 @Controller('noti')

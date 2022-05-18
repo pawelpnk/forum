@@ -1,8 +1,8 @@
 import { forwardRef, HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Message } from 'src/entity/message.entity';
-import User from 'src/entity/user.entity';
-import { UserService } from 'src/user/user.service';
+import { Message } from '../entity/message.entity';
+import User from '../entity/user.entity';
+import { UserService } from '../user/user.service';
 import { MoreThan, Repository } from 'typeorm';
 import { ChatCreateMessage } from './chat.interface/chat-create-message.interface';
 
