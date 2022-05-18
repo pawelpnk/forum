@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import socketIOClient from "socket.io-client";
-
-const SOCKET_URL = "http://localhost:5001";
+import { SOCKET_URL } from "../helpers/socket-link";
 
 const darkTheme = {
     backgroundColor: 'black',

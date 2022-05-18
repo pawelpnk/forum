@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Navbar, Container, Nav, OverlayTrigger, Tooltip, Button } from 'react-bootstrap';
 import { Person, PersonPlus, BoxArrowRight, Gear, Bell} from 'react-bootstrap-icons';
 import { useNavigate } from 'react-router';
+import { notiEventSource } from '../../helpers/eventSource-link';
 import req from '../../helpers/request';
 import { ThemeContext, UserContext } from '../../store/StoreProvider';
 import Notifications from '../notifications/Notifications';
@@ -15,13 +16,12 @@ export interface NotiI {
     fromWho: string;
     toWho: string;
     createAt: string;
-    user?: object;
+    user?: any;
 }
 
 const Header: React.FC = (): JSX.Element => {
     const [show, setShow] = useState<boolean>(false);
     const [notis, setNotis] = useState<NotiI[]>([]);
-    const [widthLayout, setWidthLayout] = useState<number>(700);
 
     const { user, setUser } = useContext(UserContext);
     const { setTheme, lightTheme, darkTheme } = useContext(ThemeContext);
@@ -40,7 +40,7 @@ const Header: React.FC = (): JSX.Element => {
     const checkNewNoti: boolean = notis.some((noti: NotiI) => noti.toDisplay === true);
 
     useEffect(() => {
-        const sse = new EventSource('http://localhost:5000/noti/sse', { withCredentials: true })
+        const sse = new EventSource(notiEventSource, { withCredentials: true })
 
         function setNotification(data: any) {
             setNotis(data.noti);
@@ -104,11 +104,6 @@ const Header: React.FC = (): JSX.Element => {
             setTheme(darkTheme);
         }
     };
-
-    useEffect(() => {
-        const setCurrentWidth = () => setWidthLayout(window.innerWidth);
-        setCurrentWidth();      
-    },[window.innerWidth])
 
     return (
         <Navbar bg="dark" variant="dark">
