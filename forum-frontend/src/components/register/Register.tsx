@@ -98,7 +98,6 @@ const Register: React.FC = (): JSX.Element => {
                 <Form.Group className={`my-2 col-md-6 border ${theme.border}`}>
                     <Form.Control placeholder='email' type='email' onChange={handleOnEmail} value={email}/>
                 </Form.Group>
-                <Form.Text muted>Po założeniu konta w ustawieniach pojawia się opcja zmiany zdjęcia profilowego</Form.Text>
                 <Form.Group className={`my-2 ${theme.textColor}`} >
                     <Form.Check type="checkbox" label="Akceptuj regulamin" onChange={handleOnCheck} />
                 </Form.Group>

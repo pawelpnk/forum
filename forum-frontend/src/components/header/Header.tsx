@@ -22,6 +22,7 @@ export interface NotiI {
 const Header: React.FC = (): JSX.Element => {
     const [show, setShow] = useState<boolean>(false);
     const [notis, setNotis] = useState<NotiI[]>([]);
+    const [themeValue, setThemeValue] = useState<boolean>(false)
 
     const { user, setUser } = useContext(UserContext);
     const { setTheme, lightTheme, darkTheme } = useContext(ThemeContext);
@@ -50,7 +51,12 @@ const Header: React.FC = (): JSX.Element => {
         return () => {
             sse.close();
           };
-    },[])
+    },[]);
+
+    useEffect(() => {
+        setTheme(JSON.parse(localStorage.getItem('theme') || '{}'));
+        setThemeValue(JSON.parse(localStorage.getItem('themeValue') || '{}'))
+    },[]);
 
     const bellColor: JSX.Element = checkNewNoti ? <Bell style={{color: 'red'}} /> : <Bell />;
 
@@ -100,8 +106,14 @@ const Header: React.FC = (): JSX.Element => {
     const handleChangeTheme = (e: React.ChangeEvent<HTMLInputElement>) => {
         if(e.target.checked) {
             setTheme(lightTheme);
+            localStorage.setItem("theme", JSON.stringify(lightTheme));
+            localStorage.setItem("themeValue", JSON.stringify(true));
+            setThemeValue(true)
         } else {
             setTheme(darkTheme);
+            localStorage.setItem("theme", JSON.stringify(darkTheme));
+            localStorage.setItem("themeValue", JSON.stringify(false));
+            setThemeValue(false)
         }
     };
 
@@ -113,7 +125,7 @@ const Header: React.FC = (): JSX.Element => {
                     <Nav.Link onClick={handleRedirectToCommunicator}>Komunikator</Nav.Link>
                     <Nav.Link className="visible-width" onClick={handleRedirectToGames}>Nuda?</Nav.Link>
                     <div className="form-check form-switch align-self-center bg-dark mx-2" style={{cursor: 'pointer'}}>
-                        <input className="form-check-input bg-secondary" type="checkbox" role="switch" id="flexSwitchCheckDefault" onChange={handleChangeTheme} style={{cursor: 'pointer'}}/>
+                        <input className="form-check-input bg-secondary" type="checkbox" role="switch" id="flexSwitchCheckDefault" checked={themeValue} onChange={handleChangeTheme} style={{cursor: 'pointer'}}/>
                         <label className="form-check-label" htmlFor="flexSwitchCheckDefault" style={{cursor: 'pointer'}}></label>
                     </div>
                 </Nav>
