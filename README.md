@@ -2,6 +2,8 @@
 
 Aplikacja napisana w React.js, TypeScript oraz NestJS. Wykorzystana baza danych to PostgreSQL.
 
+[Demo aplikacji](https://sleepy-badlands-09970.herokuapp.com)
+
 ## Podstawowe informacje
 
 Aplikacja została stworzona na potrzeby dalszej nauki wyżej wymienionych technologii. Jest implementacją forum na bazie własnego pomysłu. Aplikacja oferuje takie funkcjonalności jak:
