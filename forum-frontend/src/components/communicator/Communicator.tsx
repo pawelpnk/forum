@@ -101,7 +101,7 @@ const Communicator: React.FC = (): JSX.Element => {
             <Container>
                 <Row>
                     <Col>
-                        <p className='d-flex justify-content-center mt-5 text-secondary'>Uwaga! Wszystkie wiadomości są usuwane o północy!</p>
+                        <p className='d-flex justify-content-center mt-5 text-secondary'>Uwaga! Wiadomości starsze niż 5 dni są usuwane!</p>
                     </Col>
                 </Row>
                 <Row className='my-3 communicator-list' style={{height: '70vh'}}>

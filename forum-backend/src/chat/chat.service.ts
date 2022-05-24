@@ -43,7 +43,7 @@ export class ChatService {
         return findMessages;
     }
 
-    async findMessagesOldestThenFiveDays(): Promise<void> {
+    async findMessagesOlderThenFiveDays(): Promise<void> {
         const timeFiveDaysAgo = new Date(new Date().getTime() - (5 * 24 * 60 * 60 * 1000));
         const findMessages = await this.messageRepository.find({
             where: {

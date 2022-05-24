@@ -86,16 +86,16 @@ const Register: React.FC = (): JSX.Element => {
         <div className='d-flex justify-content-center'>
             <Form className='my-5 p-4' onSubmit={handleOnSubmit}>
                 {checkValidationMessage}
-                <Form.Group className={`my-2 col-md-6 border ${theme.border}`}>
+                <Form.Group className={`my-2 col-md-12 border ${theme.border}`}>
                     <Form.Control placeholder='login' type='text' onChange={handleOnLogin} value={login}/>
                 </Form.Group>
-                <Form.Group className={`my-2 col-md-6 border ${theme.border}`}>
+                <Form.Group className={`my-2 col-md-12 border ${theme.border}`}>
                     <Form.Control placeholder='hasło' type='password' onChange={handleOnPassword} value={password}/>
                 </Form.Group>
-                <Form.Group className={`my-2 col-md-6 border ${theme.border}`}>
+                <Form.Group className={`my-2 col-md-12 border ${theme.border}`}>
                     <Form.Control placeholder='potwierdź hasło' type='password' onChange={handleOnRepeatPassword} value={repeatPassword}/>
                 </Form.Group>
-                <Form.Group className={`my-2 col-md-6 border ${theme.border}`}>
+                <Form.Group className={`my-2 col-md-12 border ${theme.border}`}>
                     <Form.Control placeholder='email' type='email' onChange={handleOnEmail} value={email}/>
                 </Form.Group>
                 <Form.Group className={`my-2 ${theme.textColor}`} >

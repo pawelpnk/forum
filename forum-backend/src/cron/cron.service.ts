@@ -22,7 +22,7 @@ export class CronService {
 
     @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT)
     async deleteMessageAfterFiveDays() {
-        await this.chatService.findMessagesOldestThenFiveDays();
+        await this.chatService.findMessagesOlderThenFiveDays();
     }
 }
 
